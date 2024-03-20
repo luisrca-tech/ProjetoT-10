@@ -7,7 +7,7 @@ export default function App() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push("/projetos");
+    router.push("/painel-administrativo/autenticacao/login");
   }, [router]);
   return <></>;
 }
