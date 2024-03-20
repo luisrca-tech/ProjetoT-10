@@ -1,6 +1,6 @@
 import { Container } from "./styles";
 
-export default function Funcionario() {
+export default function Pessoas() {
   return (
     <Container>
       <h1>

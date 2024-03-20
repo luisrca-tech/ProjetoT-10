@@ -25,7 +25,6 @@ const globalStyle = css`
     max-height: none;
     margin: 0;
     padding: 0;
-    font-size: 2rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 
