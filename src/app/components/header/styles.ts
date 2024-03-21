@@ -10,6 +10,7 @@ export const Container = styled.header`
   width: 100%;
   display: flex;
   padding: 1.8rem 1.6rem;
+  margin-bottom: 1rem;
   justify-content: space-between;
 `;
 
