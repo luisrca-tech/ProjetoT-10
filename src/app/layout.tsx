@@ -27,6 +27,7 @@ const globalStyle = css`
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #fffdfd;
 
     p,
     h1,
