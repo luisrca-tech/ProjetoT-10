@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 import { styled } from "@linaria/react";
-import Header from "../components/header";
+import Header from "../components/Header";
 
 const Container = styled.div`
   width: 100%;
