@@ -1,16 +1,21 @@
 import { styled } from "@linaria/react";
 import { theme } from "@/app/styles/theme";
 
-type SidebaContainer = {
+type SidebaContainerType = {
   isShow: boolean;
 };
-export const Container = styled.header`
+
+type ContainerType = {
+  isAutentication: boolean;
+};
+
+export const Container = styled.header<ContainerType>`
   width: 100%;
   display: flex;
-  padding: 1.8rem 1.6rem;
-  margin-bottom: 1rem;
   align-items: center;
-  justify-content: space-between;
+  justify-content: ${(props) =>
+    props.isAutentication ? "center" : "space-between"};
+  height: 7.594rem;
 `;
 
 export const ButtonsContainer = styled.div`
@@ -29,7 +34,6 @@ export const MenuButton = styled.button`
 `;
 
 export const TitleContainer = styled.div`
-  width: 4.8rem;
   height: 4.8rem;
   display: flex;
   align-items: center;
@@ -41,7 +45,7 @@ export const TitleContainer = styled.div`
   }
 `;
 
-export const SidebarContainer = styled.div<SidebaContainer>`
+export const SidebarContainer = styled.div<SidebaContainerType>`
   padding: 3.75rem 5.625rem 0 1.938rem;
   display: flex;
   width: 66vw;
