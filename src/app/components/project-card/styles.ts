@@ -46,7 +46,6 @@ export const BackgroundProgressBar = styled.div`
 
 export const ProgressBar = styled.div`
   max-width: 100%;
-  width: 0;
   height: 4px;
   background-color: #6750a4;
   border-radius: 8px;
