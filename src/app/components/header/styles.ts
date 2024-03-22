@@ -1,4 +1,5 @@
 import { styled } from "@linaria/react";
+import { theme } from "@/app/styles/theme";
 
 type SidebaContainer = {
   isShow: boolean;
@@ -46,7 +47,7 @@ export const SidebarContainer = styled.div<SidebaContainer>`
   width: 66vw;
   flex-direction: column;
   height: 100vh;
-  background-color: #fffdfd;
+  background-color: ${theme.COLORS.WHITE};
   border-radius: 20px 20px;
   z-index: 9999;
   position: absolute;
@@ -67,7 +68,7 @@ export const CloseContainer = styled.div`
   padding: 1.5rem 0;
   display: flex;
   align-items: center;
-  border-bottom: 2px solid #f3f4f6;
+  border-bottom: 2px solid ${theme.COLORS.LIGHT};
   > button {
     width: 100%;
     border: none;
@@ -76,12 +77,12 @@ export const CloseContainer = styled.div`
     gap: 10px;
     align-items: center;
     > span {
-      color: #6750a4;
+      color: ${theme.COLORS.PRIMARY};
       font-size: 1rem;
       font-weight: bold;
     }
     > svg {
-      color: #6750a4;
+      color: ${theme.COLORS.PRIMARY};
     }
   }
 `;
@@ -101,10 +102,10 @@ export const ButtonContainer = styled.div`
   padding: 1.5rem 0;
   display: flex;
   align-items: center;
-  border-bottom: 2px solid #f3f4f6;
+  border-bottom: 2px solid ${theme.COLORS.LIGHT};
   > button {
     background-color: transparent;
-    color: #000;
+    color: ${theme.COLORS.DARK};
     font-size: 1rem;
     font-weight: 600;
     border: none;
