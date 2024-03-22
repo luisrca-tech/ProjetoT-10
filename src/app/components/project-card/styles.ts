@@ -14,7 +14,7 @@ export const ProjectContainer = styled.div`
   width: 100%;
   height: 5rem;
   gap: 1rem;
-  background-color: ${theme.COLORS.SECONDARY_LIGTH};
+  background-color: ${theme.COLORS.SECONDARY_EXTRA_LIGTH};
   border-radius: 12px;
   box-shadow: 0 1px 3px 0 ${theme.COLORS.DARK};
   clip-path: inset(1);
@@ -41,7 +41,7 @@ export const ProgressBarContainer = styled.div`
 export const BackgroundProgressBar = styled.div`
   width: 100%;
   height: 4px;
-  background-color: ${theme.COLORS.LIGHT};
+  background-color: ${theme.COLORS.SECONDARY_LIGTH};
   border-radius: 8px;
 `;
 
