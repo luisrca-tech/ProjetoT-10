@@ -9,7 +9,7 @@ export const theme = {
     PRIMARY: "#6750A4",
     ERROR: "#B72B2B",
     SECONDARY: "#FFAEAE",
-    SECONDARY_LIGTH: "#F7F2FA",
-    SECONDARY_EXTRA_LIGTH: "#eaddff",
+    SECONDARY_LIGTH: "#eaddff",
+    SECONDARY_EXTRA_LIGTH: "#F7F2FA",
   },
 };
