@@ -1,4 +1,5 @@
 import { styled } from "@linaria/react";
+import { theme } from "@/app/styles/theme";
 
 export const Container = styled.div`
   display: flex;
@@ -13,9 +14,9 @@ export const ProjectContainer = styled.div`
   width: 100%;
   height: 5rem;
   gap: 1rem;
-  background-color: #f7f2fa;
+  background-color: ${theme.COLORS.SECONDARY_LIGTH};
   border-radius: 12px;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 3px 0 ${theme.COLORS.DARK};
   clip-path: inset(1);
 `;
 
@@ -40,13 +41,13 @@ export const ProgressBarContainer = styled.div`
 export const BackgroundProgressBar = styled.div`
   width: 100%;
   height: 4px;
-  background-color: #eaddff;
+  background-color: ${theme.COLORS.LIGHT};
   border-radius: 8px;
 `;
 
 export const ProgressBar = styled.div`
   max-width: 100%;
   height: 4px;
-  background-color: #6750a4;
+  background-color: ${theme.COLORS.PRIMARY};
   border-radius: 8px;
 `;
