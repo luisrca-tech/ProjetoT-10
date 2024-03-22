@@ -56,7 +56,7 @@ export const Container = styled.div<InputProps>`
 
       > div {
         width: 100%;
-        heigth: 100%;
+        height: 100%;
       }
     }
 
