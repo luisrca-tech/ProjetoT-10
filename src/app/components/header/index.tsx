@@ -58,7 +58,7 @@ export default function Header() {
             </CloseContainer>
             <OptionsContainer>
               <ButtonContainer>
-                <button className={poppins.className}>Projetos</button>
+                <button onClick={() => router.push("/painel-administrativo/projetos")} className={poppins.className}>Projetos</button>
               </ButtonContainer>
               <ButtonContainer>
                 <button className={poppins.className}>Pessoas</button>

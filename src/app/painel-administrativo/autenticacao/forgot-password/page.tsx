@@ -4,7 +4,7 @@ import {
   Form,
   ButtonText,
   ButtonsTextContainer,
-  OthersLoginContainer,
+  OthersRegisterContainer,
 } from "./styles";
 import { useRouter } from "next/navigation";
 import Input from "@/app/components/AuthenticationUp";
@@ -14,17 +14,13 @@ import LinkedinImage from "../../../../../public/linkedin img.svg";
 import Image from "next/image";
 import { roboto } from "@/app/fonts";
 import { useState } from "react";
-import Link from "next/link";
 
-export default function Login() {
+export default function ForgotPassword() {
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [newPassword, setNewPassword] = useState<string>("");
   const [loading, setLoading] = useState(true);
-  /*Dentro da funcao handleSubmit desta pagina, o loading sera settada para true antes da requisicao ser feita, 
-  e settada para false depois que ela terminar
-  */
-     
 
   return (
     <Container>
@@ -43,40 +39,38 @@ export default function Login() {
           isPassword={true}
           id="password"
           type="password"
-          placeholder="senha"
+          placeholder="Nova senha"
           autoComplete="current-password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
+          <Input
+          label="NewPassword"
+          isPassword={true}
+          id="Newpassword"
+          type="password"
+          placeholder="Confirme a nova senha"
+          autoComplete="new-password"
+          onChange={(e) => setNewPassword(e.target.value)}
+          value={newPassword}
+        />
         <Button
           className={roboto.className}
           type="submit"
-          text="Entrar"
-          loading={true}
+          text="Confirmar"
+          loading={false}
         />
 
-        <ButtonsTextContainer>
-          <ButtonText  
-            className={roboto.className}
-          >
-             <Link href={"/painel-administrativo/autenticacao/register"}> Não tenho conta</Link>
-          </ButtonText>
-
-          <ButtonText className={roboto.className}>
-            <Link href={"/painel-administrativo/autenticacao/forgot-password"} >Esqueci minha senha</Link>
-          </ButtonText>
-        </ButtonsTextContainer>
-
-        <OthersLoginContainer>
+        <OthersRegisterContainer>
           <div>
             <span className={roboto.className}>Entre com sua conta</span>
           </div>
 
           <div>
-            <Image src={GoogleImage} alt="" width={50} height={50}  priority/>
-            <Image src={LinkedinImage} alt="" width={50} height={50} priority />
+            <Image src={GoogleImage} alt="" width={50} height={50} />
+            <Image src={LinkedinImage} alt="" width={50} height={50} />
           </div>
-        </OthersLoginContainer>
+        </OthersRegisterContainer>
       </Form>
     </Container>
   );

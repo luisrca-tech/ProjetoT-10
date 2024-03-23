@@ -32,13 +32,9 @@ export const ButtonText = styled.button`
   font-size: 0.875rem;
   color: ${theme.COLORS.PRIMARY};
   font-weight: 600;
-
-  a {
-    text-decoration: none;
-  }
 `;
 
-export const OthersLoginContainer = styled.div`
+export const OthersRegisterContainer = styled.div`
   width: 100%;
   justify-content: center;
 
