@@ -14,6 +14,7 @@ import LinkedinImage from "../../../../../public/linkedin img.svg";
 import Image from "next/image";
 import { roboto } from "@/app/fonts";
 import { useState } from "react";
+import Link from "next/link";
 
 export default function Login() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function Login() {
   /*Dentro da funcao handleSubmit desta pagina, o loading sera settada para true antes da requisicao ser feita, 
   e settada para false depois que ela terminar
   */
+     
 
   return (
     <Container>
@@ -32,6 +34,7 @@ export default function Login() {
           id="email"
           type="email"
           placeholder="email@exemplo.com"
+          autoComplete="useremail"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
         />
@@ -41,6 +44,7 @@ export default function Login() {
           id="password"
           type="password"
           placeholder="senha"
+          autoComplete="current-password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
@@ -52,10 +56,14 @@ export default function Login() {
         />
 
         <ButtonsTextContainer>
-          <ButtonText className={roboto.className}>Não tenho conta</ButtonText>
+          <ButtonText  
+            className={roboto.className}
+          >
+             <Link href={"/painel-administrativo/autenticacao/register"}> Não tenho conta</Link>
+          </ButtonText>
 
           <ButtonText className={roboto.className}>
-            Esqueci minha senha
+            <Link href={"/painel-administrativo/autenticacao/forgot-password"} >Esqueci minha senha</Link>
           </ButtonText>
         </ButtonsTextContainer>
 
@@ -65,8 +73,8 @@ export default function Login() {
           </div>
 
           <div>
-            <Image src={GoogleImage} alt="" width={50} height={50} />
-            <Image src={LinkedinImage} alt="" width={50} height={50} />
+            <Image src={GoogleImage} alt="" width={50} height={50}  priority/>
+            <Image src={LinkedinImage} alt="" width={50} height={50} priority />
           </div>
         </OthersLoginContainer>
       </Form>
