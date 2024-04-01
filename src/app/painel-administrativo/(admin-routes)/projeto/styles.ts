@@ -1,5 +1,6 @@
 import { theme } from "@/app/styles/theme";
 import { styled } from "@linaria/react";
+import { roboto, poppins } from "../../../fonts";
 
 export const Container = styled.div`
   width: 100%;
@@ -8,38 +9,54 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f6f6f6;
+  font-family: roboto;
+
+  padding: 0 1.25rem;
 `;
 
 export const InputsDataContainer = styled.div`
-  width: 100%;
+  max-width: 22.5rem;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   gap: 0.5rem;
-  padding: 0.1rem 0;
-  background-color: #f6f6f6;
 `;
 
-export const TitleProjectContainer = styled.div`
-  width: 100%;
+export const InputsData = styled.div`
+  width: 21.5rem;
   display: flex;
+  gap: 0.5rem;
+  height: 2.5rem;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  background: ${theme.COLORS.SECONDARY_EXTRA_LIGTH};
+ 
 
-  strong {
+  background-color: #f6f6f6;
+  border-radius: 60px;
+
+  span {
+    width: 100%;
+    font-size: 0.875rem;
+
+    color: ${theme.COLORS.SECONDARY_DARK};
+  }
+
+  .RoleSpacing {
+    padding: 0 0.5rem;
   }
 `;
 
-export const BackgroundSizeImage = styled.div`
-  width: 80px;
-  height: 80px;
-  border-radius: 6px;
-  background-color: ${theme.COLORS.PRIMARY};
-  color: ${theme.COLORS.WHITE};
+export const Footer = styled.footer`
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-between;
+
+  margin-top: 1rem;
+
+  span,
+  strong {
+    font-family: poppins;
+  }
+
+  span {
+    font-weight: bold;
+    font-size: 0.875rem;
+  }
 `;
