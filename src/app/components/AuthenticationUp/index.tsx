@@ -5,7 +5,7 @@ import { FaUnlockAlt, FaLock } from "react-icons/fa";
 import { z } from "zod";
 import { HTMLInputTypeAttribute, useState } from "react";
 
-const InputSchema = z.object({
+ const InputSchema = z.object({
   isPassword: z.boolean().optional(),
   label: z.string(),
   value: z.string().optional(),
