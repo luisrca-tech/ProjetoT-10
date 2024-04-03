@@ -1,12 +1,31 @@
 "use client";
 
-import { Container, Footer, InputsData, InputsDataContainer } from "./styles";
-import { RiPencilFill } from "react-icons/ri";
+import {
+  Container,
+  SwitchContainer,
+  Footer,
+  InputsData,
+  InputsDataContainer,
+} from "./styles";
 import { SelectInputWithDropdown } from "@/app/components/SelectInputWithDropdown";
+import { useState } from "react";
+import ToogleSwitch from "@/app/components/ToogleSwitch";
+import { poppins } from "@/app/fonts";
 
 export default function Projeto() {
+  const [checked, setChecked] = useState<boolean>(false);
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
+
   return (
-    <Container>
+    <Container className={poppins.className}>
+      <SwitchContainer>
+        <span>Editar datas</span>
+        <ToogleSwitch onChange={handleChange} />
+      </SwitchContainer>
+
       <InputsDataContainer>
         <InputsData>
           <SelectInputWithDropdown
