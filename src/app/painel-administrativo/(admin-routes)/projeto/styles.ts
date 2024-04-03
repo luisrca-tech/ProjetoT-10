@@ -1,6 +1,5 @@
 import { theme } from "@/app/styles/theme";
 import { styled } from "@linaria/react";
-import { roboto, poppins } from "../../../fonts";
 
 export const Container = styled.div`
   width: 100%;
@@ -9,25 +8,22 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: roboto;
-
-  padding: 0 1.25rem;
 `;
 
 export const InputsDataContainer = styled.div`
-  max-width: 22.5rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding: 0 1.25rem;
 `;
 
 export const InputsData = styled.div`
-  width: 21.5rem;
+  width: 100%;
   display: flex;
   gap: 0.5rem;
   height: 2.5rem;
   align-items: center;
- 
 
   background-color: #f6f6f6;
   border-radius: 60px;
@@ -44,7 +40,7 @@ export const InputsData = styled.div`
   }
 `;
 
-export const Footer = styled.footer`
+export const TotalBudget = styled.footer`
   display: flex;
   justify-content: space-between;
 
@@ -52,7 +48,7 @@ export const Footer = styled.footer`
 
   span,
   strong {
-    font-family: poppins;
+    font-family: "Poppins";
   }
 
   span {
