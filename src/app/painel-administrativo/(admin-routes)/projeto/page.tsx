@@ -1,12 +1,20 @@
 "use client";
 
-import { Container, Footer, InputsData, InputsDataContainer } from "./styles";
-import { RiPencilFill } from "react-icons/ri";
+import {
+  Container,
+  InputsData,
+  InputsDataContainer,
+  TotalBudget,
+} from "./styles";
 import { SelectInputWithDropdown } from "@/app/components/SelectInputWithDropdown";
+import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
+import { roboto } from "@/app/fonts";
 
 export default function Projeto() {
+
   return (
-    <Container>
+    <Container className={roboto.className}>
+      <ProjectProfileHeader value="Nome do Projeto..." />
       <InputsDataContainer>
         <InputsData>
           <SelectInputWithDropdown
@@ -94,10 +102,10 @@ export default function Projeto() {
           <span>150,00</span>
         </InputsData>
 
-        <Footer>
+        <TotalBudget>
           <strong>Total:</strong> <span>1584h</span>
           <span>178.200,00</span>
-        </Footer>
+        </TotalBudget>
       </InputsDataContainer>
     </Container>
   );
