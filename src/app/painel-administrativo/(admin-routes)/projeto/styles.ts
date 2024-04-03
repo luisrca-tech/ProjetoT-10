@@ -14,6 +14,18 @@ export const Container = styled.div`
   padding: 0 1.25rem;
 `;
 
+export const SwitchContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  span {
+    font-size: 14px;
+    font-weight: 600;
+  }
+`;
+
 export const InputsDataContainer = styled.div`
   max-width: 22.5rem;
   display: flex;
@@ -27,7 +39,6 @@ export const InputsData = styled.div`
   gap: 0.5rem;
   height: 2.5rem;
   align-items: center;
- 
 
   background-color: #f6f6f6;
   border-radius: 60px;
@@ -49,11 +60,6 @@ export const Footer = styled.footer`
   justify-content: space-between;
 
   margin-top: 1rem;
-
-  span,
-  strong {
-    font-family: poppins;
-  }
 
   span {
     font-weight: bold;
