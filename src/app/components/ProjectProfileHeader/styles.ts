@@ -61,4 +61,14 @@ export const InputContent = styled.div`
   input {
     text-align: center;
   }
+
+  input[type="date"] {
+    background: transparent;
+    border: 0;
+    padding: 0 0.5rem;
+    height: 2.5rem;
+    border-radius: 60px;
+    box-shadow: 0 1px 3px 0 ${theme.COLORS.DARK};
+    clip-path: inset(1);
+  }
 `;

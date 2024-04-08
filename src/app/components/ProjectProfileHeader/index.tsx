@@ -14,9 +14,10 @@ import Image from "next/image";
 
 interface ProjectProfileProps {
   value: string;
+  checked: boolean;
 }
 
-export function ProjectProfileHeader({ value }: ProjectProfileProps) {
+export function ProjectProfileHeader({ value, checked }: ProjectProfileProps) {
   const [inputValue, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -73,13 +74,21 @@ export function ProjectProfileHeader({ value }: ProjectProfileProps) {
           <input type="file" onChange={handleFileChange} accept="image/*" />
         </HeaderBoxProfileImage>
         <InputContent>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={handleChange}
-            ref={inputRef}
-          />
-          <RiPencilFill size={24} onClick={handlePencilClick} />
+          {checked ? (
+            <strong>Duração:</strong>
+          ) : (
+            <input
+              type="text"
+              value={inputValue}
+              onChange={handleChange}
+              ref={inputRef}
+            />
+          )}
+          {checked ? (
+            <input type="date" placeholder="Datas" />
+          ) : (
+            <RiPencilFill size={24} onClick={handlePencilClick} />
+          )}
         </InputContent>
       </ContentContainer>
     </Container>
