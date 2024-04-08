@@ -7,111 +7,96 @@ import {
   InputsData,
   InputsDataContainer,
 } from "./styles";
-import { SelectInputWithDropdown } from "@/app/components/SelectInputWithDropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ToogleSwitch from "@/app/components/ToogleSwitch";
 import { poppins } from "@/app/fonts";
+import SelectInput from "@/app/components/SelectInput";
+
+interface ParentComponentState {
+  rows: number[];
+  selectedValues: { [key: string]: string };
+}
 
 export default function Projeto() {
   const [checked, setChecked] = useState<boolean>(false);
 
-  const handleChange = () => {
+  const [rowsAndSelectedValues, setRowsAndSelectedValues] =
+    useState<ParentComponentState>({
+      rows: [0],
+      selectedValues: {},
+    });
+
+  function handleInputChange(id: string, value: string) {
+    setRowsAndSelectedValues((prevState) => ({
+      ...prevState,
+      selectedValues: {
+        ...prevState.selectedValues,
+        [id]: value,
+      },
+    }));
+  }
+
+  function handleCheckedChange() {
     setChecked(!checked);
-  };
+  }
+
+  function addRow() {
+    setRowsAndSelectedValues((prevState) => ({
+      ...prevState,
+      rows: [...prevState.rows, prevState.rows.length],
+    }));
+  }
+
+  const canAddRow = rowsAndSelectedValues.rows.every((index) => {
+    const firstTextValue =
+      rowsAndSelectedValues.selectedValues[`firstTextValue${index}`];
+    const secondTextValue =
+      rowsAndSelectedValues.selectedValues[`secondTextValue${index}`];
+    const thirdTextValue =
+      rowsAndSelectedValues.selectedValues[`thirdTextValue${index}`];
+
+    return firstTextValue && secondTextValue && thirdTextValue;
+  });
+
+  useEffect(() => {
+    if (canAddRow === false) return;
+
+    addRow();
+  }, [canAddRow]);
 
   return (
     <Container className={poppins.className}>
       <SwitchContainer>
         <span>Editar datas</span>
-        <ToogleSwitch onChange={handleChange} />
+        <ToogleSwitch onChange={handleCheckedChange} />
       </SwitchContainer>
 
       <InputsDataContainer>
-        <InputsData>
-          <SelectInputWithDropdown
-            type="text"
-            options={[
-              { value: "back-end-sr", label: "Back-end Sr." },
-              { value: "back-end-jr", label: "Back-end Jr." },
-              { value: "back-end-pl", label: "Back-end PL" },
-            ]}
-            placeholder="Cargo"
-          />
-          <SelectInputWithDropdown
-            type="number"
-            options={[
-              { value: "168h", label: "168h" },
-              { value: "368h", label: "368h" },
-              { value: "250h", label: "250h" },
-            ]}
-            placeholder="Horas"
-            hasPrefix={true}
-          />
-          <SelectInputWithDropdown
-            type="number"
-            options={[
-              { value: "R$ 150,00", label: "R$ 150,00" },
-              { value: "R$ 200,00", label: "R$ 200,00" },
-              { value: "R$ 120,00", label: "R$ 120,00" },
-            ]}
-            placeholder="Valor"
-            hasPrefix={true}
-          />
-        </InputsData>
-
-        <InputsData>
-          <span className="RoleSpacing">Back-end SR</span>
-          <SelectInputWithDropdown
-            type="number"
-            options={[
-              { value: "168h", label: "168h" },
-              { value: "368h", label: "368h" },
-              { value: "250h", label: "250h" },
-            ]}
-            placeholder="Horas"
-          />
-          <SelectInputWithDropdown
-            type="number"
-            options={[
-              { value: "R$ 150,00", label: "R$ 150,00" },
-              { value: "R$ 200,00", label: "R$ 200,00" },
-              { value: "R$ 120,00", label: "R$120,00" },
-            ]}
-            placeholder="Valor"
-          />
-        </InputsData>
-
-        <InputsData>
-          <span className="RoleSpacing">Back-end SR</span>
-          <span>168h</span>
-          <SelectInputWithDropdown
-            type="number"
-            options={[
-              { value: "R$ 150,00", label: "R$ 150,00" },
-              { value: "R$ 200,00", label: "R$ 200,00" },
-              { value: "R$ 120,00", label: "R$ 120,00" },
-            ]}
-            placeholder="Valor"
-          />
-        </InputsData>
-
-        <InputsData>
-          <span className="RoleSpacing">Back-end SR</span>
-          <span>84h</span>
-          <span>150,00</span>
-        </InputsData>
-
-        <InputsData>
-          <span className="RoleSpacing">Back-end SR</span>
-          <span>20h</span>
-          <span>150,00</span>
-        </InputsData>
-
-        <InputsData>
-          <span className="RoleSpacing">Back-end SR</span>
-          <span>168h</span>
-          <span>150,00</span>
-        </InputsData>
+        {rowsAndSelectedValues.rows
+          .slice()
+          .reverse()
+          .map((row, index) => (
+            <InputsData key={rowsAndSelectedValues.rows.length - 1 - index}>
+              <SelectInput
+                id={`firstTextValue${row}`}
+                onChange={(value) =>
+                  handleInputChange(`firstTextValue${row}`, value)
+                }
+              />
+              <SelectInput
+                id={`secondTextValue${row}`}
+                onChange={(value) =>
+                  handleInputChange(`secondTextValue${row}`, value)
+                }
+              />
+              <SelectInput
+                id={`thirdTextValue${row}`}
+                onChange={(value) =>
+                  handleInputChange(`thirdTextValue${row}`, value)
+                }
+              />
+            </InputsData>
+          ))}
 
         <Footer>
           <strong>Total:</strong> <span>1584h</span>
