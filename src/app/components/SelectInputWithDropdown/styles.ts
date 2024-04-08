@@ -1,8 +1,10 @@
+import { styled } from "@linaria/react";
+
 export const customStyles = {
   control: (provided: any) => ({
     ...provided,
     border: "0",
-    width: "6.875rem",
+    width: "100%",
     height: "2.5rem",
     borderRadius: "60px",
     boxShadow: "none",
@@ -29,3 +31,7 @@ export const customStyles = {
     },
   }),
 };
+
+export const Container = styled.div`
+  width: 100%;
+`;

@@ -2,30 +2,19 @@
 
 import {
   Container,
-  SwitchContainer,
-  Footer,
   InputsData,
   InputsDataContainer,
+  TotalBudget,
 } from "./styles";
 import { SelectInputWithDropdown } from "@/app/components/SelectInputWithDropdown";
-import { useState } from "react";
-import ToogleSwitch from "@/app/components/ToogleSwitch";
-import { poppins } from "@/app/fonts";
+import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
+import { roboto } from "@/app/fonts";
 
 export default function Projeto() {
-  const [checked, setChecked] = useState<boolean>(false);
-
-  const handleChange = () => {
-    setChecked(!checked);
-  };
 
   return (
-    <Container className={poppins.className}>
-      <SwitchContainer>
-        <span>Editar datas</span>
-        <ToogleSwitch onChange={handleChange} />
-      </SwitchContainer>
-
+    <Container className={roboto.className}>
+      <ProjectProfileHeader value="Nome do Projeto..." />
       <InputsDataContainer>
         <InputsData>
           <SelectInputWithDropdown
@@ -113,10 +102,10 @@ export default function Projeto() {
           <span>150,00</span>
         </InputsData>
 
-        <Footer>
+        <TotalBudget>
           <strong>Total:</strong> <span>1584h</span>
           <span>178.200,00</span>
-        </Footer>
+        </TotalBudget>
       </InputsDataContainer>
     </Container>
   );

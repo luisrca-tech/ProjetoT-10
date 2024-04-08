@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import { roboto } from "./fonts";
 import { css } from "@linaria/core";
-import "@radix-ui/themes/styles.css";
 
 const globalStyle = css`
   :root {
