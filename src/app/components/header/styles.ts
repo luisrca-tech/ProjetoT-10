@@ -91,7 +91,7 @@ export const CloseContainer = styled.div`
   }
 `;
 
-export const AddProjectButton = styled.div`
+export const AddProjectButton = styled.button`
   width: 2.4rem;
   height: 2.4rem;
   border: none;
