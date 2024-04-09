@@ -27,7 +27,7 @@ O Gestor Integrado de Projetos e Serviços é uma aplicação completa desenvolv
 1. Clone o repositório:
 
     ```txt
-    git clone https://github.com/P4vanzinho/Projeto-T10.git
+    git clone https://github.com/luisrca-tech/Projeto-T10.git
     ```
 
 2. Acesse o diretório do projeto:
