@@ -1,12 +1,22 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Container } from "./styles";
+
+import { backgroundImages, position } from "polished";
+import { SelectComponent } from "../SelectComponent";
 
 interface SelectInputProps {
   id: string;
   onChange: (value: string) => void;
+  placeholder: string;
 }
 
-export default function SelectInput({ id, onChange }: SelectInputProps) {
+export default function SelectInput({
+  id,
+  onChange,
+  placeholder,
+}: SelectInputProps) {
+  const selectRef = useRef<HTMLSelectElement>(null);
   const [value, setValue] = useState("");
 
   const handleChange = (
@@ -23,12 +33,19 @@ export default function SelectInput({ id, onChange }: SelectInputProps) {
   };
 
   return (
-    <>
-      <select id={id} value={value} onChange={handleChange}>
-        <option value="1">1</option>
-        <option value="2">2</option>
-      </select>
-      <input type="text" id={id} value={value} onChange={handleChange} />
-    </>
+    <Container>
+      <input
+        placeholder={placeholder}
+        type="text"
+        id={id}
+        value={value}
+        onChange={handleChange}
+      />
+      <SelectComponent
+        id={id}
+        value={value}
+        onChange={handleChange}
+      />
+    </Container>
   );
 }
