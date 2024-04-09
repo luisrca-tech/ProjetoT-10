@@ -1,7 +1,11 @@
 import { theme } from "@/app/styles/theme";
 import { styled } from "@linaria/react";
 
-export const Container = styled.div`
+type ContainerProps = {
+  hasValue: Boolean;
+};
+
+export const Container = styled.div<ContainerProps>`
   display: flex;
   width: 33%;
   height: 2.5rem;
