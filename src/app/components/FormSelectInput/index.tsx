@@ -50,6 +50,12 @@ export default function FormSelectInput() {
     return firstTextValue && secondTextValue && thirdTextValue;
   });
 
+  const isValueInInput = (row: number, inputName: string) => {
+    const { selectedValues } = rowsAndSelectedValues;
+    const textValue = selectedValues[`${inputName}${row}`];
+    return textValue !== undefined;
+  };
+
   useEffect(() => {
     if (canAddRow === false) return;
 
@@ -82,6 +88,7 @@ export default function FormSelectInput() {
                 onChange={(value) =>
                   handleInputChange(`firstTextValue${row}`, value)
                 }
+                hasValue={isValueInInput(row, "firstTextValue")}
               />
               <SelectInput
                 placeholder="Valor"
@@ -89,6 +96,7 @@ export default function FormSelectInput() {
                 onChange={(value) =>
                   handleInputChange(`secondTextValue${row}`, value)
                 }
+                hasValue={isValueInInput(row, "secondTextValue")}
               />
               <SelectInput
                 placeholder="Horas"
@@ -96,6 +104,7 @@ export default function FormSelectInput() {
                 onChange={(value) =>
                   handleInputChange(`thirdTextValue${row}`, value)
                 }
+                hasValue={isValueInInput(row, "thirdTextValue")}
               />
             </InputsRow>
           ))}
