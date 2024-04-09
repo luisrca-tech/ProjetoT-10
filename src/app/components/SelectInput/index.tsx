@@ -42,7 +42,11 @@ export default function SelectInput({
         value={value}
         onChange={handleChange}
       />
-      <SelectComponent id={id} value={value} onChange={handleChange} />
+      <SelectComponent 
+      id={id} 
+      value={value} 
+      onChange={handleChange}
+      />
     </Container>
   );
 }
