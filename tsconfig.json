@@ -32,7 +32,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "src/app/components/SelectComponent/styles.ts"  ],
   "exclude": [
     "node_modules"
   ]
