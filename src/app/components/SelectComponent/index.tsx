@@ -34,9 +34,9 @@ export function SelectComponent({ id, value, onChange }: SelectComponentProps) {
         <Option>Back-end</Option>
       </CustomFormSelect>
       {onSelectOpen ? (
-        <Image src={ArrowDown} alt="" width={25} height={25} />
+        <Image src={ArrowDown} alt="" width={5} height={10} />
       ) : (
-        <Image src={ArrowRight} alt="" width={25} height={25} />
+        <Image src={ArrowRight} alt="" width={5} height={10} />
       )}
     </Container>
   );
