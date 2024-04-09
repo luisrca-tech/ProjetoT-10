@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from "react";
 import ToogleSwitch from "@/app/components/ToogleSwitch";
 import { poppins } from "@/app/fonts";
-import SelectInput from "@/app/components/SelectInput";
+import FormSelectInput from "@/app/components/FormSelectInput";
 
 interface ParentComponentState {
   rows: number[];
@@ -71,38 +71,7 @@ export default function Projeto() {
         <ToogleSwitch onChange={handleCheckedChange} />
       </SwitchContainer>
 
-      <InputsDataContainer>
-        {rowsAndSelectedValues.rows
-          .slice()
-          .reverse()
-          .map((row, index) => (
-            <InputsData key={rowsAndSelectedValues.rows.length - 1 - index}>
-              <SelectInput
-                id={`firstTextValue${row}`}
-                onChange={(value) =>
-                  handleInputChange(`firstTextValue${row}`, value)
-                }
-              />
-              <SelectInput
-                id={`secondTextValue${row}`}
-                onChange={(value) =>
-                  handleInputChange(`secondTextValue${row}`, value)
-                }
-              />
-              <SelectInput
-                id={`thirdTextValue${row}`}
-                onChange={(value) =>
-                  handleInputChange(`thirdTextValue${row}`, value)
-                }
-              />
-            </InputsData>
-          ))}
-
-        <Footer>
-          <strong>Total:</strong> <span>1584h</span>
-          <span>178.200,00</span>
-        </Footer>
-      </InputsDataContainer>
+      <FormSelectInput />
     </Container>
   );
 }
