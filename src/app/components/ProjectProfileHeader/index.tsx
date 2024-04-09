@@ -14,7 +14,7 @@ import Image from "next/image";
 
 interface ProjectProfileProps {
   value: string;
-  checked: boolean;
+  checked?: boolean;
 }
 
 export function ProjectProfileHeader({ value, checked }: ProjectProfileProps) {
