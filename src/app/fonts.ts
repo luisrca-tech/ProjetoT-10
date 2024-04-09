@@ -8,7 +8,7 @@ export const bebasNeue = Bebas_Neue({
 
 export const poppins = Poppins({
   display: "swap",
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600"],
   subsets: ["latin"],
 });
 

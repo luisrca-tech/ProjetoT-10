@@ -10,7 +10,8 @@ export type ThemeColors = {
   PRIMARY: string;
   ERROR: string;
   SECONDARY: string;
-  SECONDARY_LIGTH: string;
+  SECONDARY_LIGHT: string;
+  SECONDARY_EXTRA_LIGHT: string;
 };
 
 declare module "styled-components" {

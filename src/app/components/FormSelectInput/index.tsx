@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -76,18 +77,21 @@ export default function FormSelectInput() {
           .map((row, index) => (
             <InputsRow key={rowsAndSelectedValues.rows.length - 1 - index}>
               <SelectInput
+                placeholder="Cargo"
                 id={`firstTextValue${row}`}
                 onChange={(value) =>
                   handleInputChange(`firstTextValue${row}`, value)
                 }
               />
               <SelectInput
+                placeholder="Valor"
                 id={`secondTextValue${row}`}
                 onChange={(value) =>
                   handleInputChange(`secondTextValue${row}`, value)
                 }
               />
               <SelectInput
+                placeholder="Horas"
                 id={`thirdTextValue${row}`}
                 onChange={(value) =>
                   handleInputChange(`thirdTextValue${row}`, value)
