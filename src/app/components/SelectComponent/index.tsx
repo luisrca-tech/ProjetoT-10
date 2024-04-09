@@ -3,6 +3,9 @@
 import { Container, CustomFormSelect, Option } from "./styles";
 import React, { ChangeEvent, useState } from "react";
 
+import ArrowRight from "../../../../public/arrowright.svg";
+import ArrowDown from "../../../../public/arrowdown.svg";
+
 import Image from "next/image";
 
 interface SelectComponentProps {
@@ -31,9 +34,9 @@ export function SelectComponent({ id, value, onChange }: SelectComponentProps) {
         <Option>Back-end</Option>
       </CustomFormSelect>
       {onSelectOpen ? (
-        <Image src={"../../../../public/arrowdown.svg"} alt="" />
+        <Image src={ArrowDown} alt="" width={5} height={10} />
       ) : (
-        <Image src={"../../../../public/arrowright.svg"} alt="" />
+        <Image src={ArrowRight} alt="" width={5} height={10} />
       )}
     </Container>
   );

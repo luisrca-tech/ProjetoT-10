@@ -9,12 +9,14 @@ interface SelectInputProps {
   id: string;
   onChange: (value: string) => void;
   placeholder: string;
+  hasValue: boolean;
 }
 
 export default function SelectInput({
   id,
   onChange,
   placeholder,
+  hasValue,
 }: SelectInputProps) {
   const [value, setValue] = useState("");
 
@@ -32,7 +34,7 @@ export default function SelectInput({
   };
 
   return (
-    <Container>
+    <Container hasValue={hasValue}>
       <input
         placeholder={placeholder}
         type="text"
@@ -40,11 +42,7 @@ export default function SelectInput({
         value={value}
         onChange={handleChange}
       />
-      <SelectComponent
-        id={id}
-        value={value}
-        onChange={handleChange}
-      />
+      <SelectComponent id={id} value={value} onChange={handleChange} />
     </Container>
   );
 }
