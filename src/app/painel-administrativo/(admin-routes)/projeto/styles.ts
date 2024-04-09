@@ -56,3 +56,15 @@ export const TotalBudget = styled.footer`
     font-size: 0.875rem;
   }
 `;
+export const SwitchContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.25rem;
+
+  span {
+    font-size: 14px;
+    font-weight: 600;
+  }
+`;
