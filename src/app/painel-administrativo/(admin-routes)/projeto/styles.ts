@@ -10,8 +10,6 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   font-family: roboto;
-
-  padding: 0 1.25rem;
 `;
 
 export const SwitchContainer = styled.div`
@@ -19,6 +17,7 @@ export const SwitchContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0 1.25rem;
 
   span {
     font-size: 14px;
@@ -27,14 +26,15 @@ export const SwitchContainer = styled.div`
 `;
 
 export const InputsDataContainer = styled.div`
-  max-width: 22.5rem;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding: 0 1.25rem;
 `;
 
 export const InputsData = styled.div`
-  width: 21.5rem;
+  width: 100%;
   display: flex;
   gap: 0.5rem;
   height: 2.5rem;
@@ -55,11 +55,16 @@ export const InputsData = styled.div`
   }
 `;
 
-export const Footer = styled.footer`
+export const TotalBudget = styled.footer`
   display: flex;
   justify-content: space-between;
 
   margin-top: 1rem;
+
+  span,
+  strong {
+    font-family: "Poppins";
+  }
 
   span {
     font-weight: bold;
