@@ -1,15 +1,10 @@
 "use client";
 
-import {
-  Container,
-  SwitchContainer,
-  Footer,
-  InputsData,
-  InputsDataContainer,
-} from "./styles";
+import { Container, SwitchContainer } from "./styles";
 import { useEffect, useState } from "react";
 import ToogleSwitch from "@/app/components/ToogleSwitch";
 import { poppins } from "@/app/fonts";
+import SelectInput from "@/app/components/SelectInput";
 import FormSelectInput from "@/app/components/FormSelectInput";
 
 interface ParentComponentState {
