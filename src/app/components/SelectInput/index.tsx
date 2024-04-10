@@ -54,7 +54,6 @@ export default function SelectInput({
           onChange={handleChange}
         />
       </SelectComponentContainer>
-=======
       <SelectComponent 
       id={id} 
       value={value} 
