@@ -59,6 +59,8 @@ export default function SelectInput({
       id={id} 
       value={value} 
       onChange={handleChange}
+      hasValue={hasValue}
       />
+    </Container>
   );
 }
