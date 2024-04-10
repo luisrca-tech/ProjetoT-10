@@ -20,12 +20,12 @@ export default function Projeto() {
   };
   return (
     <Container className={roboto.className}>
-      <ProjectProfileHeader value="Nome do Projeto..." />
+      <ProjectProfileHeader checked={checked} value="Nome do Projeto..." />
       <SwitchContainer>
         <span>Editar datas</span>
         <ToggleSwitch onChange={handleChange} />
       </SwitchContainer>
-      <FormSelectInput />
+      <FormSelectInput checked={checked} />
     </Container>
   );
 }
