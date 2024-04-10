@@ -4,15 +4,13 @@ import FormSelect from "react-bootstrap/esm/FormSelect";
 
 export const Container = styled.div`
   display: flex;
-  position: relative;
+  position: absolute;
+  top: -0.6rem;
+  right: 0.8rem;
 `;
 
 export const CustomFormSelect = styled(FormSelect)`
   position: absolute;
-  right: -3%;
-  top: 0;
-  height: 100%;
-  width: 100%;
   appearance: none;
   background-repeat: no-repeat;
   background-position: center;
@@ -26,7 +24,8 @@ export const CustomFormSelect = styled(FormSelect)`
 `;
 
 export const Option = styled.option`
-  width: 130%;
   color: ${theme.COLORS.SECONDARY_DARK};
-  border-radius: 20px;  
+  background: ${theme.COLORS.SELECT_INPUT};
+  width: 100%;
+  border-radius: 20px;
 `;

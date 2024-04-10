@@ -15,7 +15,7 @@ interface ParentComponentState {
   selectedValues: { [key: string]: string };
 }
 
-export default function FormSelectInput() {
+export default function FormSelectInput({ checked }: { checked: boolean }) {
   const [rowsAndSelectedValues, setRowsAndSelectedValues] =
     useState<ParentComponentState>({
       rows: [0],
@@ -81,7 +81,7 @@ export default function FormSelectInput() {
           .slice()
           .reverse()
           .map((row, index) => (
-            <InputsRow key={rowsAndSelectedValues.rows.length - 1 - index}>
+            <InputsRow checked={checked} key={rowsAndSelectedValues.rows.length - 1 - index}>
               <SelectInput
                 placeholder="Cargo"
                 id={`firstTextValue${row}`}
@@ -89,23 +89,34 @@ export default function FormSelectInput() {
                   handleInputChange(`firstTextValue${row}`, value)
                 }
                 hasValue={isValueInInput(row, "firstTextValue")}
+                checked={checked}
               />
-              <SelectInput
-                placeholder="Valor"
-                id={`secondTextValue${row}`}
-                onChange={(value) =>
-                  handleInputChange(`secondTextValue${row}`, value)
-                }
-                hasValue={isValueInInput(row, "secondTextValue")}
-              />
-              <SelectInput
-                placeholder="Horas"
-                id={`thirdTextValue${row}`}
-                onChange={(value) =>
-                  handleInputChange(`thirdTextValue${row}`, value)
-                }
-                hasValue={isValueInInput(row, "thirdTextValue")}
-              />
+              {!checked ? (
+                <>
+                  <SelectInput
+                    placeholder="Valor"
+                    id={`secondTextValue${row}`}
+                    onChange={(value) =>
+                      handleInputChange(`secondTextValue${row}`, value)
+                    }
+                    hasValue={isValueInInput(row, "secondTextValue")}
+                    checked={checked}
+                  />
+                  <SelectInput
+                    placeholder="Horas"
+                    id={`thirdTextValue${row}`}
+                    onChange={(value) =>
+                      handleInputChange(`thirdTextValue${row}`, value)
+                    }
+                    hasValue={isValueInInput(row, "thirdTextValue")}
+                    checked={checked}
+                  />
+                </>
+              ) : (
+                <>
+                  <input type="date" />
+                </>
+              )}
             </InputsRow>
           ))}
       </InputsDataContainer>

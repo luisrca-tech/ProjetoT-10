@@ -33,7 +33,21 @@ export const Footer = styled.div`
   }
 `;
 
-export const InputsRow = styled.div`
+type InputsRowProps = {
+  checked: boolean;
+};
+
+export const InputsRow = styled.div<InputsRowProps>`
   display: flex;
   justify-content: space-between;
+  gap: ${(props) => props.checked ? '28px' : ''};
+  background: ${theme.COLORS.LIGHT};
+
+  input[type="date"] {
+    background: ${theme.COLORS.SELECT_INPUT};
+    border: none;
+    padding: 0 0.5rem;
+    height: 2.5rem;
+    border-radius: 60px;
+  }
 `;

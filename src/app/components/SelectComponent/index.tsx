@@ -1,7 +1,7 @@
 "use client";
 
 import { Container, CustomFormSelect, Option } from "./styles";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 
 import ArrowRight from "../../../../public/arrowright.svg";
 import ArrowDown from "../../../../public/arrowdown.svg";
@@ -12,13 +12,19 @@ interface SelectComponentProps {
   id: string;
   value: string;
   onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  hasValue: boolean;
 }
 
-export function SelectComponent({ id, value, onChange }: SelectComponentProps) {
-  const [onSelectOpen, setOnSelectOpen] = useState(false);
+export function SelectComponent({
+  id,
+  value,
+  onChange,
+  hasValue,
+}: SelectComponentProps) {
+  const [isSelectOpen, setIsSelectOpen] = useState(false);
 
   function handleImageClick() {
-    setOnSelectOpen(!onSelectOpen);
+    setIsSelectOpen(!isSelectOpen);
   }
 
   return (
@@ -28,16 +34,18 @@ export function SelectComponent({ id, value, onChange }: SelectComponentProps) {
         value={value}
         onChange={onChange}
         id={id}
-        size="sm"
       >
         <Option>Front-end</Option>
         <Option>Back-end</Option>
+        <Option selected hidden></Option>
       </CustomFormSelect>
-      {onSelectOpen ? (
-        <Image src={ArrowDown} alt="" width={5} height={10} />
-      ) : (
-        <Image src={ArrowRight} alt="" width={5} height={10} />
-      )}
+      <div style={{ display: !isSelectOpen && hasValue ? "none" : "block" }}>
+        {isSelectOpen ? (
+          <Image src={ArrowDown} alt="Seta para baixo (aberto)" />
+        ) : (
+          <Image src={ArrowRight} alt="Seta para direita (fechado)" />
+        )}
+      </div>
     </Container>
   );
 }

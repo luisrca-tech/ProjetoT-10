@@ -1,6 +1,6 @@
 "use client";
-import { useRef, useState } from "react";
-import { Container } from "./styles";
+import { useEffect, useRef, useState } from "react";
+import { Container, Input, SelectComponentContainer } from "./styles";
 
 import { backgroundImages, position } from "polished";
 import { SelectComponent } from "../SelectComponent";
@@ -10,6 +10,7 @@ interface SelectInputProps {
   onChange: (value: string) => void;
   placeholder: string;
   hasValue: boolean;
+  checked: boolean
 }
 
 export default function SelectInput({
@@ -17,6 +18,7 @@ export default function SelectInput({
   onChange,
   placeholder,
   hasValue,
+  checked,
 }: SelectInputProps) {
   const [value, setValue] = useState("");
 
@@ -34,19 +36,29 @@ export default function SelectInput({
   };
 
   return (
-    <Container hasValue={hasValue}>
-      <input
+    <Container checked={checked}>
+      <Input
+        autoComplete="off"
+        hasValue={hasValue}
         placeholder={placeholder}
         type="text"
         id={id}
         value={value}
         onChange={handleChange}
       />
+      <SelectComponentContainer>
+        <SelectComponent
+          hasValue={hasValue}
+          id={id}
+          value={value}
+          onChange={handleChange}
+        />
+      </SelectComponentContainer>
+=======
       <SelectComponent 
       id={id} 
       value={value} 
       onChange={handleChange}
       />
-    </Container>
   );
 }
