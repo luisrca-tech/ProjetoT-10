@@ -87,7 +87,7 @@ O Gestor Integrado de Projetos e Serviços é uma aplicação completa desenvolv
     ```
 
   ```ts
-  "use client";
+ "use client";
 
 import { useEffect, useState } from "react";
 import {
@@ -101,7 +101,6 @@ import SelectInput from "../SelectInput";
 import Image from "next/image";
 
 import { useContext } from "react";
-import { ScrolldownContext } from "../../../contexts/ScrolldownContext";
 
 interface ParentComponentState {
   rows: number[];
@@ -109,7 +108,20 @@ interface ParentComponentState {
 }
 
 export default function FormSelectInput({ checked }: { checked: boolean }) {
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
+  // Estado para controlar o índice do item selecionado
+  const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
+    null,
+  );
+
+  // Função para abrir ou fechar o item na posição especificada
+  const toggleSelectOpen = (index: number) => {
+    setSelectedItemIndex(selectedItemIndex === index ? null : index);
+  };
+
+  // Verifica se o item na posição 'index' está aberto
+  const isSelectOpen = (index: number) => {
+    return selectedItemIndex === index;
+  };
 
   const [rowsAndSelectedValues, setRowsAndSelectedValues] =
     useState<ParentComponentState>({
@@ -147,7 +159,6 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
 
   const isValueInInput = (row: number, inputName: string) => {
     const { selectedValues } = rowsAndSelectedValues;
-    console.log(selectedValues, selectedValues);
     const textValue = selectedValues[`${inputName}${row}`];
 
     return textValue !== undefined && textValue.length > 0;
@@ -201,8 +212,7 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   inputValue={
                     rowsAndSelectedValues.selectedValues[`firstTextValue${row}`]
                   }
-                  isSelectOpen={isSelectOpen}
-                  setIsSelectOpen={setIsSelectOpen}
+                  setIsSelectOpen={() => toggleSelectOpen(index)}
                 />
                 {!checked ? (
                   <>
@@ -243,22 +253,18 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   </>
                 )}
               </InputsRow>
-              {isSelectOpen &&
-                row ===
-                  rowsAndSelectedValues.rows[
-                    rowsAndSelectedValues.rows.length - 1
-                  ] && (
-                  <div className="scrolldown">
-                    {Object.values(offices).map((value, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleButtonClick(value, row)}
-                      >
-                        <span>{value}</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
+              {isSelectOpen(index) && ( // Atualizado para chamar a função 'isSelectOpen' com o índice atual
+                <div className="scrolldown">
+                  {Object.values(offices).map((value, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleButtonClick(value, row)}
+                    >
+                      <span>{value}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
       </InputsDataContainer>
@@ -276,12 +282,12 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
     </Container>
   );
 }
+
   ```
 
 ```ts
-  import { useContext, useEffect, useState } from "react";
+ import { useContext, useEffect, useState } from "react";
 import { Container, Input } from "./styles";
-import { ScrolldownContext } from "@/contexts/ScrolldownContext";
 
 interface SelectInputProps {
   id: string;
@@ -308,8 +314,6 @@ export default function SelectInput({
   setIsSelectOpen,
   value,
 }: SelectInputProps) {
-  const [currentValue, setCurrentValue] = useState(value);
-
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>,
   ) => {
@@ -318,29 +322,28 @@ export default function SelectInput({
       event.target instanceof HTMLInputElement
     ) {
       const newValue = event.target.value;
-      setCurrentValue(newValue);
+
       onChange(newValue);
     }
   };
 
   const handleInputFocus = () => {
     if (setIsSelectOpen === undefined) {
-      return 
+      return;
     }
-    setIsSelectOpen(true)
+    setIsSelectOpen(true);
   };
 
   const handleInputBlur = () => {
     if (setIsSelectOpen === undefined) {
-      return
+      return;
     }
-    setTimeout(() => {
-      setIsSelectOpen(false);
-    }, 200);
+
+    setIsSelectOpen(false);
   };
 
   return (
-    <Container checked={checked}>
+    <Container checked={checked} >
       <Input
         onBlur={handleInputBlur}
         autoComplete="off"
