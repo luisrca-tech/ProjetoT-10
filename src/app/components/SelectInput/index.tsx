@@ -60,6 +60,7 @@ export default function SelectInput({
   return (
     <Container checked={checked}>
         <Input
+          onBlur={handleInputBlur}
           autoComplete="off"
           hasValue={hasValue}
           placeholder={placeholder}
