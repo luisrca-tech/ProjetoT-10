@@ -1,16 +1,21 @@
-"use client";
-import { useEffect, useRef, useState } from "react";
-import { Container, Input, SelectComponentContainer } from "./styles";
+import { useContext, useEffect, useState } from "react";
+import { Container, Input } from "./styles";
 
-import { backgroundImages, position } from "polished";
-import { SelectComponent } from "../SelectComponent";
+import ArrowDown from "../../../../public/arrowdown.svg";
+import ArrowRight from "../../../../public/arrowright.svg";
+import Image from "next/image";
 
 interface SelectInputProps {
   id: string;
   onChange: (value: string) => void;
   placeholder: string;
   hasValue: boolean;
-  checked: boolean
+  checked: boolean;
+  values: { [key: string]: string };
+  inputValue: string;
+  isSelectOpen?: boolean;
+  setIsSelectOpen?: (boolean: boolean) => void;
+  value?: string;
 }
 
 export default function SelectInput({
@@ -19,8 +24,11 @@ export default function SelectInput({
   placeholder,
   hasValue,
   checked,
+  inputValue,
+  isSelectOpen,
+  setIsSelectOpen,
 }: SelectInputProps) {
-  const [value, setValue] = useState("");
+  const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>,
@@ -30,36 +38,42 @@ export default function SelectInput({
       event.target instanceof HTMLInputElement
     ) {
       const newValue = event.target.value;
-      setValue(newValue);
+
       onChange(newValue);
+    }
+  };
+
+  const handleInputFocus = () => {
+    setIsFocused(true);
+    if (setIsSelectOpen) {
+      setIsSelectOpen(true);
+    }
+  };
+
+  const handleInputBlur = () => {
+    setIsFocused(false);
+    if (setIsSelectOpen) {
+      setIsSelectOpen(false);
     }
   };
 
   return (
     <Container checked={checked}>
-      <Input
-        autoComplete="off"
-        hasValue={hasValue}
-        placeholder={placeholder}
-        type="text"
-        id={id}
-        value={value}
-        onChange={handleChange}
-      />
-      <SelectComponentContainer>
-        <SelectComponent
+        <Input
+          autoComplete="off"
           hasValue={hasValue}
+          placeholder={placeholder}
+          type="text"
           id={id}
-          value={value}
+          value={inputValue}
           onChange={handleChange}
+          onFocus={handleInputFocus}
         />
-      </SelectComponentContainer>
-      <SelectComponent 
-      id={id} 
-      value={value} 
-      onChange={handleChange}
-      hasValue={hasValue}
-      />
+        {!isFocused ? (
+          <Image src={ArrowRight} alt="" />
+        ) : (
+          <Image src={ArrowDown} alt="" />
+        )}
     </Container>
   );
 }
