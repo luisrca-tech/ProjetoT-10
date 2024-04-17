@@ -11,6 +11,7 @@ import {
   SeparatorContainer,
   HeaderContent,
   BudgetContainer,
+  RowAndScrollDownContainer,
 } from "./styles";
 import SelectInput from "../SelectInput";
 import Image from "next/image";
@@ -37,12 +38,6 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
   const [lastRowIndex, setLastRowIndex] = useState<number | null>(null);
   const [totalHours, setTotalHours] = useState<number>(0);
   const [totalValue, setTotalValue] = useState<number>(0);
-
-  useEffect(() => {
-    // Encontrar o índice da última linha
-    const lastIndex = Object.values(offices).length - 0;
-    setLastRowIndex(lastIndex);
-  }, []);
 
   // Função para abrir ou fechar o item na posição especificada
   const toggleSelectOpen = (index: number) => {
@@ -95,15 +90,15 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
     return textValue !== undefined && textValue.length > 0;
   };
 
+  const handleButtonClick = (value: string, row: number) => {
+    handleInputChange(`firstTextValue${row}`, value);
+  };
+
   useEffect(() => {
     if (canAddRow === false) return;
 
     addRow();
   }, [canAddRow]);
-
-  const handleButtonClick = (value: string, row: number) => {
-    handleInputChange(`firstTextValue${row}`, value);
-  };
 
   useEffect(() => {
     let totalHoursSum = 0;
@@ -130,6 +125,12 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
     setTotalHours(totalHoursSum);
     setTotalValue(totalValueSum);
   }, [rowsAndSelectedValues]); // rowsAndSelectedValues como dependencia garante que os valores vão se alterar cada vez que esse argumento mudar.
+
+  useEffect(() => {
+    // Encontrar o índice da última linha
+    const lastIndex = Object.values(offices).length - 0;
+    setLastRowIndex(lastIndex);
+  }, []);
 
   return (
     <Container>
@@ -163,9 +164,12 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
           .slice()
           .reverse()
           .map((row, index) => (
-            <div key={rowsAndSelectedValues.rows.length - 1 - index}>
+            <RowAndScrollDownContainer
+              key={rowsAndSelectedValues.rows.length - 1 - index}
+            >
               <InputsRow checked={checked}>
                 <SelectInput
+                  type="text"
                   placeholder="Cargo"
                   id={`firstTextValue${row}`}
                   onChange={(value) =>
@@ -182,6 +186,7 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                 {!checked ? (
                   <>
                     <SelectInput
+                      type="number"
                       placeholder="Horas"
                       id={`secondTextValue${row}`}
                       onChange={(value) =>
@@ -197,6 +202,7 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                       }
                     />
                     <SelectInput
+                      type="number"
                       placeholder="Valor"
                       id={`thirdTextValue${row}`}
                       onChange={(value) =>
@@ -218,7 +224,8 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   </>
                 )}
               </InputsRow>
-              {isSelectOpen(index) && ( // Atualizado para chamar a função 'isSelectOpen' com o índice atual
+              {isSelectOpen(index) && (
+                // Atualizado para chamar a função 'isSelectOpen' com o índice atual
                 <ScrollDownContainer
                   className={poppins.className}
                   onMouseDown={(e) => e.preventDefault()} // onMouseDown previne a perda do foco que acontece dentro de onClick, e.preventDefault impede que o foco seja perido.
@@ -241,7 +248,7 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   ))}
                 </ScrollDownContainer>
               )}
-            </div>
+            </RowAndScrollDownContainer>
           ))}
       </InputsDataContainer>
       <Footer>
