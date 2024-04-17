@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { HTMLInputTypeAttribute, useContext, useEffect, useState } from "react";
 import { Container, Input } from "./styles";
 
 import ArrowDown from "../../../../public/arrowdown.svg";
@@ -16,6 +16,7 @@ interface SelectInputProps {
   isSelectOpen?: boolean;
   setIsSelectOpen?: (boolean: boolean) => void;
   value?: string;
+  type: string;
 }
 
 export default function SelectInput({
@@ -27,6 +28,7 @@ export default function SelectInput({
   inputValue,
   isSelectOpen,
   setIsSelectOpen,
+  ...rest
 }: SelectInputProps) {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -59,22 +61,28 @@ export default function SelectInput({
 
   return (
     <Container checked={checked}>
-        <Input
-          onBlur={handleInputBlur}
-          autoComplete="off"
-          hasValue={hasValue}
-          placeholder={placeholder}
-          type="text"
-          id={id}
-          value={inputValue}
-          onChange={handleChange}
-          onFocus={handleInputFocus}
-        />
-        {!isFocused ? (
+      <Input
+        {...rest}
+        onBlur={handleInputBlur}
+        autoComplete="off"
+        hasValue={hasValue}
+        placeholder={placeholder}
+        type={!rest.type ? "text" : rest.type}
+        id={id}
+        value={inputValue}
+        onChange={handleChange}
+        onFocus={handleInputFocus}
+      />
+
+      {!hasValue ? (
+        !isFocused ? (
           <Image src={ArrowRight} alt="" />
         ) : (
           <Image src={ArrowDown} alt="" />
-        )}
+        )
+      ) : (
+        ""
+      )}
     </Container>
   );
 }
