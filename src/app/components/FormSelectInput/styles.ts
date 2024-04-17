@@ -1,6 +1,14 @@
 import { styled } from "@linaria/react";
 import { theme } from "@/app/styles/theme";
 
+type InputsRowProps = {
+  checked: boolean;
+};
+
+type HeaderProps = {
+  checked: boolean;
+};
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -8,16 +16,6 @@ export const Container = styled.div`
   width: 100%;
   padding: 0 1.25rem;
 `;
-
-export const InputsDataContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-`;
-
-type HeaderProps = {
-  checked: boolean;
-};
 
 export const Header = styled.div<HeaderProps>`
   display: flex;
@@ -37,9 +35,16 @@ export const HeaderContent = styled.div`
   }
 `;
 
-type InputsRowProps = {
-  checked: boolean;
-};
+export const InputsDataContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+export const RowAndScrollDownContainer = styled.div`
+  background: ${theme.COLORS.SELECT_INPUT};
+  border-radius: 20px;
+`;
 
 export const InputsRow = styled.div<InputsRowProps>`
   display: flex;
@@ -59,7 +64,6 @@ export const InputsRow = styled.div<InputsRowProps>`
 `;
 
 export const ScrollDownContainer = styled.div`
-  margin-top: 0.25rem;
   background: ${theme.COLORS.SELECT_INPUT};
   display: flex;
   flex-direction: column;
@@ -128,4 +132,4 @@ export const BudgetContainer = styled.div`
     font-size: 0.875rem;
     font-weight: bold;
   }
-`
+`;
