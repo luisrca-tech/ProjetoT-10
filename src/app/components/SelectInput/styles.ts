@@ -42,4 +42,15 @@ export const Input = styled.input<InputProps>`
     font-size: 1rem;
     color: ${theme.COLORS.SECONDARY_DARK};
   }
+
+  box-shadow: -3px 1px 3px rgba(0, 0, 0, 0.25);
+   -webkit-appearance: none;
+  -moz-appearance: textfield; 
+
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0; 
+
 `;
