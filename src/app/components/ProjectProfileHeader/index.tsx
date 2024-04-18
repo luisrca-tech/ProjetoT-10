@@ -1,16 +1,20 @@
 "use client";
 
-import { z } from "zod";
+import { useEffect, useRef, useState } from "react";
 import {
   Container,
   ContentContainer,
+  DataContainer,
   HeaderBoxProfileImage,
   InputContent,
+  InputDataMenu,
 } from "./styles";
-import { RiPencilFill } from "react-icons/ri";
-import { useEffect, useRef, useState } from "react";
+
 import { roboto } from "@/app/fonts";
 import Image from "next/image";
+import CalendarIcon from "../../../../public/calendaricon.svg";
+import { RiPencilFill } from "react-icons/ri";
+import DateRangePicker  from "../DateRangePicker";
 
 interface ProjectProfileProps {
   value: string;
@@ -21,6 +25,11 @@ export function ProjectProfileHeader({ value, checked }: ProjectProfileProps) {
   const [inputValue, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  function toggleDatePicker() {
+    setIsDatePickerOpen(!isDatePickerOpen);
+  }
 
   // Divide a string em palavras
   const words = inputValue.split(" ");
@@ -85,7 +94,19 @@ export function ProjectProfileHeader({ value, checked }: ProjectProfileProps) {
             />
           )}
           {checked ? (
-            <input type="date" placeholder="Datas" />
+            <DataContainer>
+              <InputDataMenu onClick={toggleDatePicker}>
+                <span>Datas</span>
+                <Image
+                  src={CalendarIcon}
+                  alt="Icone de calendário"
+                  width={24}
+                  height={24}
+                />
+              </InputDataMenu>
+              {isDatePickerOpen && <DateRangePicker />}
+              {/* Renderize o DateRangePicker somente se isDatePickerOpen for true */}
+            </DataContainer>
           ) : (
             <RiPencilFill size={24} onClick={handlePencilClick} />
           )}
