@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import {
   Container,
@@ -12,12 +11,15 @@ import {
   HeaderContent,
   BudgetContainer,
   RowAndScrollDownContainer,
+  InputDataMenu,
 } from "./styles";
+
 import SelectInput from "../SelectInput";
 import Image from "next/image";
+import { poppins } from "@/app/fonts";
 
 import AddButton from "../../../../public/add.svg";
-import { poppins } from "@/app/fonts";
+import CalendarIcon from "../../../../public/calendaricon.svg";
 
 interface ParentComponentState {
   rows: number[];
@@ -220,7 +222,10 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   </>
                 ) : (
                   <>
-                    <input type="date" />
+                    <InputDataMenu>
+                      <span>Datas</span>
+                      <Image src={CalendarIcon} width={24} height={24} alt="Icone de Calendário" />
+                    </InputDataMenu>
                   </>
                 )}
               </InputsRow>
