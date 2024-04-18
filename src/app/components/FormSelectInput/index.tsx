@@ -20,6 +20,7 @@ import { poppins } from "@/app/fonts";
 
 import AddButton from "../../../../public/add.svg";
 import CalendarIcon from "../../../../public/calendaricon.svg";
+import DateRangePickerInput from "../DateRangePicker";
 
 interface ParentComponentState {
   rows: number[];
@@ -224,7 +225,12 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   <>
                     <InputDataMenu>
                       <span>Datas</span>
-                      <Image src={CalendarIcon} width={24} height={24} alt="Icone de Calendário" />
+                      <Image
+                        src={CalendarIcon}
+                        width={24}
+                        height={24}
+                        alt="Icone de Calendário"
+                      />
                     </InputDataMenu>
                   </>
                 )}
