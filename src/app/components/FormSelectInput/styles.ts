@@ -53,14 +53,6 @@ export const InputsRow = styled.div<InputsRowProps>`
   gap: ${(props) => (props.checked ? "28px" : "")};
   background: ${theme.COLORS.LIGHT};
   width: 100%;
-
-  input[type="date"] {
-    background: ${theme.COLORS.SELECT_INPUT};
-    border: none;
-    padding: 0 0.5rem;
-    height: 2.5rem;
-    border-radius: 60px;
-  }
 `;
 
 export const ScrollDownContainer = styled.div`
@@ -86,6 +78,20 @@ export const ScrollDownContainer = styled.div`
       font-weight: ExtraLight;
     }
   }
+`;
+
+export const InputDataMenu = styled.button`
+  background: ${theme.COLORS.SELECT_INPUT};
+  color: ${theme.COLORS.SECONDARY_DARK};
+  font-size: 1rem;
+  border: none;
+  padding: 0 0.5rem;
+  height: 2.5rem;
+  border-radius: 60px;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 `;
 
 export const SeparatorContainer = styled.div`
