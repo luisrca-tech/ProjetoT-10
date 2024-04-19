@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import {
   Container,
   Header,
@@ -12,6 +12,7 @@ import {
   BudgetContainer,
   RowAndScrollDownContainer,
   InputDataMenu,
+  DeleteButtonAnimationFrame,
 } from "./styles";
 
 import SelectInput from "../SelectInput";
@@ -20,7 +21,7 @@ import { poppins } from "@/app/fonts";
 
 import AddButton from "../../../../public/add.svg";
 import CalendarIcon from "../../../../public/calendaricon.svg";
-import DateRangePickerInput from "../DateRangePicker";
+import TrashAnimation from "../../../../public/trashanimation.svg";
 
 interface ParentComponentState {
   rows: number[];
@@ -41,6 +42,10 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
   const [lastRowIndex, setLastRowIndex] = useState<number | null>(null);
   const [totalHours, setTotalHours] = useState<number>(0);
   const [totalValue, setTotalValue] = useState<number>(0);
+  const [startX, setStartX] = useState<number | null>(null);
+  const [offsetXByRow, setOffsetXByRow] = useState<{ [key: number]: number }>(
+    {},
+  );
 
   // Função para abrir ou fechar o item na posição especificada
   const toggleSelectOpen = (index: number) => {
@@ -135,6 +140,38 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
     setLastRowIndex(lastIndex);
   }, []);
 
+  // Funções para manipulação de toque específicas para cada linha
+  const handleTouchStartForRow = (
+    event: React.TouchEvent,
+    rowIndex: number,
+  ) => {
+    setStartX(event.touches[0].clientX);
+    setOffsetXByRow((prevOffsetX) => ({
+      ...prevOffsetX,
+      [rowIndex]: 0, // Começa com offsetX zero para esta linha
+    }));
+  };
+
+  const handleTouchMove = (event: React.TouchEvent, rowIndex: number) => {
+    event.preventDefault();
+
+    if (startX !== null) {
+      const newOffsetX = event.touches[0].clientX - startX;
+      setOffsetXByRow((prevState) => ({
+        ...prevState,
+        [rowIndex]: newOffsetX,
+      }));
+    }
+  };
+
+  const handleTouchEndForRow = (rowIndex: number) => {
+    setStartX(null);
+    setOffsetXByRow((prevOffsetX) => ({
+      ...prevOffsetX,
+      [rowIndex]: 0, // Reseta o offsetX para zero quando o toque termina
+    }));
+  };
+
   return (
     <Container>
       <Header checked={checked}>
@@ -168,6 +205,11 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
           .reverse()
           .map((row, index) => (
             <RowAndScrollDownContainer
+              offsetXByRow={offsetXByRow} // Passando o objeto completo como propriedade
+              offsetX={offsetXByRow[index] || 0}
+              onTouchStart={(e) => handleTouchStartForRow(e, index)}
+              onTouchMove={(e) => handleTouchMove(e, index)}
+              onTouchEnd={() => handleTouchEndForRow(index)}
               key={rowsAndSelectedValues.rows.length - 1 - index}
             >
               <InputsRow checked={checked}>
@@ -186,6 +228,12 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   }
                   setIsSelectOpen={() => toggleSelectOpen(index)}
                 />
+                <DeleteButtonAnimationFrame
+                  offsetX={offsetXByRow[index] || 0}
+                  offsetXByRow={offsetXByRow}
+                >
+                  <Image src={TrashAnimation} alt="" width={20} height={20} />
+                </DeleteButtonAnimationFrame>
                 {!checked ? (
                   <>
                     <SelectInput

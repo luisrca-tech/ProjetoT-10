@@ -41,9 +41,22 @@ export const InputsDataContainer = styled.div`
   gap: 8px;
 `;
 
-export const RowAndScrollDownContainer = styled.div`
+type RowProps = {
+  offsetX: number;
+  offsetXByRow?: {
+    [key: number]: number;
+  };
+};
+
+export const RowAndScrollDownContainer = styled.div<RowProps>`
   background: ${theme.COLORS.SELECT_INPUT};
   border-radius: 20px;
+  position: relative;
+  transition: transform 0.5s ease;
+  transform: translateX(
+    ${(props) => (props.offsetXByRow && props.offsetX ? "-2rem" : "0")}
+  );
+  cursor: grab;
 `;
 
 export const InputsRow = styled.div<InputsRowProps>`
@@ -53,6 +66,30 @@ export const InputsRow = styled.div<InputsRowProps>`
   gap: ${(props) => (props.checked ? "28px" : "")};
   background: ${theme.COLORS.LIGHT};
   width: 100%;
+  position: relative;
+`;
+
+export const DeleteButtonAnimationFrame = styled.button<RowProps>`
+  width: 5rem;
+  height: 100%;
+  padding-right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  text-align: center;
+  position: absolute;
+  bottom: 0;
+  z-index: -1;
+  right: 0;
+  transition: transform 0.5s ease;
+  transform: translateX(
+    ${(props) => (props.offsetXByRow && props.offsetX ? "1.5rem" : "0")}
+  );
+
+  background: ${theme.COLORS.SECONDARY};
+  border-radius: 20px;
+  border: none;
+  outline: none;
 `;
 
 export const ScrollDownContainer = styled.div`
