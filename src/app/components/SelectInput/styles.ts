@@ -16,6 +16,7 @@ export const Container = styled.div<ContainerProps>`
     position: absolute;
     top: 5;
     right: 1rem;
+    z-index: 2;
   }
 `;
 
@@ -37,6 +38,7 @@ export const Input = styled.input<InputProps>`
   border-radius: 60px;
   border: none;
   outline: none;
+  z-index: 1;
 
   &::placeholder {
     font-size: 1rem;
@@ -44,13 +46,10 @@ export const Input = styled.input<InputProps>`
   }
 
   box-shadow: -3px 1px 3px rgba(0, 0, 0, 0.25);
-   -webkit-appearance: none;
-  -moz-appearance: textfield; 
-
 
   &::-webkit-inner-spin-button,
   &::-webkit-outer-spin-button {
     -webkit-appearance: none;
-    margin: 0; 
-
+    margin: 0;
+  }
 `;
