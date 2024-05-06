@@ -14,22 +14,21 @@ import { roboto } from "@/app/fonts";
 import Image from "next/image";
 import CalendarIcon from "../../../../public/calendaricon.svg";
 import { RiPencilFill } from "react-icons/ri";
-import DateRangePicker  from "../DateRangePicker";
 
 interface ProjectProfileProps {
   value: string;
   checked?: boolean;
+  toggleDatePicker: () => void;
 }
 
-export function ProjectProfileHeader({ value, checked }: ProjectProfileProps) {
+export function ProjectProfileHeader({
+  value,
+  checked,
+  toggleDatePicker,
+}: ProjectProfileProps) {
   const [inputValue, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-
-  function toggleDatePicker() {
-    setIsDatePickerOpen(!isDatePickerOpen);
-  }
 
   // Divide a string em palavras
   const words = inputValue.split(" ");
@@ -104,7 +103,7 @@ export function ProjectProfileHeader({ value, checked }: ProjectProfileProps) {
                   height={24}
                 />
               </InputDataMenu>
-              {isDatePickerOpen && <DateRangePicker />}
+
               {/* Renderize o DateRangePicker somente se isDatePickerOpen for true */}
             </DataContainer>
           ) : (

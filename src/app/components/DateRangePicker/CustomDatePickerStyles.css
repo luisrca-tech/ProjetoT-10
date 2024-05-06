@@ -1,0 +1,43 @@
+/* CustomDatePickerStyles.css */
+
+/* Estilo para o intervalo de datas selecionadas */
+.react-datepicker__month-container {
+  display: flex;
+  flex-direction: column;
+} /* check!!!!! */
+
+.react-datepicker__week--selected {
+  background-color: black;
+} /* check!!!!! */
+
+.react-datepicker__day {
+  border-radius: 9999px;
+} /* check!!!!! */
+
+.react-datepicker__day--selected-start,
+.react-datepicker__day--selected-end {
+  background-color: #8a6576; /* Cor de fundo do intervalo */
+  color: black; /* Cor do texto dentro do intervalo */
+}
+
+/* Estilo para os dias entre o início e o fim do intervalo */
+.react-datepicker__day--in-range {
+  background-color: rgba(
+    255,
+    0,
+    0,
+    0.747
+  ); /* Cor de fundo para os dias entre o início e o fim */
+}
+
+/* Estilo para o dia de início do intervalo */
+.react-datepicker__day--selected-start {
+  border-top-left-radius: 9999px; /* Borda arredondada no canto superior esquerdo */
+  border-bottom-left-radius: 9999px; /* Borda arredondada no canto inferior esquerdo */
+}
+
+/* Estilo para o dia de fim do intervalo */
+.react-datepicker__day--selected-end {
+  border-top-right-radius: 50%; /* Borda arredondada no canto superior direito */
+  border-bottom-right-radius: 50%; /* Borda arredondada no canto inferior direito */
+}
