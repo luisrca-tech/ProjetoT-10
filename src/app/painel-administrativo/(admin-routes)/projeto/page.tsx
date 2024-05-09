@@ -11,7 +11,10 @@ import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
 import { useState } from "react";
 import ToggleSwitch from "@/app/components/ToggleSwitch";
-import CustomDatePicker from "@/app/components/DateRangePicker";
+
+import { DateRangePicker } from "rsuite";
+import "rsuite/DateRangePicker/styles/index.css";
+import "./DateRangePicker.css";
 
 export default function Projeto() {
   const [checked, setChecked] = useState<boolean>(false);
@@ -33,7 +36,9 @@ export default function Projeto() {
         toggleDatePicker={toggleDatePicker}
       />
 
-      {isDatePickerOpen && <CustomDatePicker />}
+      {isDatePickerOpen && (
+        <DateRangePicker editable={true} showHeader={true} />
+      )}
       <SwitchContainer>
         <span>Editar datas</span>
         <ToggleSwitch onChange={handleChange} />

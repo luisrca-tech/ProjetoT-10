@@ -1,0 +1,16 @@
+.rs-picker-daterange-header {
+  display: none;
+}
+
+.rs-picker-daterange-calendar-group {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.rs-picker-daterange-calendar-group {
+}
+
+.rs-stack-item > button {
+  display: none;
+}
