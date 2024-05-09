@@ -1,0 +1,85 @@
+.rs-input-group.rs-input-group-inside {
+  background-color: #fff;
+  border-radius: 60px;
+  width: 22.5rem;
+  border: none;
+  outline: none;
+}
+
+.rs-picker-daterange > .rs-input-group.rs-input-group-inside .rs-input {
+  border: none;
+  outline: none;
+  border-radius: 60px;
+}
+
+.rs-input-group input.rs-input ~ .rs-input-group-addon {
+  display: none;
+}
+
+.rs-picker-daterange
+  > .rs-input-group.rs-input-group-inside
+  .rs-input::placeholder {
+  text-align: center;
+  font-size: 1rem;
+  color: #1d1b20;
+}
+
+.rs-picker-daterange-header {
+  display: none;
+}
+
+.rs-calendar-header-title {
+  margin: 0;
+  padding: 0;
+  text-align: start;
+}
+
+.rs-picker-popup {
+  position: absolute;
+  top: 0;
+}
+
+.rs-stack {
+  width: 528px;
+  border-radius: 60px;
+  border: none;
+  background-color: #fff;
+}
+
+.rs-stack-item > button {
+  display: none;
+}
+
+.rs-picker-daterange-calendar-group {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  border: none;
+  width: 100%;
+}
+
+.rs-picker-popup .rs-calendar-body {
+  border: none;
+  width: 100%;
+}
+
+.rs-picker-popup .rs-calendar {
+  margin: 0;
+  padding: 0;
+}
+
+.rs-picker-popup .rs-calendar .rs-calendar-table-cell-content {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rs-calendar-table-cell-selected::before,
+.rs-calendar-table-cell-in-range::before {
+  background-color: #e8def8;
+  border-radius: 10px;
+  height: 100%;
+  width: 100%;
+}
