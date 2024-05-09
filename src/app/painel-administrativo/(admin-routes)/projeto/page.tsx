@@ -3,18 +3,13 @@
 import FormSelectInput from "@/app/components/FormSelectInput";
 import {
   Container,
-  InputsData,
-  InputsDataContainer,
   SwitchContainer,
 } from "./styles";
 import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
 import { useState } from "react";
 import ToggleSwitch from "@/app/components/ToggleSwitch";
-
-import { DateRangePicker } from "rsuite";
-import "rsuite/DateRangePicker/styles/index.css";
-import "./DateRangePicker.css";
+import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
 
 export default function Projeto() {
   const [checked, setChecked] = useState<boolean>(false);
@@ -37,7 +32,7 @@ export default function Projeto() {
       />
 
       {isDatePickerOpen && (
-        <DateRangePicker editable={true} showHeader={true} />
+        <CustomDateRangePicker />
       )}
       <SwitchContainer>
         <span>Editar datas</span>
