@@ -1,15 +1,12 @@
 "use client";
 
 import FormSelectInput from "@/app/components/FormSelectInput";
-import {
-  Container,
-  SwitchContainer,
-} from "./styles";
+import { Container, SwitchContainer } from "./styles";
 import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
 import { useState } from "react";
 import ToggleSwitch from "@/app/components/ToggleSwitch";
-import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
+import { ModalDatePicker } from "@/app/components/TestDateRange";
 
 export default function Projeto() {
   const [checked, setChecked] = useState<boolean>(false);
@@ -32,7 +29,11 @@ export default function Projeto() {
       />
 
       {isDatePickerOpen && (
-        <CustomDateRangePicker />
+        <ModalDatePicker
+          headlineRange="Aug 17 – Aug 23"
+          supportingTextRange="Depart - Return dates"
+          type="full-screen-range"
+        />
       )}
       <SwitchContainer>
         <span>Editar datas</span>

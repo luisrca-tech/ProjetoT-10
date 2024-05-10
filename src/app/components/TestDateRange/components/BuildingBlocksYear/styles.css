@@ -1,0 +1,66 @@
+.building-blocks-year {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 52px;
+  justify-content: center;
+  position: relative;
+  width: 88px;
+}
+
+.building-blocks-year .container {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  position: relative;
+}
+
+.building-blocks-year .state-layer {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  height: 36px;
+  justify-content: center;
+  position: relative;
+  width: 72px;
+}
+
+.building-blocks-year .year {
+  font-size: 16px;
+  line-height: 24px;
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+  width: fit-content;
+}
+
+.building-blocks-year .disabled {
+  opacity: 0.38;
+}
+
+.building-blocks-year .focused {
+  border-radius: 100px;
+}
+
+.building-blocks-year .selected-true {
+}
+
+.building-blocks-year .selected-false {
+}
+
+.building-blocks-year:hover .container {
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.building-blocks-year:hover .selected-true {
+  background-color: #ffffff14;
+}
+
+.building-blocks-year:hover .selected-false {
+  background-color: #1d1b2014;
+}
