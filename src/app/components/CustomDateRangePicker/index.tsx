@@ -6,8 +6,6 @@ import "./DateRangePicker.css";
 import { Container } from "./styles";
 import { use, useState } from "react";
 
-import { enGB } from "date-fns/locale";
-
 export function CustomDateRangePicker() {
   const [format, setFormat] = useState<string>(
     `Data inicial ${"               "} | ${"             "} Data final`,
