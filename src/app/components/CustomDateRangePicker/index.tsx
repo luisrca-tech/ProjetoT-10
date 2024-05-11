@@ -7,9 +7,26 @@ import { Container } from "./styles";
 import { use, useState } from "react";
 
 export function CustomDateRangePicker() {
-  const [format, setFormat] = useState<string>(
-    `Data inicial ${"               "} | ${"             "} Data final`,
-  );
+  const RsStack = document.querySelector("#picker-popup");
+
+  if (RsStack) {
+    const divs = RsStack.querySelectorAll("div");
+
+    divs.forEach((div) => {
+      div.style.position = "none"
+      div.style.left = "none"
+    });
+  }
+
+  const RsPicker = document.querySelector(".rs-picker-daterange-panel");
+
+  if (RsPicker) {
+    const divs = RsPicker.querySelectorAll("div");
+
+    divs.forEach((div) => {
+      div.style.minWidth = "none";
+    });
+  }
 
   const ptBR = {
     sunday: "Dom",
