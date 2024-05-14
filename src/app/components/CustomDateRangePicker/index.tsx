@@ -1,52 +1,33 @@
-"use client";
-
-import { DateRangePicker } from "rsuite";
-import "rsuite/DateRangePicker/styles/index.css";
+// import "rsuite/DateRangePicker/styles/index.css";
 import "./DateRangePicker.css";
 import { Container } from "./styles";
-import { use, useState } from "react";
+
+import React, { useState } from "react";
+import { addDays } from "date-fns";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { DateRangePicker } from "react-date-range";
+
+type ValuePiece = Date | null;
+
+type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export function CustomDateRangePicker() {
-  const RsStack = document.querySelector("#picker-popup");
-
-  if (RsStack) {
-    const divs = RsStack.querySelectorAll("div");
-
-    divs.forEach((div) => {
-      div.style.position = "none"
-      div.style.left = "none"
-    });
-  }
-
-  const RsPicker = document.querySelector(".rs-picker-daterange-panel");
-
-  if (RsPicker) {
-    const divs = RsPicker.querySelectorAll("div");
-
-    divs.forEach((div) => {
-      div.style.minWidth = "none";
-    });
-  }
-
-  const ptBR = {
-    sunday: "Dom",
-    monday: "Seg",
-    tuesday: "Ter",
-    wednesday: "Qua",
-    thursday: "Qui",
-    friday: "Sex",
-    saturday: "Sáb",
-  };
-
+  const [state, setState] = useState([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
   return (
     <Container>
       <DateRangePicker
-        placeholder={`Data inicial ${"           "} | ${"         "} Data final`}
-        editable={true}
-        showHeader={true}
-        format={`${"            "}dd/MM/yyyy ${"            "}`}
-        locale={ptBR}
-        isoWeek
+        onChange={(item) => setState([item.selection])}
+        moveRangeOnFirstSelection={false}
+        months={3}
+        ranges={state}
+        direction="vertical"
       />
     </Container>
   );
