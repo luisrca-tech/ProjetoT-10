@@ -1,8 +1,19 @@
 .rdrCalendarWrapper,
 .rdrDateRangeWrapper {
-  max-height: 400px;
+  max-width: 95vw;
+  min-width: 300px;
+  width: 95vw;
 }
 
+.rdrMonthPicker > select,
+.rdrYearPicker > select {
+  font-size: 1rem;
+}
+
+.rdrNextPrevButton,
+.rdrNextButton {
+  width: 30px;
+}
 .rdrMonths,
 .rdrMonthsVertical {
   height: 100%;
@@ -10,6 +21,44 @@
   border: none;
 }
 
+.rdrMonth {
+  width: auto;
+  min-width: 100%;
+  font-size: 100%;
+}
+
+.rdrMonthName {
+  font-size: 1.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.rdrDateDisplay > span > input {
+  font-size: 130%;
+}
 .rdrDefinedRangesWrapper {
   display: none;
+}
+
+@media screen and (min-width: 1000px) {
+  .rdrWeekDay,
+  .rdrDayNumber,
+  .rdrMonthPicker > select,
+  .rdrYearPicker > select {
+    font-size: 150%;
+  }
+  .rdrDay {
+    height: 30px;
+  }
+
+  .rdrDays > button {
+    height: 50px;
+  }
+  .rdrDateRangeWrapper,
+  .rdrDateRangeWrapper {
+    max-height: 60vh;
+    max-width: 60vw;
+    min-width: 300px;
+    width: 60vw;
+  }
 }
