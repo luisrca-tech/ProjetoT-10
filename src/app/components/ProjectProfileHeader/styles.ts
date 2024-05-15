@@ -8,6 +8,7 @@ export const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 7.594rem;
 `;
 
 export const ContentContainer = styled.div`
@@ -67,7 +68,7 @@ export const DataContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-`
+`;
 
 export const InputDataMenu = styled.div`
   background: transparent;

@@ -16,6 +16,8 @@ export const Container = styled.header<ContainerType>`
   justify-content: ${(props) =>
     props.isAutentication ? "center" : "space-between"};
   height: 7.594rem;
+  position: fixed;
+  background-color: white;
 `;
 
 export const ButtonsContainer = styled.div`
