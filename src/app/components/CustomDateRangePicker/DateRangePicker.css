@@ -1,8 +1,21 @@
 .rdrCalendarWrapper,
 .rdrDateRangeWrapper {
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+  background-color: #fff;
+  max-height: 450px;
   max-width: 95vw;
   min-width: 300px;
   width: 95vw;
+}
+
+div > .rdrDateDisplayWrapper {
+  background-color: rgba(255, 255, 255);
+}
+
+.rdrMonth .rdrWeekDays {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .rdrMonthPicker > select,
@@ -10,15 +23,30 @@
   font-size: 1rem;
 }
 
+button.rdrNextPrevButton {
+  background-color: #6750a4;
+}
+
+button.rdrNextPrevButton:hover {
+  background-color: #6750a4;
+  opacity: 0.9;
+}
+
 .rdrNextPrevButton,
 .rdrNextButton {
   width: 30px;
 }
+
 .rdrMonths,
 .rdrMonthsVertical {
   height: 100%;
   overflow-y: auto;
   border: none;
+}
+
+.rdrMonths,
+.rdrMonthsVertical::-webkit-scrollbar {
+  display: none;
 }
 
 .rdrMonth {
@@ -31,6 +59,19 @@
   font-size: 1.25rem;
   display: flex;
   justify-content: center;
+}
+
+span.rdrStartEdge {
+  background-color: #6750a4;
+}
+
+span.rdrEndEdge {
+  background-color: #6750a4;
+}
+
+span.rdrInRange {
+  background-color: #e8def8;
+  color: #1d192b;
 }
 
 .rdrDateDisplay > span > input {

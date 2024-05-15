@@ -27,7 +27,7 @@ export function CustomDateRangePicker() {
       <DateRangePicker
         onChange={(item) => setState([item.selection])}
         moveRangeOnFirstSelection={false}
-        months={3}
+        months={12}
         ranges={state}
         direction="vertical"
         locale={ptBR}
