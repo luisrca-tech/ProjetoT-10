@@ -8,6 +8,7 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-bottom: 2rem;
 `;
 
 export const InputsDataContainer = styled.div`
