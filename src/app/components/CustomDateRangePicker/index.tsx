@@ -7,6 +7,7 @@ import { addDays } from "date-fns";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
+import { ptBR } from "date-fns/locale";
 
 type ValuePiece = Date | null;
 
@@ -20,6 +21,7 @@ export function CustomDateRangePicker() {
       key: "selection",
     },
   ]);
+
   return (
     <Container>
       <DateRangePicker
@@ -28,6 +30,7 @@ export function CustomDateRangePicker() {
         months={3}
         ranges={state}
         direction="vertical"
+        locale={ptBR}
       />
     </Container>
   );
