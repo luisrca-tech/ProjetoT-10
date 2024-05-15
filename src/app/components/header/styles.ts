@@ -18,6 +18,7 @@ export const Container = styled.header<ContainerType>`
   height: 7.594rem;
   position: fixed;
   background-color: white;
+  z-index: 3;
 `;
 
 export const ButtonsContainer = styled.div`
