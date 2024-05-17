@@ -34,11 +34,7 @@ export default function Projeto() {
       />
 
       <MainContainer>
-        {isDatePickerOpen && (
-          <div onBlur={() => setIsDatePickerOpen(false)}>
-            <CustomDateRangePicker />
-          </div>
-        )}
+        {isDatePickerOpen && <CustomDateRangePicker />}
         <FormContainer isDatePickerOpen={isDatePickerOpen}>
           <SwitchContainer>
             <span>Editar datas</span>
