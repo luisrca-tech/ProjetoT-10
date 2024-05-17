@@ -1,6 +1,10 @@
 import { theme } from "@/app/styles/theme";
 import { styled } from "@linaria/react";
 
+type FormContainer = {
+  isDatePickerOpen: boolean;
+};
+
 export const Container = styled.div`
   width: 100%;
   display: flex;
@@ -8,8 +12,33 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 1rem 0;
+`;
+
+export const MainContainer = styled.div`
+  margin-top: 12.594rem;
+  max-width: 90vw;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding-bottom: 2rem;
-  padding-top: 1rem;
+
+  @media (min-width: 1000px) {
+    max-width: 65vw;
+  }
+`;
+
+export const FormContainer = styled.div<FormContainer>`
+  filter: ${(props) => (props.isDatePickerOpen ? `blur(2px)` : `none`)};
+  width: 100%;
+  pointer-events: ${(props) => (props.isDatePickerOpen ? `none` : `auto`)};
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
 export const InputsDataContainer = styled.div`
@@ -17,7 +46,6 @@ export const InputsDataContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  padding: 0 1.25rem;
 `;
 
 export const InputsData = styled.div`
@@ -63,7 +91,6 @@ export const SwitchContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 1.25rem;
 
   span {
     font-size: 14px;

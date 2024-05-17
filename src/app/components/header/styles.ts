@@ -57,7 +57,7 @@ export const SidebarContainer = styled.div<SidebaContainerType>`
   background-color: ${theme.COLORS.WHITE};
   border-radius: 20px 20px;
   z-index: 9999;
-  position: absolute;
+  position: fixed;
   left: ${(props) => (props.isShow ? `0` : `-66vw`)};
   top: 0;
   transition: left 0.3s;

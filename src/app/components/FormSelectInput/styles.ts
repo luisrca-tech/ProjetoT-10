@@ -14,13 +14,33 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  padding: 0 1.25rem;
 `;
 
 export const Header = styled.div<HeaderProps>`
   display: flex;
   gap: ${(props) => (props.checked ? "5.5rem" : "2.9rem")};
-  padding: 0 0.75rem;
+  padding: 0 0.5rem;
+`;
+
+export const EditDateContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  span {
+    width: 100%;
+    font-size: 0.875rem;
+    font-weight: bold;
+    text-align: end;
+  }
+
+  span:nth-of-type(1) {
+    text-align: start;
+  }
+
+  span:nth-of-type(2) {
+    text-align: end;
+  }
 `;
 
 export const HeaderContent = styled.div`
@@ -29,9 +49,21 @@ export const HeaderContent = styled.div`
   width: 100%;
 
   span {
+    width: 100%;
     font-size: 0.875rem;
     font-weight: bold;
-    text-align: center;
+  }
+
+  span:nth-of-type(1) {
+    text-align: start;
+  }
+
+  span:nth-of-type(2) {
+    text-align: end;
+  }
+
+  span:nth-of-type(3) {
+    text-align: end;
   }
 `;
 
@@ -158,7 +190,7 @@ export const SeparatorContainer = styled.div`
 export const Footer = styled.div`
   display: flex;
   width: 100%;
-  padding: 0 1.25rem;
+  padding: 0 0.5rem;
   gap: 5rem;
 
   > div {
