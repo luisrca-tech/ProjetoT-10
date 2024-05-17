@@ -1,45 +1,45 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import {
+  ButtonDataMenu,
+  CalendarDateValues,
   Container,
   ContentContainer,
   DataContainer,
   HeaderBoxProfileImage,
   InputContent,
-  InputDataMenu,
 } from "./styles";
 
 import { roboto } from "@/app/fonts";
 import Image from "next/image";
 import CalendarIcon from "../../../../public/calendaricon.svg";
 import { RiPencilFill } from "react-icons/ri";
+import { ScrolldownContext } from "@/contexts/ScrolldownContext";
 
 interface ProjectProfileProps {
-  value: string;
-  checked?: boolean;
-  toggleDatePicker?: () => void;
+  inputName: string;
 }
 
-export function ProjectProfileHeader({
-  value,
-  checked,
-  toggleDatePicker,
-}: ProjectProfileProps) {
+export function ProjectProfileHeader({ inputName }: ProjectProfileProps) {
+  const {
+    checked,
+    toggleDatePicker,
+    value,
+    hasDateValue,
+    toggleEditPicker,
+  } = useContext(ScrolldownContext);
+
   const [inputValue, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Divide a string em palavras
   const words = inputValue.split(" ");
 
-  // Mapeie sobre as palavras e pegue  o primeiro caractere de cada uma
   const initials = words.map((word) => word.charAt(0));
 
-  // Junte os caracteres iniciais em uma única string
   const initialsString = initials.join("");
 
-  // Define o valor inicial do input ao montar o componente
   useEffect(() => {
     const storedValue = localStorage.getItem("ProjectProfileInputHeader");
     if (storedValue !== null) {
@@ -54,7 +54,6 @@ export function ProjectProfileHeader({
     }
   };
 
-  // Atualiza o valor do input e armazena no localStorage
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
     setInputValue(newValue);
@@ -65,6 +64,10 @@ export function ProjectProfileHeader({
     if (inputRef.current) {
       inputRef.current.focus();
     }
+  };
+
+  const formatDate = (date: Date | undefined) => {
+    return date ? date.toLocaleDateString("pt-BR") : "";
   };
 
   return (
@@ -94,15 +97,25 @@ export function ProjectProfileHeader({
           )}
           {checked ? (
             <DataContainer>
-              <InputDataMenu onClick={toggleDatePicker}>
-                <span>Datas</span>
-                <Image
-                  src={CalendarIcon}
-                  alt="Icone de calendário"
-                  width={24}
-                  height={24}
-                />
-              </InputDataMenu>
+              {!hasDateValue ? (
+                <ButtonDataMenu
+                  onClick={toggleDatePicker}
+                >
+                  <span>Datas</span>
+                  <Image
+                    src={CalendarIcon}
+                    alt="Icone de calendário"
+                    width={24}
+                    height={24}
+                  />
+                </ButtonDataMenu>
+              ) : (
+                <CalendarDateValues onClick={toggleEditPicker}>
+                  <p>{formatDate(value[0].startDate)}</p>
+                  <span>-</span>
+                  <p>{formatDate(value[0].endDate)}</p>
+                </CalendarDateValues>
+              )}
             </DataContainer>
           ) : (
             <RiPencilFill size={24} onClick={handlePencilClick} />
