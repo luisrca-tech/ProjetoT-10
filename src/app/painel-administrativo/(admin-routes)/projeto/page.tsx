@@ -3,35 +3,24 @@
 import FormSelectInput from "@/app/components/FormSelectInput";
 import {
   Container,
-  SwitchContainer,
-  MainContainer,
   FormContainer,
+  MainContainer,
+  SwitchContainer,
 } from "./styles";
 import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ToggleSwitch from "@/app/components/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
+import { ScrolldownContext } from "@/contexts/ScrolldownContext";
 
 export default function Projeto() {
-  const [checked, setChecked] = useState<boolean>(false);
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
-
-  const handleCheckedChange = () => {
-    setChecked(!checked);
-  };
-
-  function ToggleDatePicker() {
-    setIsDatePickerOpen(!isDatePickerOpen);
-  }
+  const { checked, handleCheckedChange, isDatePickerOpen, handleBlurCalendar } =
+    useContext(ScrolldownContext);
 
   return (
     <Container className={roboto.className}>
-      <ProjectProfileHeader
-        checked={checked}
-        value="Nome do Projeto..."
-        toggleDatePicker={ToggleDatePicker}
-      />
+      <ProjectProfileHeader inputName="Nomeie seu projeto..." />
 
       <MainContainer>
         {isDatePickerOpen && <CustomDateRangePicker />}
