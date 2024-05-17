@@ -18,7 +18,7 @@ import { RiPencilFill } from "react-icons/ri";
 interface ProjectProfileProps {
   value: string;
   checked?: boolean;
-  toggleDatePicker: () => void;
+  toggleDatePicker?: () => void;
 }
 
 export function ProjectProfileHeader({
@@ -103,8 +103,6 @@ export function ProjectProfileHeader({
                   height={24}
                 />
               </InputDataMenu>
-
-              {/* Renderize o DateRangePicker somente se isDatePickerOpen for true */}
             </DataContainer>
           ) : (
             <RiPencilFill size={24} onClick={handlePencilClick} />
