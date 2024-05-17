@@ -5,9 +5,13 @@
   background-color: #fff;
   max-height: 400px;
   max-width: 95vw;
-  min-width: 300px;
-  width: 85vw;
+
+  width: 100%;
   z-index: 2;
+}
+
+.rdrDateRangePickerWrapper {
+  width: 100%;
 }
 
 div > .rdrDateDisplayWrapper {
