@@ -3,7 +3,6 @@ import { ReactNode, useState } from "react";
 
 import { styled } from "@linaria/react";
 import Header from "../components/header";
-import { ProjectProfileHeader } from "../components/ProjectProfileHeader";
 
 const Container = styled.div`
   width: 100%;
