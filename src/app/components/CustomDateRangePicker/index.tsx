@@ -2,33 +2,27 @@
 import "./DateRangePicker.css";
 import { Container } from "./styles";
 
-import React, { useState } from "react";
-import { addDays } from "date-fns";
+import React, { useContext, useEffect, useState } from "react";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker } from "react-date-range";
 import { ptBR } from "date-fns/locale";
+import { ScrolldownContext } from "@/contexts/ScrolldownContext";
 
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 export function CustomDateRangePicker() {
-  const [state, setState] = useState([
-    {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: "selection",
-    },
-  ]);
+  const { value, handleSelectDate } = useContext(ScrolldownContext);
 
   return (
     <Container>
       <DateRangePicker
-        onChange={(item) => setState([item.selection])}
+        onChange={handleSelectDate}
         moveRangeOnFirstSelection={false}
         months={12}
-        ranges={state}
+        ranges={value}
         direction="vertical"
         locale={ptBR}
       />
