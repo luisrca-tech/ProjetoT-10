@@ -8,11 +8,12 @@ import {
   Footer,
   ScrollDownContainer,
   SeparatorContainer,
-  HeaderContent,
+  EditDateContainer,
   BudgetContainer,
   RowAndScrollDownContainer,
   InputDataMenu,
   DeleteButtonAnimationFrame,
+  HeaderContent,
 } from "./styles";
 
 import SelectInput from "../SelectInput";
@@ -179,23 +180,18 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
           <>
             <HeaderContent>
               <span className="FristRole">Cargo</span>
-            </HeaderContent>
-            <HeaderContent>
+
               <span>Horas/mês</span>
-            </HeaderContent>
-            <HeaderContent>
+
               <span>Valor Hora</span>
             </HeaderContent>
           </>
         ) : (
-          <>
-            <HeaderContent>
-              <span className="FristRole">Cargo</span>
-            </HeaderContent>
-            <HeaderContent>
-              <span>Data de trabalho</span>
-            </HeaderContent>
-          </>
+          <EditDateContainer>
+            <span className="FristRole">Cargo</span>
+
+            <span>Data de trabalho</span>
+          </EditDateContainer>
         )}
       </Header>
 
