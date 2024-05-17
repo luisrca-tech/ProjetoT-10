@@ -73,7 +73,7 @@ export const DataContainer = styled.div`
   position: relative;
 `;
 
-export const InputDataMenu = styled.div`
+export const ButtonDataMenu = styled.div`
   background: transparent;
   border: 0;
   padding: 0 0.5rem;
@@ -90,4 +90,13 @@ export const InputDataMenu = styled.div`
     font-size: 1rem;
     color: ${theme.COLORS.SECONDARY_DARK};
   }
+`;
+
+export const CalendarDateValues = styled.div`
+  display: flex;
+  gap: 0.2rem;
+
+  font-family: "Roboto";
+  font-size: 1rem;
+  font-weight: Regular;
 `;

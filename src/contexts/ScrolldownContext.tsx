@@ -1,13 +1,31 @@
 "use client";
 
+import { addDays } from "date-fns";
 import { ReactNode, createContext, useState, useContext } from "react";
+import { Range, RangeKeyDict } from "react-date-range";
 
 interface ScrolldownContextType {
-  handleInputChange: (id: string, value: string) => void;
+  checked: boolean;
+  isDatePickerOpen: boolean;
+  hasDateValue: boolean;
+  value: Range[];
+  handleCheckedChange: () => void;
+  toggleDatePicker: () => void;
+  toggleEditPicker: () => void;
+  handleBlurCalendar: () => void;
+  handleSelectDate: (ranges: RangeKeyDict) => void;
 }
 
 export const ScrolldownContext = createContext<ScrolldownContextType>({
-  handleInputChange: () => {},
+  checked: false,
+  isDatePickerOpen: false,
+  hasDateValue: false,
+  value: [],
+  handleCheckedChange: () => {},
+  toggleDatePicker: () => {},
+  toggleEditPicker: () => {},
+  handleSelectDate: () => {},
+  handleBlurCalendar: () => {},
 });
 
 interface ScrolldownContextProviderProps {
@@ -17,15 +35,54 @@ interface ScrolldownContextProviderProps {
 export function ScrolldownContextProvider({
   children,
 }: ScrolldownContextProviderProps) {
+  const [checked, setChecked] = useState<boolean>(false);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
+  const [hasDateValue, setHasDateValue] = useState<boolean>(false);
+  const [value, setValue] = useState<Range[]>([
+    {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection",
+    },
+  ]);
 
-  const handleInputChange = (id: string, value: string) => {
-    // Implemente a lógica para manipular o estado dos inputs
+  const handleCheckedChange = () => {
+    setChecked(!checked);
+  };
+
+  const toggleDatePicker = () => {
+    checked && setIsDatePickerOpen(!isDatePickerOpen);
+
+    setHasDateValue(!hasDateValue);
+  };
+
+  const toggleEditPicker = () => {
+    setIsDatePickerOpen(!isDatePickerOpen);
+  };
+
+  const handleBlurCalendar = () => {
+    setIsDatePickerOpen(false);
+  };
+
+  const handleSelectDate = (ranges: RangeKeyDict) => {
+    const { selection } = ranges;
+    if (selection.startDate && selection.endDate) {
+      setValue([selection as Range]);
+    }
   };
 
   return (
     <ScrolldownContext.Provider
       value={{
-        handleInputChange,
+        checked,
+        isDatePickerOpen,
+        hasDateValue,
+        value,
+        toggleDatePicker,
+        toggleEditPicker,
+        handleSelectDate,
+        handleBlurCalendar,
+        handleCheckedChange,
       }}
     >
       {children}
