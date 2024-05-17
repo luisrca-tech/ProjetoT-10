@@ -12,7 +12,6 @@ export const Container = styled.div`
   position: fixed;
   z-index: 3;
   border-bottom-left-radius: 10px;
-  box-shadow: 0 4px 5px #8888a1;
 `;
 
 export const ContentContainer = styled.div`
