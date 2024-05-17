@@ -1,7 +1,12 @@
 "use client";
 
 import FormSelectInput from "@/app/components/FormSelectInput";
-import { Container, SwitchContainer } from "./styles";
+import {
+  Container,
+  SwitchContainer,
+  MainContainer,
+  FormContainer,
+} from "./styles";
 import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
 import { useState } from "react";
@@ -12,26 +17,36 @@ export default function Projeto() {
   const [checked, setChecked] = useState<boolean>(false);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
 
-  const handleChange = () => {
+  const handleCheckedChange = () => {
     setChecked(!checked);
-    //setChecked e checked vao vir do contexto.
   };
+
+  function ToggleDatePicker() {
+    setIsDatePickerOpen(!isDatePickerOpen);
+  }
 
   return (
     <Container className={roboto.className}>
-      {/* {isDatePickerOpen && 
-      <CustomDateRangePicker />} 
-      Essa sera a versao final.
-      isDatePickerOpen vem do contexto.
+      <ProjectProfileHeader
+        checked={checked}
+        value="Nome do Projeto..."
+        toggleDatePicker={ToggleDatePicker}
+      />
 
-      
-      */}
-      <CustomDateRangePicker />
-      <SwitchContainer>
-        <span>Editar datas</span>
-        <ToggleSwitch onChange={handleChange} />
-      </SwitchContainer>
-      <FormSelectInput checked={checked} />
+      <MainContainer>
+        {isDatePickerOpen && (
+          <div onBlur={() => setIsDatePickerOpen(false)}>
+            <CustomDateRangePicker />
+          </div>
+        )}
+        <FormContainer isDatePickerOpen={isDatePickerOpen}>
+          <SwitchContainer>
+            <span>Editar datas</span>
+            <ToggleSwitch onChange={handleCheckedChange} />
+          </SwitchContainer>
+          <FormSelectInput checked={checked} />
+        </FormContainer>
+      </MainContainer>
     </Container>
   );
 }
