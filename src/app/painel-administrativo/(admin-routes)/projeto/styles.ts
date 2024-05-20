@@ -97,3 +97,12 @@ export const SwitchContainer = styled.div`
     font-weight: 600;
   }
 `;
+
+export const CloseCalendarContainer = styled.div<FormContainer>`
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  z-index: ${(props) => (props.isDatePickerOpen ? "1" : "-1")};
+  left: 0;
+`
