@@ -46,6 +46,8 @@ export function ScrolldownContextProvider({
     },
   ]);
 
+  // Funções retiraveis do contexto Começa
+
   const handleCheckedChange = () => {
     setChecked(!checked);
   };
@@ -63,6 +65,8 @@ export function ScrolldownContextProvider({
   const handleBlurCalendar = () => {
     setIsDatePickerOpen(false);
   };
+
+  // Funções retiraveis do contexto - Termina
 
   const handleSelectDate = (ranges: RangeKeyDict) => {
     const { selection } = ranges;
