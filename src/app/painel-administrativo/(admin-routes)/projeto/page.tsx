@@ -2,6 +2,7 @@
 
 import FormSelectInput from "@/app/components/FormSelectInput";
 import {
+  CloseCalendarContainer,
   Container,
   FormContainer,
   MainContainer,
@@ -9,7 +10,7 @@ import {
 } from "./styles";
 import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ToggleSwitch from "@/app/components/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
 import { ScrolldownContext } from "@/contexts/ScrolldownContext";
@@ -19,7 +20,7 @@ export default function Projeto() {
     useContext(ScrolldownContext);
 
   return (
-    <Container className={roboto.className}>
+  <Container className={roboto.className}>
       <ProjectProfileHeader inputName="Nomeie seu projeto..." />
 
       <MainContainer>
@@ -32,6 +33,11 @@ export default function Projeto() {
           <FormSelectInput checked={checked} />
         </FormContainer>
       </MainContainer>
+
+      <CloseCalendarContainer
+        isDatePickerOpen={isDatePickerOpen}
+        onClick={handleBlurCalendar}
+      ></CloseCalendarContainer>
     </Container>
   );
 }
