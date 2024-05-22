@@ -40,7 +40,6 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
   );
-  const [lastRowIndex, setLastRowIndex] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState<number>(0);
   const [totalValue, setTotalValue] = useState<number>(0);
   const [startX, setStartX] = useState<number | null>(null);
@@ -324,7 +323,7 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   {Object.values(offices).map((value, index) => (
                     <SeparatorContainer
                       key={index}
-                      className={row === lastRowIndex ? "last-row" : ""}
+                      className={row === getLastRowIndex() ? "last-row" : ""}
                     >
                       <button
                         onMouseDown={(e) => {
