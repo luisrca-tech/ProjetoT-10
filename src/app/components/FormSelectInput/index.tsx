@@ -1,5 +1,5 @@
 "use client";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Container,
   Header,
@@ -25,7 +25,7 @@ import CalendarIcon from "../../../../public/calendaricon.svg";
 import TrashAnimation from "../../../../public/trashanimation.svg";
 
 interface ParentComponentState {
-  rows: number[];
+  rows: string[];
   selectedValues: { [key: string]: string };
 }
 
@@ -37,32 +37,31 @@ let offices = {
 };
 
 export default function FormSelectInput({ checked }: { checked: boolean }) {
-  const [selectedItemIndex, setSelectedItemIndex] = useState<number | null>(
+  const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
   );
-  const [lastRowIndex, setLastRowIndex] = useState<number | null>(null);
+  const [lastRowIndex, setLastRowIndex] = useState<string | null>(null);
   const [totalHours, setTotalHours] = useState<number>(0);
   const [totalValue, setTotalValue] = useState<number>(0);
   const [startX, setStartX] = useState<number | null>(null);
-  const [offsetXByRow, setOffsetXByRow] = useState<{ [key: number]: number }>(
+  const [offsetXByRow, setOffsetXByRow] = useState<{ [key: string]: number }>(
     {},
   );
+  const [rowsAndSelectedValues, setRowsAndSelectedValues] =
+    useState<ParentComponentState>({
+      rows: ["row-0"],
+      selectedValues: {},
+    });
 
   // Função para abrir ou fechar o item na posição especificada
-  const toggleSelectOpen = (index: number) => {
+  const toggleSelectOpen = (index: string) => {
     setSelectedItemIndex(selectedItemIndex === index ? null : index);
   };
 
   // Verifica se o item na posição 'index' está aberto
-  const isSelectOpen = (index: number) => {
+  const isSelectOpen = (index: string) => {
     return selectedItemIndex === index;
   };
-
-  const [rowsAndSelectedValues, setRowsAndSelectedValues] =
-    useState<ParentComponentState>({
-      rows: [0],
-      selectedValues: {},
-    });
 
   function handleInputChange(id: string, value: string) {
     setRowsAndSelectedValues((prevState) => ({
@@ -75,10 +74,38 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
   }
 
   function addRow() {
+    const newRowId = `row-${Date.now()}`;
     setRowsAndSelectedValues((prevState) => ({
       ...prevState,
-      rows: [...prevState.rows, prevState.rows.length],
+      rows: [...prevState.rows, newRowId],
     }));
+  }
+
+  function handleFindRowIndexByClick(rowIndex: string) {
+    setSelectedItemIndex(rowIndex);
+    console.log(rowIndex);
+  }
+
+  function removeRow(rowIndex: string) {
+    setRowsAndSelectedValues((prevState) => {
+      const removedRows = prevState.rows.filter((row) => row !== rowIndex);
+      const updatedSelectedValues = { ...prevState.selectedValues };
+
+      Object.keys(updatedSelectedValues).forEach((key) => {
+        if (
+          key.includes(`firstTextValue${rowIndex}`) ||
+          key.includes(`secondTextValue${rowIndex}`) ||
+          key.includes(`thirdTextValue${rowIndex}`)
+        ) {
+          delete updatedSelectedValues[key];
+        }
+      });
+
+      return {
+        rows: removedRows,
+        selectedValues: updatedSelectedValues,
+      };
+    });
   }
 
   const canAddRow = rowsAndSelectedValues.rows.every((index) => {
@@ -92,35 +119,31 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
     return firstTextValue && secondTextValue && thirdTextValue;
   });
 
-  const isValueInInput = (row: number, inputName: string) => {
-    const { selectedValues } = rowsAndSelectedValues;
-    const textValue = selectedValues[`${inputName}${row}`];
-
-    return textValue !== undefined && textValue.length > 0;
-  };
-
-  const handleButtonClick = (value: string, row: number) => {
-    handleInputChange(`firstTextValue${row}`, value);
-  };
-
   useEffect(() => {
     if (canAddRow === false) return;
 
     addRow();
   }, [canAddRow]);
 
+  const isValueInInput = (row: string, inputName: string) => {
+    const { selectedValues } = rowsAndSelectedValues;
+    const textValue = selectedValues[`${inputName}${row}`];
+
+    return textValue !== undefined && textValue.length > 0;
+  };
+
+  const handleButtonClick = (value: string, row: string) => {
+    handleInputChange(`firstTextValue${row}`, value);
+  };
+
   useEffect(() => {
     let totalHoursSum = 0;
     let totalValueSum = 0;
 
-    // Itero com as linhas a partir de rows e crio variaveis transformando-as em números inteiros decimais,
-    // Pego o index do segundo e terceiro input, Horas e valor e defino 0 se não houver valor.
-    // igualo totalHoursSum e totalValueSum as minhas constantes ja que o valor vai ser modificado e após altero o estado respectivamente.
-
     rowsAndSelectedValues.rows.forEach((index) => {
       const hours = parseInt(
         rowsAndSelectedValues.selectedValues[`secondTextValue${index}`] || "0",
-        10, // 10 é o segundo argumento que o javaScript recebe em parseInt, ele serve para garantir que o numero obtido no valor é decimal
+        10,
       );
       const value = parseInt(
         rowsAndSelectedValues.selectedValues[`thirdTextValue${index}`] || "0",
@@ -133,29 +156,20 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
 
     setTotalHours(totalHoursSum);
     setTotalValue(totalValueSum);
-  }, [rowsAndSelectedValues]); // rowsAndSelectedValues como dependencia garante que os valores vão se alterar cada vez que esse argumento mudar.
+  }, [rowsAndSelectedValues]);
 
-  useEffect(() => {
-    // Encontrar o índice da última linha
-    const lastIndex = Object.values(offices).length - 0;
-    setLastRowIndex(lastIndex);
-  }, []);
-
-  // Funções para manipulação de toque específicas para cada linha
   const handleTouchStartForRow = (
     event: React.TouchEvent,
-    rowIndex: number,
+    rowIndex: string,
   ) => {
     setStartX(event.touches[0].clientX);
     setOffsetXByRow((prevOffsetX) => ({
       ...prevOffsetX,
-      [rowIndex]: 0, // Começa com offsetX zero para esta linha
+      [rowIndex]: 0,
     }));
   };
 
-  const handleTouchMove = (event: React.TouchEvent, rowIndex: number) => {
-    event.preventDefault();
-
+  const handleTouchMove = (event: React.TouchEvent, rowIndex: string) => {
     if (startX !== null) {
       const newOffsetX = event.touches[0].clientX - startX;
       setOffsetXByRow((prevState) => ({
@@ -165,11 +179,29 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
     }
   };
 
-  const handleTouchEndForRow = (rowIndex: number) => {
+  const getLastRowIndex = () => {
+    const rows = rowsAndSelectedValues.rows;
+    return rows[rows.length - 1];
+  };
+
+  const handleTouchEndForRow = (rowIndex: string) => {
+    if (rowIndex === getLastRowIndex()) {
+      setStartX(null);
+      setOffsetXByRow((prevOffsetX) => ({
+        ...prevOffsetX,
+        [rowIndex]: 0,
+      }));
+      return;
+    }
+
+    if (offsetXByRow[rowIndex] && Math.abs(offsetXByRow[rowIndex]) > 50) {
+      removeRow(rowIndex);
+    }
+
     setStartX(null);
     setOffsetXByRow((prevOffsetX) => ({
       ...prevOffsetX,
-      [rowIndex]: 0, // Reseta o offsetX para zero quando o toque termina
+      [rowIndex]: 0,
     }));
   };
 
@@ -199,14 +231,16 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
         {rowsAndSelectedValues.rows
           .slice()
           .reverse()
-          .map((row, index) => (
+          .map((row) => (
             <RowAndScrollDownContainer
-              offsetXByRow={offsetXByRow} // Passando o objeto completo como propriedade
-              offsetX={offsetXByRow[index] || 0}
-              onTouchStart={(e) => handleTouchStartForRow(e, index)}
-              onTouchMove={(e) => handleTouchMove(e, index)}
-              onTouchEnd={() => handleTouchEndForRow(index)}
-              key={rowsAndSelectedValues.rows.length - 1 - index}
+              key={row}
+              offsetXByRow={offsetXByRow}
+              offsetX={offsetXByRow[row]}
+              onTouchStart={(e) => handleTouchStartForRow(e, row)}
+              onTouchMove={(e) => handleTouchMove(e, row)}
+              onTouchEnd={() => handleTouchEndForRow(row)}
+              onClick={() => handleFindRowIndexByClick(row)}
+              isLastRow={row === getLastRowIndex()}
             >
               <InputsRow checked={checked}>
                 <SelectInput
@@ -222,11 +256,13 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   inputValue={
                     rowsAndSelectedValues.selectedValues[`firstTextValue${row}`]
                   }
-                  setIsSelectOpen={() => toggleSelectOpen(index)}
+                  setIsSelectOpen={() => toggleSelectOpen(row)}
                 />
                 <DeleteButtonAnimationFrame
-                  offsetX={offsetXByRow[index] || 0}
+                  onClick={() => removeRow(row)}
+                  offsetX={offsetXByRow[row] || 0}
                   offsetXByRow={offsetXByRow}
+                  isLastRow={row === getLastRowIndex()}
                 >
                   <Image src={TrashAnimation} alt="" width={20} height={20} />
                 </DeleteButtonAnimationFrame>
@@ -250,7 +286,7 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                     />
                     <SelectInput
                       type="number"
-                      placeholder="Valor"
+                      placeholder="Valor Hora"
                       id={`thirdTextValue${row}`}
                       onChange={(value) =>
                         handleInputChange(`thirdTextValue${row}`, value)
@@ -279,7 +315,7 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   </>
                 )}
               </InputsRow>
-              {isSelectOpen(index) && (
+              {isSelectOpen(row) && (
                 // Atualizado para chamar a função 'isSelectOpen' com o índice atual
                 <ScrollDownContainer
                   className={poppins.className}
@@ -288,7 +324,7 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   {Object.values(offices).map((value, index) => (
                     <SeparatorContainer
                       key={index}
-                      className={index === lastRowIndex ? "last-row" : ""}
+                      className={row === lastRowIndex ? "last-row" : ""}
                     >
                       <button
                         onMouseDown={(e) => {
