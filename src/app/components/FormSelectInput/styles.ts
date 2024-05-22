@@ -2,7 +2,12 @@ import { styled } from "@linaria/react";
 import { theme } from "@/app/styles/theme";
 
 type InputsRowProps = {
-  checked: boolean;
+  checked?: boolean;
+  offsetX?: number;
+  offsetXByRow?: {
+    [key: number]: number;
+  };
+  isLastRow?: boolean;
 };
 
 type HeaderProps = {
@@ -73,20 +78,20 @@ export const InputsDataContainer = styled.div`
   gap: 8px;
 `;
 
-type RowProps = {
-  offsetX: number;
-  offsetXByRow?: {
-    [key: number]: number;
-  };
-};
-
-export const RowAndScrollDownContainer = styled.div<RowProps>`
+export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
   background: ${theme.COLORS.SELECT_INPUT};
   border-radius: 20px;
   position: relative;
   transition: transform 0.5s ease;
   transform: translateX(
-    ${(props) => (props.offsetXByRow && props.offsetX ? "-2rem" : "0")}
+    ${(props) =>
+      props.isLastRow
+        ? props.offsetXByRow && props.offsetX
+          ? "0"
+          : "0"
+        : props.offsetXByRow && props.offsetX
+          ? "-2rem"
+          : "0"}
   );
   cursor: grab;
 `;
@@ -101,26 +106,34 @@ export const InputsRow = styled.div<InputsRowProps>`
   position: relative;
 `;
 
-export const DeleteButtonAnimationFrame = styled.button<RowProps>`
+export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
   width: 5rem;
   height: 100%;
   padding-right: 5px;
-  display: flex;
+  display: ${(props) => (props.isLastRow ? "none" : "flex")};
   align-items: center;
   justify-content: end;
   text-align: center;
+
   position: absolute;
   bottom: 0;
-  z-index: -1;
   right: 0;
+  z-index: -1;
   transition: transform 0.5s ease;
   transform: translateX(
-    ${(props) => (props.offsetXByRow && props.offsetX ? "1.5rem" : "0")}
+    ${(props) =>
+      props.isLastRow
+        ? props.offsetXByRow && props.offsetX
+          ? "0"
+          : "0"
+        : props.offsetXByRow && props.offsetX
+          ? "1.5rem"
+          : "0"}
   );
 
   background: ${theme.COLORS.SECONDARY};
   border-radius: 20px;
-  border: none;
+  border: 1px solid ${theme.COLORS.WHITE};
   outline: none;
 `;
 
