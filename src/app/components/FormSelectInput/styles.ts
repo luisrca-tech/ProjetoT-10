@@ -93,7 +93,6 @@ export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
           ? "-2rem"
           : "0"}
   );
-  cursor: grab;
 `;
 
 export const InputsRow = styled.div<InputsRowProps>`
