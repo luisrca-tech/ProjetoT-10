@@ -1,4 +1,4 @@
-import { HTMLInputTypeAttribute, useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { Container, Input } from "./styles";
 
 import ArrowDown from "../../../../public/arrowdown.svg";
