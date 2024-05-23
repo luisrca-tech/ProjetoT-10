@@ -104,6 +104,19 @@ export const AddProjectButton = styled.button`
   justify-content: center;
 `;
 
+export const CheckProjectButton = styled.form`
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  background-color: transparent;
+  color: ${theme.COLORS.PRIMARY};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
+
 export const ButtonContainer = styled.div`
   width: 100%;
   padding: 1.5rem 0;
