@@ -9,6 +9,7 @@ import {
   SidebarContainer,
   TitleContainer,
   AddProjectButton,
+  CheckProjectButton,
 } from "./styles";
 import { IoMenu, IoAdd } from "react-icons/io5";
 import { poppins } from "@/app/fonts";
@@ -17,7 +18,18 @@ import { useState } from "react";
 import Modal from "../Modal";
 import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
+import { RiCheckFill } from "react-icons/ri";
+import { useForm } from "react-hook-form";
+import { SelectInputData, SelectInputSchema } from "../FormSelectInput";
+import { zodResolver } from "@hookform/resolvers/zod";
 export default function Header() {
+  const { handleSubmit } = useForm<SelectInputData>({
+    resolver: zodResolver(SelectInputSchema),
+  });
+
+  function handleFormData() {
+  }
+
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
   const currentPath = usePathname();
@@ -27,6 +39,10 @@ export default function Header() {
 
   const isAuthPage = () => {
     return currentPath.startsWith("/painel-administrativo/autenticacao");
+  };
+
+  const isProjectPage = () => {
+    return currentPath.startsWith("/painel-administrativo/projeto");
   };
 
   const noRenderIconsAndSidebar = () => {
@@ -85,11 +101,17 @@ export default function Header() {
               <h1>Projetos</h1>
             </TitleContainer>
             <ButtonsContainer>
-              <AddProjectButton
-                onClick={() => router.push("/painel-administrativo/projeto")}
-              >
-                <IoAdd size={24} />
-              </AddProjectButton>
+              {isProjectPage() ? (
+                <CheckProjectButton onSubmit={handleSubmit(handleFormData)}>
+                  <RiCheckFill size={24} />
+                </CheckProjectButton>
+              ) : (
+                <AddProjectButton
+                  onClick={() => router.push("/painel-administrativo/projeto")}
+                >
+                  <IoAdd size={24} />
+                </AddProjectButton>
+              )}
             </ButtonsContainer>
           </Container>
         </>
