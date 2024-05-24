@@ -218,7 +218,7 @@ export default function FormSelectInput({
   };
 
   const handleTouchEndForRow = (rowIndex: string) => {
-    if (offsetXByRow[rowIndex] && Math.abs(offsetXByRow[rowIndex]) > 400) {
+    if (offsetXByRow[rowIndex] && Math.abs(offsetXByRow[rowIndex]) > 100) {
       removeRow(rowIndex);
     } else {
       // Restaura a posição inicial
