@@ -165,10 +165,13 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
   const handleTouchMove = (event: React.TouchEvent, rowIndex: string) => {
     if (startX !== null) {
       const newOffsetX = event.touches[0].clientX - startX;
-      setOffsetXByRow((prevState) => ({
-        ...prevState,
-        [rowIndex]: newOffsetX,
-      }));
+      // Permitir o arrasto apenas para a esquerda
+      if (newOffsetX < 0) {
+        setOffsetXByRow((prevState) => ({
+          ...prevState,
+          [rowIndex]: newOffsetX,
+        }));
+      }
     }
   };
 
@@ -178,24 +181,16 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
   };
 
   const handleTouchEndForRow = (rowIndex: string) => {
-    if (rowIndex === getLastRowIndex()) {
-      setStartX(null);
+    if (offsetXByRow[rowIndex] && Math.abs(offsetXByRow[rowIndex]) > 400) {
+      removeRow(rowIndex);
+    } else {
+      // Restaura a posição inicial
       setOffsetXByRow((prevOffsetX) => ({
         ...prevOffsetX,
         [rowIndex]: 0,
       }));
-      return;
     }
-
-    if (offsetXByRow[rowIndex] && Math.abs(offsetXByRow[rowIndex]) > 80) {
-      removeRow(rowIndex);
-    }
-
     setStartX(null);
-    setOffsetXByRow((prevOffsetX) => ({
-      ...prevOffsetX,
-      [rowIndex]: 0,
-    }));
   };
 
   return (
@@ -220,133 +215,131 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
         )}
       </Header>
 
-        <InputsDataContainer>
-          {rowsAndSelectedValues.rows
-            .slice()
-            .reverse()
-            .map((row) => (
-              <RowAndScrollDownContainer
-                key={row}
-                offsetXByRow={offsetXByRow}
-                offsetX={offsetXByRow[row]}
-                onTouchStart={(e) => handleTouchStartForRow(e, row)}
-                onTouchMove={(e) => handleTouchMove(e, row)}
-                onTouchEnd={() => handleTouchEndForRow(row)}
-                isLastRow={row === getLastRowIndex()}
-              >
-                <InputsRow checked={checked}>
-                  <SelectInput
-                    type="text"
-                    placeholder="Cargo"
-                    id={`firstTextValue${row}`}
-                    onChange={(value) =>
-                      handleInputChange(`firstTextValue${row}`, value)
-                    }
-                    hasValue={isValueInInput(row, "firstTextValue")}
-                    checked={checked}
-                    values={offices}
-                    inputValue={
-                      rowsAndSelectedValues.selectedValues[
-                        `firstTextValue${row}`
-                      ]
-                    }
-                    setIsSelectOpen={() => toggleSelectOpen(row)}
-                  />
-                  <DeleteButtonAnimationFrame
-                    onClick={() => removeRow(row)}
-                    offsetX={offsetXByRow[row] || 0}
-                    offsetXByRow={offsetXByRow}
-                    isLastRow={row === getLastRowIndex()}
-                  >
-                    <Image src={TrashAnimation} alt="" width={20} height={20} />
-                  </DeleteButtonAnimationFrame>
-                  {!checked ? (
-                    <>
-                      <SelectInput
-                        type="number"
-                        placeholder="Horas"
-                        id={`secondTextValue${row}`}
-                        onChange={(value) =>
-                          handleInputChange(`secondTextValue${row}`, value)
-                        }
-                        hasValue={isValueInInput(row, "secondTextValue")}
-                        checked={checked}
-                        values={offices}
-                        inputValue={
-                          rowsAndSelectedValues.selectedValues[
-                            `secondTextValue${row}`
-                          ]
-                        }
+      <InputsDataContainer>
+        {rowsAndSelectedValues.rows
+          .slice()
+          .reverse()
+          .map((row) => (
+            <RowAndScrollDownContainer
+              key={row}
+              offsetXByRow={offsetXByRow}
+              offsetX={offsetXByRow[row]}
+              onTouchStart={(e) => handleTouchStartForRow(e, row)}
+              onTouchMove={(e) => handleTouchMove(e, row)}
+              onTouchEnd={() => handleTouchEndForRow(row)}
+              isLastRow={row === getLastRowIndex()}
+            >
+              <InputsRow checked={checked}>
+                <SelectInput
+                  type="text"
+                  placeholder="Cargo"
+                  id={`firstTextValue${row}`}
+                  onChange={(value) =>
+                    handleInputChange(`firstTextValue${row}`, value)
+                  }
+                  hasValue={isValueInInput(row, "firstTextValue")}
+                  checked={checked}
+                  values={offices}
+                  inputValue={
+                    rowsAndSelectedValues.selectedValues[`firstTextValue${row}`]
+                  }
+                  setIsSelectOpen={() => toggleSelectOpen(row)}
+                />
+                <DeleteButtonAnimationFrame
+                  onClick={() => removeRow(row)}
+                  offsetX={offsetXByRow[row] || 0}
+                  offsetXByRow={offsetXByRow}
+                  isLastRow={row === getLastRowIndex()}
+                >
+                  <Image src={TrashAnimation} alt="" width={20} height={20} />
+                </DeleteButtonAnimationFrame>
+                {!checked ? (
+                  <>
+                    <SelectInput
+                      type="number"
+                      placeholder="Horas"
+                      id={`secondTextValue${row}`}
+                      onChange={(value) =>
+                        handleInputChange(`secondTextValue${row}`, value)
+                      }
+                      hasValue={isValueInInput(row, "secondTextValue")}
+                      checked={checked}
+                      values={offices}
+                      inputValue={
+                        rowsAndSelectedValues.selectedValues[
+                          `secondTextValue${row}`
+                        ]
+                      }
+                    />
+                    <SelectInput
+                      type="number"
+                      placeholder="Valor Hora"
+                      id={`thirdTextValue${row}`}
+                      onChange={(value) =>
+                        handleInputChange(`thirdTextValue${row}`, value)
+                      }
+                      hasValue={isValueInInput(row, "thirdTextValue")}
+                      checked={checked}
+                      values={offices}
+                      inputValue={
+                        rowsAndSelectedValues.selectedValues[
+                          `thirdTextValue${row}`
+                        ]
+                      }
+                    />
+                  </>
+                ) : (
+                  <>
+                    <InputDataMenu>
+                      <span>Datas</span>
+                      <Image
+                        src={CalendarIcon}
+                        width={24}
+                        height={24}
+                        alt="Icone de Calendário"
                       />
-                      <SelectInput
-                        type="number"
-                        placeholder="Valor Hora"
-                        id={`thirdTextValue${row}`}
-                        onChange={(value) =>
-                          handleInputChange(`thirdTextValue${row}`, value)
-                        }
-                        hasValue={isValueInInput(row, "thirdTextValue")}
-                        checked={checked}
-                        values={offices}
-                        inputValue={
-                          rowsAndSelectedValues.selectedValues[
-                            `thirdTextValue${row}`
-                          ]
-                        }
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <InputDataMenu>
-                        <span>Datas</span>
-                        <Image
-                          src={CalendarIcon}
-                          width={24}
-                          height={24}
-                          alt="Icone de Calendário"
-                        />
-                      </InputDataMenu>
-                    </>
-                  )}
-                </InputsRow>
-                {isSelectOpen(row) && (
-                  // Atualizado para chamar a função 'isSelectOpen' com o índice atual
-                  <ScrollDownContainer
-                    className={poppins.className}
-                    onMouseDown={(e) => e.preventDefault()} // onMouseDown previne a perda do foco que acontece dentro de onClick, e.preventDefault impede que o foco seja perido.
-                  >
-                    {Object.values(offices).map((value, index) => (
-                      <SeparatorContainer
-                        key={index}
-                        className={row === getLastRowIndex() ? "last-row" : ""}
-                      >
-                        <button
-                          onMouseDown={(e) => {
-                            e.preventDefault(); // Previne a perda de foco
-                            handleButtonClick(value, row);
-                          }}
-                        >
-                          <Image src={AddButton} alt="" />
-                          <span>{value}</span>
-                        </button>
-                      </SeparatorContainer>
-                    ))}
-                  </ScrollDownContainer>
+                    </InputDataMenu>
+                  </>
                 )}
-              </RowAndScrollDownContainer>
-            ))}
-        </InputsDataContainer>
-        <Footer>
-          <BudgetContainer className={poppins.className}>
-            <span>Total:</span>
-          </BudgetContainer>
-          <BudgetContainer>
-            <span>{`${totalHours}h`}</span>
-          </BudgetContainer>
-          <BudgetContainer>
-            <span>{`R$${totalValue},00`}</span>
-          </BudgetContainer>
-        </Footer>
+              </InputsRow>
+              {isSelectOpen(row) && (
+                // Atualizado para chamar a função 'isSelectOpen' com o índice atual
+                <ScrollDownContainer
+                  className={poppins.className}
+                  onMouseDown={(e) => e.preventDefault()} // onMouseDown previne a perda do foco que acontece dentro de onClick, e.preventDefault impede que o foco seja perido.
+                >
+                  {Object.values(offices).map((value, index) => (
+                    <SeparatorContainer
+                      key={index}
+                      className={row === getLastRowIndex() ? "last-row" : ""}
+                    >
+                      <button
+                        onMouseDown={(e) => {
+                          e.preventDefault(); // Previne a perda de foco
+                          handleButtonClick(value, row);
+                        }}
+                      >
+                        <Image src={AddButton} alt="" />
+                        <span>{value}</span>
+                      </button>
+                    </SeparatorContainer>
+                  ))}
+                </ScrollDownContainer>
+              )}
+            </RowAndScrollDownContainer>
+          ))}
+      </InputsDataContainer>
+      <Footer>
+        <BudgetContainer className={poppins.className}>
+          <span>Total:</span>
+        </BudgetContainer>
+        <BudgetContainer>
+          <span>{`${totalHours}h`}</span>
+        </BudgetContainer>
+        <BudgetContainer>
+          <span>{`R$${totalValue},00`}</span>
+        </BudgetContainer>
+      </Footer>
     </Container>
   );
 }
