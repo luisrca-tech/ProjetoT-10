@@ -14,6 +14,7 @@ import {
   InputDataMenu,
   DeleteButtonAnimationFrame,
   HeaderContent,
+  CalendarDateValues,
 } from "./styles";
 import Image from "next/image";
 import { poppins } from "@/app/fonts";
@@ -44,6 +45,8 @@ interface FormSelectInputProps {
   setRowCount: React.Dispatch<React.SetStateAction<number>>;
   rowCount: number;
   setStringRow: React.Dispatch<React.SetStateAction<string>>;
+  stringRow: string;
+  value: { [key: string]: Range };
 }
 
 export default function FormSelectInput({
@@ -52,6 +55,8 @@ export default function FormSelectInput({
   setRowCount,
   rowCount,
   setStringRow,
+  stringRow,
+  value,
 }: FormSelectInputProps) {
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
@@ -68,7 +73,8 @@ export default function FormSelectInput({
       selectedValues: {},
     });
 
-  const { isDatePickerOpen, openDatePicker } = useContext(ScrolldownContext);
+  const { isDatePickerOpen, openDatePicker, toggleEditPicker } =
+    useContext(ScrolldownContext);
 
   // Função para abrir ou fechar o item na posição especificada
   const toggleSelectOpen = (index: string) => {
@@ -104,7 +110,7 @@ export default function FormSelectInput({
     const newDateRange = {
       startDate: new Date(),
       endDate: addDays(new Date(), 7),
-      key: `selection-${rowCount}`,
+      key: `selection-row-${rowCount}`,
     };
 
     setRowsAndSelectedValues((prevState) => ({
@@ -234,6 +240,10 @@ export default function FormSelectInput({
     setStartX(null);
   };
 
+  const formatDate = (date: Date | undefined) => {
+    return date ? date.toLocaleDateString("pt-BR") : "";
+  };
+
   return (
     <Container>
       <Header checked={checked}>
@@ -331,15 +341,23 @@ export default function FormSelectInput({
                   </>
                 ) : (
                   <>
-                    <InputDataMenu onClick={() => InputDataMenuClick(row)}>
-                      <span>Datas</span>
-                      <Image
-                        src={CalendarIcon}
-                        width={24}
-                        height={24}
-                        alt="Icone de Calendário"
-                      />
-                    </InputDataMenu>
+                    {value[row] ? (
+                      <CalendarDateValues onClick={() => InputDataMenuClick(row)}>
+                        <p>{formatDate(value[row].startDate)}</p>
+                        <span>-</span>
+                        <p>{formatDate(value[row].endDate)}</p>
+                      </CalendarDateValues>
+                    ) : (
+                      <InputDataMenu onClick={() => InputDataMenuClick(row)}>
+                        <span>Datas</span>
+                        <Image
+                          src={CalendarIcon}
+                          width={24}
+                          height={24}
+                          alt="Icone de Calendário"
+                        />
+                      </InputDataMenu>
+                    )}
                   </>
                 )}
               </InputsRow>

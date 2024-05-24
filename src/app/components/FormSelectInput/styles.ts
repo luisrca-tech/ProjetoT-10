@@ -103,6 +103,18 @@ export const InputsRow = styled.div<InputsRowProps>`
   background: ${theme.COLORS.LIGHT};
   width: 100%;
   position: relative;
+  height: 100%;
+`;
+
+export const CalendarDateValues = styled.div`
+  display: flex;
+  gap: 0.2rem;
+  height: 100%;
+  align-items: center;
+  font-family: "Roboto";
+  font-size: 1rem;
+  font-weight: Regular;
+  padding: 11px 10px 0;
 `;
 
 export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`

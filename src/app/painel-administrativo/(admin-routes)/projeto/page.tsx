@@ -25,9 +25,15 @@ export default function Projeto() {
   const [stringRow, setStringRow] = useState<string>("row-0");
 
   const [value, setValue] = useState<{ [key: string]: Range }>({
+    "global-project-data": {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection-global-project-data",
+    },
+
     "row-0": {
       startDate: new Date(),
-      endDate: addDays(new Date(), 7),
+      endDate: new Date(),
       key: "selection-row-0",
     },
   });
@@ -38,7 +44,11 @@ export default function Projeto() {
   }, [rowCount, value]);
   return (
     <Container className={roboto.className}>
-      <ProjectProfileHeader inputName="Nomeie seu projeto..." />
+      <ProjectProfileHeader
+        inputName="Nomeie seu projeto..."
+        setStringRow={setStringRow}
+        value={value}
+      />
 
       <MainContainer>
         {isDatePickerOpen && (
@@ -60,6 +70,8 @@ export default function Projeto() {
             setValue={setValue}
             setRowCount={setRowCount}
             setStringRow={setStringRow}
+            stringRow={stringRow}
+            value={value}
           />
         </FormContainer>
       </MainContainer>

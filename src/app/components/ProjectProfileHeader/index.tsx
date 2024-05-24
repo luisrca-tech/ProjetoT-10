@@ -16,19 +16,21 @@ import Image from "next/image";
 import CalendarIcon from "../../../../public/calendaricon.svg";
 import { RiPencilFill } from "react-icons/ri";
 import { ScrolldownContext } from "@/contexts/ScrolldownContext";
+import { Range } from "react-date-range";
 
 interface ProjectProfileProps {
   inputName: string;
+  setStringRow: React.Dispatch<React.SetStateAction<string>>;
+  value: { [key: string]: Range };
 }
 
-export function ProjectProfileHeader({ inputName }: ProjectProfileProps) {
-  const {
-    checked,
-    toggleDatePicker,
-    value,
-    hasDateValue,
-    toggleEditPicker,
-  } = useContext(ScrolldownContext);
+export function ProjectProfileHeader({
+  inputName,
+  setStringRow,
+  value,
+}: ProjectProfileProps) {
+  const { checked, toggleDatePicker, hasDateValue, toggleEditPicker } =
+    useContext(ScrolldownContext);
 
   const [inputValue, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -39,6 +41,7 @@ export function ProjectProfileHeader({ inputName }: ProjectProfileProps) {
   const initials = words.map((word) => word.charAt(0));
 
   const initialsString = initials.join("");
+  const { isDatePickerOpen, openDatePicker } = useContext(ScrolldownContext);
 
   useEffect(() => {
     const storedValue = localStorage.getItem("ProjectProfileInputHeader");
@@ -70,6 +73,11 @@ export function ProjectProfileHeader({ inputName }: ProjectProfileProps) {
     return date ? date.toLocaleDateString("pt-BR") : "";
   };
 
+  function InputDataMenuClick(row: string) {
+    openDatePicker();
+    setStringRow(row);
+  }
+  let la = "global-project-data";
   return (
     <Container className={roboto.className}>
       <ContentContainer>
@@ -97,9 +105,9 @@ export function ProjectProfileHeader({ inputName }: ProjectProfileProps) {
           )}
           {checked ? (
             <DataContainer>
-              {!hasDateValue ? (
+              {!value["global-project-data"] ? (
                 <ButtonDataMenu
-                  onClick={toggleDatePicker}
+                  onClick={() => InputDataMenuClick("global-project-data")}
                 >
                   <span>Datas</span>
                   <Image
@@ -110,10 +118,12 @@ export function ProjectProfileHeader({ inputName }: ProjectProfileProps) {
                   />
                 </ButtonDataMenu>
               ) : (
-                <CalendarDateValues onClick={toggleEditPicker}>
-                  <p>{formatDate(value[0].startDate)}</p>
+                <CalendarDateValues
+                  onClick={() => InputDataMenuClick("global-project-data")}
+                >
+                  <p>{formatDate(value["global-project-data"].startDate)}</p>
                   <span>-</span>
-                  <p>{formatDate(value[0].endDate)}</p>
+                  <p>{formatDate(value["global-project-data"].endDate)}</p>
                 </CalendarDateValues>
               )}
             </DataContainer>
