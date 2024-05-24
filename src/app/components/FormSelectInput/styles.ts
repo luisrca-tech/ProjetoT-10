@@ -90,7 +90,7 @@ export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "-2rem"
+          ? "-1.5rem"
           : "0"}
   );
 `;
@@ -106,7 +106,7 @@ export const InputsRow = styled.div<InputsRowProps>`
 `;
 
 export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
-  width: 5rem;
+  width: 100%;
   height: 100%;
   padding-right: 5px;
   display: ${(props) => (props.isLastRow ? "none" : "flex")};

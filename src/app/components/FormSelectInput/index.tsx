@@ -202,10 +202,13 @@ export default function FormSelectInput({
   const handleTouchMove = (event: React.TouchEvent, rowIndex: string) => {
     if (startX !== null) {
       const newOffsetX = event.touches[0].clientX - startX;
-      setOffsetXByRow((prevState) => ({
-        ...prevState,
-        [rowIndex]: newOffsetX,
-      }));
+      // Permitir o arrasto apenas para a esquerda
+      if (newOffsetX < 0) {
+        setOffsetXByRow((prevState) => ({
+          ...prevState,
+          [rowIndex]: newOffsetX,
+        }));
+      }
     }
   };
 
@@ -215,24 +218,16 @@ export default function FormSelectInput({
   };
 
   const handleTouchEndForRow = (rowIndex: string) => {
-    if (rowIndex === getLastRowIndex()) {
-      setStartX(null);
+    if (offsetXByRow[rowIndex] && Math.abs(offsetXByRow[rowIndex]) > 100) {
+      removeRow(rowIndex);
+    } else {
+      // Restaura a posição inicial
       setOffsetXByRow((prevOffsetX) => ({
         ...prevOffsetX,
         [rowIndex]: 0,
       }));
-      return;
     }
-
-    if (offsetXByRow[rowIndex] && Math.abs(offsetXByRow[rowIndex]) > 80) {
-      removeRow(rowIndex);
-    }
-
     setStartX(null);
-    setOffsetXByRow((prevOffsetX) => ({
-      ...prevOffsetX,
-      [rowIndex]: 0,
-    }));
   };
 
   return (
@@ -332,7 +327,7 @@ export default function FormSelectInput({
                   </>
                 ) : (
                   <>
-                    <InputDataMenu>
+                    <InputDataMenu onClick={() => InputDataMenuClick(row)}>
                       <span>Datas</span>
                       <Image
                         src={CalendarIcon}
