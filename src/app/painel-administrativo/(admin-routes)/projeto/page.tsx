@@ -1,7 +1,6 @@
 "use client";
 
-import FormSelectInput, {
-} from "@/app/components/FormSelectInput";
+import FormSelectInput from "@/app/components/FormSelectInput";
 import {
   CloseCalendarContainer,
   Container,
@@ -11,34 +10,61 @@ import {
 } from "./styles";
 import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import ToggleSwitch from "@/app/components/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
 import { ScrolldownContext } from "@/contexts/ScrolldownContext";
+import { Range } from "react-date-range";
+import { addDays } from "date-fns";
 
 export default function Projeto() {
   const { checked, handleCheckedChange, isDatePickerOpen, handleBlurCalendar } =
     useContext(ScrolldownContext);
 
+  const [rowCount, setRowCount] = useState(1);
+
+  const [value, setValue] = useState<{ [key: string]: Range }>({
+    "row-0": {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: "selection-row-0",
+    },
+  });
+
+  useEffect(() => {
+    console.log(`rowCount`, rowCount);
+    console.log(`value`, value);
+  }, [rowCount, value]);
   return (
     <Container className={roboto.className}>
-        <ProjectProfileHeader inputName="Nomeie seu projeto..." />
+      <ProjectProfileHeader inputName="Nomeie seu projeto..." />
 
-        <MainContainer>
-          {isDatePickerOpen && <CustomDateRangePicker />}
-          <FormContainer isDatePickerOpen={isDatePickerOpen}>
-            <SwitchContainer>
-              <span>Editar datas</span>
-              <ToggleSwitch onChange={handleCheckedChange} />
-            </SwitchContainer>
-            <FormSelectInput checked={checked} />
-          </FormContainer>
-        </MainContainer>
+      <MainContainer>
+        {isDatePickerOpen && (
+          <CustomDateRangePicker
+            value={value}
+            rowCount={rowCount}
+            setValue={setValue}
+          />
+        )}
+        <FormContainer isDatePickerOpen={isDatePickerOpen}>
+          <SwitchContainer>
+            <span>Editar datas</span>
+            <ToggleSwitch onChange={handleCheckedChange} />
+          </SwitchContainer>
+          <FormSelectInput
+            checked={checked}
+            rowCount={rowCount}
+            setValue={setValue}
+            setRowCount={setRowCount}
+          />
+        </FormContainer>
+      </MainContainer>
 
-        <CloseCalendarContainer
-          isDatePickerOpen={isDatePickerOpen}
-          onClick={handleBlurCalendar}
-        ></CloseCalendarContainer>
+      <CloseCalendarContainer
+        isDatePickerOpen={isDatePickerOpen}
+        onClick={handleBlurCalendar}
+      ></CloseCalendarContainer>
     </Container>
   );
 }
