@@ -4,6 +4,7 @@ import { addDays } from "date-fns";
 import { ReactNode, createContext, useState, useContext } from "react";
 import { Range, RangeKeyDict } from "react-date-range";
 
+
 interface ScrolldownContextType {
   checked: boolean;
   isDatePickerOpen: boolean;
