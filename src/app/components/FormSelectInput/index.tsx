@@ -327,7 +327,7 @@ export default function FormSelectInput({
                   </>
                 ) : (
                   <>
-                    <InputDataMenu>
+                    <InputDataMenu onClick={() => InputDataMenuClick(row)}>
                       <span>Datas</span>
                       <Image
                         src={CalendarIcon}
