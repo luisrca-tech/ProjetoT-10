@@ -19,16 +19,8 @@ import Modal from "../Modal";
 import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
-import { useForm } from "react-hook-form";
-import { SelectInputData, SelectInputSchema } from "../FormSelectInput";
-import { zodResolver } from "@hookform/resolvers/zod";
-export default function Header() {
-  const { handleSubmit } = useForm<SelectInputData>({
-    resolver: zodResolver(SelectInputSchema),
-  });
 
-  function handleFormData() {
-  }
+export default function Header() {
 
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -36,7 +28,6 @@ export default function Header() {
   const handleMenu = () => {
     setShowModal((current) => !current);
   };
-
   const isAuthPage = () => {
     return currentPath.startsWith("/painel-administrativo/autenticacao");
   };
@@ -102,7 +93,7 @@ export default function Header() {
             </TitleContainer>
             <ButtonsContainer>
               {isProjectPage() ? (
-                <CheckProjectButton onSubmit={handleSubmit(handleFormData)}>
+                <CheckProjectButton>
                   <RiCheckFill size={24} />
                 </CheckProjectButton>
               ) : (

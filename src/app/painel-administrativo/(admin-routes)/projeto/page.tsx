@@ -1,6 +1,7 @@
 "use client";
 
-import FormSelectInput from "@/app/components/FormSelectInput";
+import FormSelectInput, {
+} from "@/app/components/FormSelectInput";
 import {
   CloseCalendarContainer,
   Container,
@@ -20,24 +21,24 @@ export default function Projeto() {
     useContext(ScrolldownContext);
 
   return (
-  <Container className={roboto.className}>
-      <ProjectProfileHeader inputName="Nomeie seu projeto..." />
+    <Container className={roboto.className}>
+        <ProjectProfileHeader inputName="Nomeie seu projeto..." />
 
-      <MainContainer>
-        {isDatePickerOpen && <CustomDateRangePicker />}
-        <FormContainer isDatePickerOpen={isDatePickerOpen}>
-          <SwitchContainer>
-            <span>Editar datas</span>
-            <ToggleSwitch onChange={handleCheckedChange} />
-          </SwitchContainer>
-          <FormSelectInput checked={checked} />
-        </FormContainer>
-      </MainContainer>
+        <MainContainer>
+          {isDatePickerOpen && <CustomDateRangePicker />}
+          <FormContainer isDatePickerOpen={isDatePickerOpen}>
+            <SwitchContainer>
+              <span>Editar datas</span>
+              <ToggleSwitch onChange={handleCheckedChange} />
+            </SwitchContainer>
+            <FormSelectInput checked={checked} />
+          </FormContainer>
+        </MainContainer>
 
-      <CloseCalendarContainer
-        isDatePickerOpen={isDatePickerOpen}
-        onClick={handleBlurCalendar}
-      ></CloseCalendarContainer>
+        <CloseCalendarContainer
+          isDatePickerOpen={isDatePickerOpen}
+          onClick={handleBlurCalendar}
+        ></CloseCalendarContainer>
     </Container>
   );
 }

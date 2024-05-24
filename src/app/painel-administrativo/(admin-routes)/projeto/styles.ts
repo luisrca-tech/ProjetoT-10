@@ -105,4 +105,4 @@ export const CloseCalendarContainer = styled.div<FormContainer>`
   top: 0;
   z-index: ${(props) => (props.isDatePickerOpen ? "1" : "-1")};
   left: 0;
-`
+`;
