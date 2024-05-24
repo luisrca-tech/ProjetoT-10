@@ -42,28 +42,31 @@ interface CustomDateRangePickerProps {
   rowCount: number;
   value: { [key: string]: Range };
   setValue: React.Dispatch<React.SetStateAction<{ [key: string]: Range }>>;
+  stringRow: string;
 }
 
 export function CustomDateRangePicker({
   rowCount,
   value,
   setValue,
+  stringRow,
 }: CustomDateRangePickerProps) {
-  const currentRange = value[`row-${rowCount}`] || {
+  const currentRange = value[stringRow] || {
     startDate: new Date(),
     endDate: addDays(new Date(), 7),
-    key: `selection-${rowCount}`,
+    key: `selection-${stringRow}`,
   };
 
   useEffect(() => {
-    console.log(`currentRange`, currentRange);
-  }, []);
+    console.log(`stringRow`, stringRow);
+    console.log(` currentRange`, currentRange);
+  }, [stringRow]);
 
   const handleSelectDate = (ranges: RangeKeyDict) => {
     const { selection } = ranges;
     setValue((prevState) => ({
       ...prevState,
-      [`row-${rowCount}`]: selection,
+      [stringRow]: selection,
     }));
   };
 

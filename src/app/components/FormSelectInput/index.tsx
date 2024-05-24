@@ -21,31 +21,10 @@ import { poppins } from "@/app/fonts";
 import AddButton from "../../../../public/add.svg";
 import CalendarIcon from "../../../../public/calendaricon.svg";
 import TrashAnimation from "../../../../public/trashanimation.svg";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import SelectInput from "../SelectInput";
 import { ScrolldownContext } from "@/contexts/ScrolldownContext";
 import { addDays } from "date-fns";
 import { Range } from "react-date-range";
-
-export const SelectInputSchema = z.object({
-  role: z
-    .string()
-    .min(3, { message: "O cargo precisa ter pelo menos 3 letras." })
-    .regex(/^([a-z\\-]+)$/i, {
-      message: "O cargo pode ter apenas letras e hifens",
-    })
-    .transform((role) => role.toLowerCase()),
-  roleValue: z
-    .number()
-    .min(1, { message: "O valor do cargo precisa ter pelo menos 1 número." }),
-  roleTime: z
-    .number()
-    .min(1, { message: "As horas do cargo precisa ter pelo menos 1 número." }),
-});
-
-export type SelectInputData = z.infer<typeof SelectInputSchema>;
 
 interface ParentComponentState {
   rows: string[];
@@ -64,6 +43,7 @@ interface FormSelectInputProps {
   setValue: React.Dispatch<React.SetStateAction<{ [key: string]: Range }>>;
   setRowCount: React.Dispatch<React.SetStateAction<number>>;
   rowCount: number;
+  setStringRow: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function FormSelectInput({
@@ -71,14 +51,8 @@ export default function FormSelectInput({
   setValue,
   setRowCount,
   rowCount,
+  setStringRow,
 }: FormSelectInputProps) {
-  const {
-    register,
-    formState: { errors },
-  } = useForm<SelectInputData>({
-    resolver: zodResolver(SelectInputSchema),
-  });
-
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
   );
@@ -108,10 +82,12 @@ export default function FormSelectInput({
 
   function InputDataMenuClick(row: string) {
     openDatePicker();
-    console.log(`rowCount`, rowCount);
-    setRowCount(Number(row));
+    setStringRow(row);
     console.log(`rowCount`, rowCount);
   }
+  useEffect(() => {
+    console.log(`rowCount updated:`, rowCount);
+  }, [rowCount]);
 
   function handleInputChange(id: string, value: string) {
     setRowsAndSelectedValues((prevState) => ({
@@ -301,7 +277,6 @@ export default function FormSelectInput({
             >
               <InputsRow checked={checked}>
                 <SelectInput
-                  {...register("role")}
                   type="text"
                   placeholder="Cargo"
                   id={`firstTextValue${row}`}
@@ -316,7 +291,6 @@ export default function FormSelectInput({
                   }
                   setIsSelectOpen={() => toggleSelectOpen(row)}
                 />
-                <p>{errors.role && errors.role.message}</p>
                 <DeleteButtonAnimationFrame
                   onClick={() => removeRow(row)}
                   offsetX={offsetXByRow[row] || 0}
@@ -328,7 +302,6 @@ export default function FormSelectInput({
                 {!checked ? (
                   <>
                     <SelectInput
-                      {...register("roleTime")}
                       type="number"
                       placeholder="Horas"
                       id={`secondTextValue${row}`}
@@ -344,9 +317,7 @@ export default function FormSelectInput({
                         ]
                       }
                     />
-                    <p>{errors.roleTime && errors.roleTime.message}</p>
                     <SelectInput
-                      {...register("roleValue")}
                       type="number"
                       placeholder="Valor Hora"
                       id={`thirdTextValue${row}`}
@@ -362,7 +333,6 @@ export default function FormSelectInput({
                         ]
                       }
                     />
-                    <p>{errors.roleValue && errors.roleValue.message}</p>
                   </>
                 ) : (
                   <>

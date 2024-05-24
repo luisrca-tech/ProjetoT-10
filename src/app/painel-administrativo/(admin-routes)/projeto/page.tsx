@@ -22,6 +22,7 @@ export default function Projeto() {
     useContext(ScrolldownContext);
 
   const [rowCount, setRowCount] = useState(1);
+  const [stringRow, setStringRow] = useState<string>("row-0");
 
   const [value, setValue] = useState<{ [key: string]: Range }>({
     "row-0": {
@@ -45,6 +46,7 @@ export default function Projeto() {
             value={value}
             rowCount={rowCount}
             setValue={setValue}
+            stringRow={stringRow}
           />
         )}
         <FormContainer isDatePickerOpen={isDatePickerOpen}>
@@ -57,6 +59,7 @@ export default function Projeto() {
             rowCount={rowCount}
             setValue={setValue}
             setRowCount={setRowCount}
+            setStringRow={setStringRow}
           />
         </FormContainer>
       </MainContainer>
