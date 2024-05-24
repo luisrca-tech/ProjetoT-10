@@ -69,7 +69,7 @@ export default function SelectInput({
         placeholder={placeholder}
         type={!rest.type ? "text" : rest.type}
         id={id}
-        value={inputValue}
+        value={inputValue || ""}
         onChange={handleChange}
         onFocus={handleInputFocus}
       />
