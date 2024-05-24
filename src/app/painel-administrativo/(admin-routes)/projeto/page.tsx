@@ -27,7 +27,7 @@ export default function Projeto() {
   const [value, setValue] = useState<{ [key: string]: Range }>({
     "row-0": {
       startDate: new Date(),
-      endDate: addDays(new Date(), 7),
+      endDate: new Date(),
       key: "selection-row-0",
     },
   });
@@ -60,6 +60,7 @@ export default function Projeto() {
             setValue={setValue}
             setRowCount={setRowCount}
             setStringRow={setStringRow}
+            stringRow={stringRow}
           />
         </FormContainer>
       </MainContainer>

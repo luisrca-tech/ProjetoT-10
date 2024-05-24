@@ -53,7 +53,7 @@ export function CustomDateRangePicker({
 }: CustomDateRangePickerProps) {
   const currentRange = value[stringRow] || {
     startDate: new Date(),
-    endDate: addDays(new Date(), 7),
+    endDate: new Date(),
     key: `selection-${stringRow}`,
   };
 
@@ -63,13 +63,30 @@ export function CustomDateRangePicker({
   }, [stringRow]);
 
   const handleSelectDate = (ranges: RangeKeyDict) => {
-    const { selection } = ranges;
-    setValue((prevState) => ({
-      ...prevState,
-      [stringRow]: selection,
-    }));
+    console.log("handleSelectDate - ranges:", ranges);
+
+    // Verifique se 'selection-row-0' está presente em 'ranges'
+    if (`selection-${stringRow}` in ranges) {
+      const selection = ranges[`selection-${stringRow}`];
+      console.log("handleSelectDate - selection:", selection);
+
+      setValue((prevState) => ({
+        ...prevState,
+        [stringRow]: selection,
+      }));
+    } else {
+      console.log(`selection-${stringRow} não encontrado em ranges`);
+    }
   };
 
+  //  if (`selection-${stringRow}` in ranges) {
+  // const selection = ranges[`selection-${stringRow}`];
+  // console.log("handleSelectDate - selection:", selection);
+
+  // setValue((prevState) => ({
+  //   ...prevState,
+  //   [stringRow]: selection,
+  // }));
   return (
     <Container>
       <DateRangePicker

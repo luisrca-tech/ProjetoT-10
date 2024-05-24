@@ -44,6 +44,7 @@ interface FormSelectInputProps {
   setRowCount: React.Dispatch<React.SetStateAction<number>>;
   rowCount: number;
   setStringRow: React.Dispatch<React.SetStateAction<string>>;
+  stringRow: string;
 }
 
 export default function FormSelectInput({
@@ -52,6 +53,7 @@ export default function FormSelectInput({
   setRowCount,
   rowCount,
   setStringRow,
+  stringRow,
 }: FormSelectInputProps) {
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
@@ -104,7 +106,7 @@ export default function FormSelectInput({
     const newDateRange = {
       startDate: new Date(),
       endDate: addDays(new Date(), 7),
-      key: `selection-${rowCount}`,
+      key: `selection-row-${rowCount}`,
     };
 
     setRowsAndSelectedValues((prevState) => ({
