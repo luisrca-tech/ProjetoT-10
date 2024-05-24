@@ -26,6 +26,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import SelectInput from "../SelectInput";
 import { ScrolldownContext } from "@/contexts/ScrolldownContext";
+import { addDays } from "date-fns";
+import { Range } from "react-date-range";
 
 export const SelectInputSchema = z.object({
   role: z
@@ -57,7 +59,19 @@ let offices = {
   office4: "Front-End SR",
 };
 
-export default function FormSelectInput({ checked }: { checked: boolean }) {
+interface FormSelectInputProps {
+  checked: boolean;
+  setValue: React.Dispatch<React.SetStateAction<{ [key: string]: Range }>>;
+  setRowCount: React.Dispatch<React.SetStateAction<number>>;
+  rowCount: number;
+}
+
+export default function FormSelectInput({
+  checked,
+  setValue,
+  setRowCount,
+  rowCount,
+}: FormSelectInputProps) {
   const {
     register,
     formState: { errors },
@@ -80,6 +94,8 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
       selectedValues: {},
     });
 
+  const { isDatePickerOpen, openDatePicker } = useContext(ScrolldownContext);
+
   // Função para abrir ou fechar o item na posição especificada
   const toggleSelectOpen = (index: string) => {
     setSelectedItemIndex(selectedItemIndex === index ? null : index);
@@ -89,6 +105,13 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
   const isSelectOpen = (index: string) => {
     return selectedItemIndex === index;
   };
+
+  function InputDataMenuClick(row: string) {
+    openDatePicker();
+    console.log(`rowCount`, rowCount);
+    setRowCount(Number(row));
+    console.log(`rowCount`, rowCount);
+  }
 
   function handleInputChange(id: string, value: string) {
     setRowsAndSelectedValues((prevState) => ({
@@ -101,11 +124,24 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
   }
 
   function addRow() {
-    const newRowId = `row-${Date.now()}`;
+    // const newRowId = `row-${Date.now()}`;
+    const newDateRange = {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: `selection-${rowCount}`,
+    };
+
     setRowsAndSelectedValues((prevState) => ({
       ...prevState,
-      rows: [...prevState.rows, newRowId],
+      rows: [...prevState.rows, `row-${rowCount}`],
     }));
+
+    setValue((prevState) => ({
+      ...prevState,
+      [`row-${rowCount}`]: newDateRange,
+    }));
+
+    setRowCount((prevCount) => prevCount + 1);
   }
 
   function removeRow(rowIndex: string) {
@@ -330,7 +366,7 @@ export default function FormSelectInput({ checked }: { checked: boolean }) {
                   </>
                 ) : (
                   <>
-                    <InputDataMenu>
+                    <InputDataMenu onClick={() => InputDataMenuClick(row)}>
                       <span>Datas</span>
                       <Image
                         src={CalendarIcon}

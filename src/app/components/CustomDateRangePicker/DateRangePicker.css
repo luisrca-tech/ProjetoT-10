@@ -46,14 +46,13 @@ button.rdrNextPrevButton:hover {
   width: 30px;
 }
 
-.rdrMonths,
+
 .rdrMonthsVertical {
   height: 100%;
   overflow-y: auto;
   border: none;
 }
 
-.rdrMonths,
 .rdrMonthsVertical::-webkit-scrollbar {
   display: none;
 }

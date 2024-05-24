@@ -13,6 +13,7 @@ interface ScrolldownContextType {
   toggleDatePicker: () => void;
   toggleEditPicker: () => void;
   handleBlurCalendar: () => void;
+  openDatePicker: () => void;
   handleSelectDate: (ranges: RangeKeyDict) => void;
 }
 
@@ -26,6 +27,7 @@ export const ScrolldownContext = createContext<ScrolldownContextType>({
   toggleEditPicker: () => {},
   handleSelectDate: () => {},
   handleBlurCalendar: () => {},
+  openDatePicker: () => {},
 });
 
 interface ScrolldownContextProviderProps {
@@ -47,6 +49,9 @@ export function ScrolldownContextProvider({
   ]);
 
   // Funções retiraveis do contexto Começa
+  const openDatePicker = () => {
+    setIsDatePickerOpen(true);
+  };
 
   const handleCheckedChange = () => {
     setChecked(!checked);
@@ -87,6 +92,7 @@ export function ScrolldownContextProvider({
         handleSelectDate,
         handleBlurCalendar,
         handleCheckedChange,
+        openDatePicker,
       }}
     >
       {children}
