@@ -118,7 +118,7 @@ export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
   bottom: 0;
   right: 0;
   z-index: -1;
-  transition: transform 0.6s ease;
+  transition: transform 0.5s ease;
   transform: translateX(
     ${(props) =>
       props.isLastRow
