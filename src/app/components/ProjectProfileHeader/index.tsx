@@ -18,10 +18,14 @@ import { RiPencilFill } from "react-icons/ri";
 import { ScrolldownContext } from "@/contexts/ScrolldownContext";
 import { Range } from "react-date-range";
 
+interface SelectableRange extends Range {
+  isSelected?: boolean;
+}
+
 interface ProjectProfileProps {
   inputName: string;
   setStringRow: React.Dispatch<React.SetStateAction<string>>;
-  value: { [key: string]: Range };
+  value: { [key: string]: SelectableRange };
 }
 
 export function ProjectProfileHeader({
@@ -105,7 +109,7 @@ export function ProjectProfileHeader({
           )}
           {checked ? (
             <DataContainer>
-              {!value["global-project-data"] ? (
+              {!value["global-project-data"].isSelected ? (
                 <ButtonDataMenu
                   onClick={() => InputDataMenuClick("global-project-data")}
                 >

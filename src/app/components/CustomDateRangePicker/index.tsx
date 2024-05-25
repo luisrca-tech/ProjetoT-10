@@ -38,10 +38,15 @@ import { Container } from "./styles";
 import { addDays } from "date-fns";
 import "./DateRangePicker.css";
 
+interface SelectableRange extends Range {
+  isSelected?: boolean;
+}
 interface CustomDateRangePickerProps {
   rowCount: number;
-  value: { [key: string]: Range };
-  setValue: React.Dispatch<React.SetStateAction<{ [key: string]: Range }>>;
+  value: { [key: string]: SelectableRange };
+  setValue: React.Dispatch<
+    React.SetStateAction<{ [key: string]: SelectableRange }>
+  >;
   stringRow: string;
 }
 
@@ -57,36 +62,21 @@ export function CustomDateRangePicker({
     key: `selection-${stringRow}`,
   };
 
-  useEffect(() => {
-    console.log(`stringRow`, stringRow);
-    console.log(` currentRange`, currentRange);
-  }, [stringRow]);
-
   const handleSelectDate = (ranges: RangeKeyDict) => {
-    console.log("handleSelectDate - ranges:", ranges);
-
-    // Verifique se 'selection-row-0' está presente em 'ranges'
     if (`selection-${stringRow}` in ranges) {
       const selection = ranges[`selection-${stringRow}`];
-      console.log("handleSelectDate - selection:", selection);
 
       setValue((prevState) => ({
         ...prevState,
-        [stringRow]: selection,
+        [stringRow]: {
+          ...selection,
+          isSelected: true,
+        },
       }));
     } else {
-      console.log(`selection-${stringRow} não encontrado em ranges`);
     }
   };
 
-  //  if (`selection-${stringRow}` in ranges) {
-  // const selection = ranges[`selection-${stringRow}`];
-  // console.log("handleSelectDate - selection:", selection);
-
-  // setValue((prevState) => ({
-  //   ...prevState,
-  //   [stringRow]: selection,
-  // }));
   return (
     <Container>
       <DateRangePicker

@@ -16,31 +16,32 @@ import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
 import { ScrolldownContext } from "@/contexts/ScrolldownContext";
 import { Range } from "react-date-range";
 import { addDays } from "date-fns";
+interface SelectableRange extends Range {
+  isSelected?: boolean;
+}
 
 export default function Projeto() {
   const { checked, handleCheckedChange, isDatePickerOpen, handleBlurCalendar } =
     useContext(ScrolldownContext);
 
-  const [rowCount, setRowCount] = useState(0);
+  const [rowCount, setRowCount] = useState(1);
   const [stringRow, setStringRow] = useState<string>("row-0");
 
-  const [value, setValue] = useState<{ [key: string]: Range }>({
-    // "global-project-data": {
-    //   startDate: new Date(),
-    //   endDate: new Date(),
-    //   key: "selection-global-project-data",
-    // },
-    // "row-0": {
-    //   startDate: new Date(),
-    //   endDate: new Date(),
-    //   key: "selection-row-0",
-    // },
+  const [value, setValue] = useState<{ [key: string]: SelectableRange }>({
+    "global-project-data": {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection-global-project-data",
+      isSelected: false,
+    },
+    "row-0": {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection-row-0",
+      isSelected: false,
+    },
   });
 
-  useEffect(() => {
-    console.log(`rowCount`, rowCount);
-    console.log(`value`, value);
-  }, [rowCount, value]);
   return (
     <Container className={roboto.className}>
       <ProjectProfileHeader

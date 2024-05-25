@@ -27,6 +27,9 @@ import { ScrolldownContext } from "@/contexts/ScrolldownContext";
 import { addDays } from "date-fns";
 import { Range } from "react-date-range";
 
+interface SelectableRange extends Range {
+  isSelected?: boolean;
+}
 interface ParentComponentState {
   rows: string[];
   selectedValues: { [key: string]: string };
@@ -41,12 +44,14 @@ let offices = {
 
 interface FormSelectInputProps {
   checked: boolean;
-  setValue: React.Dispatch<React.SetStateAction<{ [key: string]: Range }>>;
+  setValue: React.Dispatch<
+    React.SetStateAction<{ [key: string]: SelectableRange }>
+  >;
   setRowCount: React.Dispatch<React.SetStateAction<number>>;
   rowCount: number;
   setStringRow: React.Dispatch<React.SetStateAction<string>>;
   stringRow: string;
-  value: { [key: string]: Range };
+  value: { [key: string]: SelectableRange };
 }
 
 export default function FormSelectInput({
@@ -89,24 +94,7 @@ export default function FormSelectInput({
   function InputDataMenuClick(row: string) {
     openDatePicker();
     setStringRow(row);
-
-    const newDateRange = {
-      startDate: new Date(),
-      endDate: addDays(new Date(), 7),
-      key: `selection-row-${rowCount}`,
-    };
-
-    setValue((prevState) => ({
-      ...prevState,
-      [`row-${rowCount}`]: newDateRange,
-    }));
-
-    setRowCount((prevCount) => prevCount + 1);
-    console.log(`rowCount`, rowCount);
   }
-  useEffect(() => {
-    console.log(`rowCount updated:`, rowCount);
-  }, [rowCount]);
 
   function handleInputChange(id: string, value: string) {
     setRowsAndSelectedValues((prevState) => ({
@@ -124,6 +112,7 @@ export default function FormSelectInput({
       startDate: new Date(),
       endDate: addDays(new Date(), 7),
       key: `selection-row-${rowCount}`,
+      isSelected: false,
     };
 
     setRowsAndSelectedValues((prevState) => ({
@@ -131,12 +120,12 @@ export default function FormSelectInput({
       rows: [...prevState.rows, `row-${rowCount}`],
     }));
 
-    // setValue((prevState) => ({
-    //   ...prevState,
-    //   [`row-${rowCount}`]: newDateRange,
-    // }));
+    setValue((prevState) => ({
+      ...prevState,
+      [`row-${rowCount}`]: newDateRange,
+    }));
 
-    // setRowCount((prevCount) => prevCount + 1);
+    setRowCount((prevCount) => prevCount + 1);
   }
 
   function removeRow(rowIndex: string) {
@@ -354,7 +343,7 @@ export default function FormSelectInput({
                   </>
                 ) : (
                   <>
-                    {value[row] ? (
+                    {value[row].isSelected ? (
                       <CalendarDateValues
                         onClick={() => InputDataMenuClick(row)}
                       >
