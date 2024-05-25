@@ -21,21 +21,20 @@ export default function Projeto() {
   const { checked, handleCheckedChange, isDatePickerOpen, handleBlurCalendar } =
     useContext(ScrolldownContext);
 
-  const [rowCount, setRowCount] = useState(1);
+  const [rowCount, setRowCount] = useState(0);
   const [stringRow, setStringRow] = useState<string>("row-0");
 
   const [value, setValue] = useState<{ [key: string]: Range }>({
-    "global-project-data": {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection-global-project-data",
-    },
-
-    "row-0": {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection-row-0",
-    },
+    // "global-project-data": {
+    //   startDate: new Date(),
+    //   endDate: new Date(),
+    //   key: "selection-global-project-data",
+    // },
+    // "row-0": {
+    //   startDate: new Date(),
+    //   endDate: new Date(),
+    //   key: "selection-row-0",
+    // },
   });
 
   useEffect(() => {

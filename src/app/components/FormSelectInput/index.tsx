@@ -89,6 +89,19 @@ export default function FormSelectInput({
   function InputDataMenuClick(row: string) {
     openDatePicker();
     setStringRow(row);
+
+    const newDateRange = {
+      startDate: new Date(),
+      endDate: addDays(new Date(), 7),
+      key: `selection-row-${rowCount}`,
+    };
+
+    setValue((prevState) => ({
+      ...prevState,
+      [`row-${rowCount}`]: newDateRange,
+    }));
+
+    setRowCount((prevCount) => prevCount + 1);
     console.log(`rowCount`, rowCount);
   }
   useEffect(() => {
@@ -118,12 +131,12 @@ export default function FormSelectInput({
       rows: [...prevState.rows, `row-${rowCount}`],
     }));
 
-    setValue((prevState) => ({
-      ...prevState,
-      [`row-${rowCount}`]: newDateRange,
-    }));
+    // setValue((prevState) => ({
+    //   ...prevState,
+    //   [`row-${rowCount}`]: newDateRange,
+    // }));
 
-    setRowCount((prevCount) => prevCount + 1);
+    // setRowCount((prevCount) => prevCount + 1);
   }
 
   function removeRow(rowIndex: string) {
@@ -342,7 +355,9 @@ export default function FormSelectInput({
                 ) : (
                   <>
                     {value[row] ? (
-                      <CalendarDateValues onClick={() => InputDataMenuClick(row)}>
+                      <CalendarDateValues
+                        onClick={() => InputDataMenuClick(row)}
+                      >
                         <p>{formatDate(value[row].startDate)}</p>
                         <span>-</span>
                         <p>{formatDate(value[row].endDate)}</p>
