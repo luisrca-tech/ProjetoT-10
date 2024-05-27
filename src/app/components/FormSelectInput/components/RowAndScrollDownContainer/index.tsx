@@ -167,7 +167,9 @@ export default function RowAndScrollDownContainer({
 
   const handleTouchEndForRow = (rowIndex: string) => {
     if (offsetXByRow[rowIndex] && Math.abs(offsetXByRow[rowIndex]) > 100) {
-      removeRow(rowIndex);
+      if (rowIndex !== getLastRowIndex()) {
+        removeRow(rowIndex);
+      }
     } else {
       // Restaura a posição inicial
       setOffsetXByRow((prevOffsetX) => ({
