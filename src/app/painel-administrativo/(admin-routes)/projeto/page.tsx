@@ -13,21 +13,15 @@ import { roboto } from "@/app/fonts";
 import { useContext, useEffect, useState } from "react";
 import ToggleSwitch from "@/app/components/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
-import { ScrolldownContext } from "@/contexts/ScrolldownContext";
+
 import { Range } from "react-date-range";
-import { addDays } from "date-fns";
-interface SelectableRange extends Range {
-  isSelected?: boolean;
-}
+import { SelectableRange } from "@/app/components/types";
 
 export default function Projeto() {
-  const { checked, handleCheckedChange, isDatePickerOpen, handleBlurCalendar } =
-    useContext(ScrolldownContext);
-
   const [rowCount, setRowCount] = useState(1);
   const [stringRow, setStringRow] = useState<string>("row-0");
-
-  const [value, setValue] = useState<{ [key: string]: SelectableRange }>({
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
+  const [ranges, setRanges] = useState<{ [key: string]: SelectableRange }>({
     "global-project-data": {
       startDate: new Date(),
       endDate: new Date(),
@@ -41,21 +35,41 @@ export default function Projeto() {
       isSelected: false,
     },
   });
+  const [checked, setChecked] = useState<boolean>(false);
+
+  const openDatePicker = () => {
+    setIsDatePickerOpen(true);
+  };
+
+  const handleCheckedChange = () => {
+    setChecked(!checked);
+  };
+
+  function inputDataMenuClick(row: string) {
+    openDatePicker();
+    setStringRow(row);
+  }
+
+  const handleBlurCalendar = () => {
+    setIsDatePickerOpen(false);
+  };
 
   return (
     <Container className={roboto.className}>
       <ProjectProfileHeader
         inputName="Nomeie seu projeto..."
         setStringRow={setStringRow}
-        value={value}
+        value={ranges}
+        inputDataMenuClick={inputDataMenuClick}
+        checked={checked}
       />
 
       <MainContainer>
         {isDatePickerOpen && (
           <CustomDateRangePicker
-            value={value}
+            ranges={ranges}
+            setRanges={setRanges}
             rowCount={rowCount}
-            setValue={setValue}
             stringRow={stringRow}
           />
         )}
@@ -67,11 +81,11 @@ export default function Projeto() {
           <FormSelectInput
             checked={checked}
             rowCount={rowCount}
-            setValue={setValue}
+            setRanges={setRanges}
             setRowCount={setRowCount}
             setStringRow={setStringRow}
-            stringRow={stringRow}
-            value={value}
+            ranges={ranges}
+            inputDataMenuClick={inputDataMenuClick}
           />
         </FormContainer>
       </MainContainer>
