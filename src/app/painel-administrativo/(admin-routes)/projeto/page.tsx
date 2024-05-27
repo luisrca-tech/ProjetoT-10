@@ -10,12 +10,11 @@ import {
 } from "./styles";
 import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import ToggleSwitch from "@/app/components/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
 
-import { Range } from "react-date-range";
-import { SelectableRange } from "@/app/components/types";
+import { SelectableRange } from "@/app/components/FormSelectInput/types";
 
 export default function Projeto() {
   const [rowCount, setRowCount] = useState(1);

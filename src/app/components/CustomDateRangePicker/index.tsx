@@ -4,7 +4,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker, Range, RangeKeyDict } from "react-date-range";
 import { ptBR } from "date-fns/locale";
 import { Container } from "./styles";
-import { SelectableRange } from "../types";
+import { SelectableRange } from "../FormSelectInput/types";
 
 import "./DateRangePicker.css";
 
