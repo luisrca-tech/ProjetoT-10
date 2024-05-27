@@ -11,10 +11,7 @@ import {
 
 import { poppins } from "@/app/fonts";
 import RowAndScrollDownContainer from "./components/RowAndScrollDownContainer";
-import {
-  FormSelectInputProps,
-  RowsAndSelectedValueProps,
-} from "../@types/types";
+import { FormSelectInputProps, RowsAndSelectedValueProps } from "./types";
 import { BudgetContainer } from "./components/FooterSumContainer";
 
 export default function FormSelectInput({

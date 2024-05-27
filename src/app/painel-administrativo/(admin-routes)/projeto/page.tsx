@@ -14,7 +14,7 @@ import { useState } from "react";
 import ToggleSwitch from "@/app/components/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
 
-import { SelectableRange } from "@/app/components/@types/types";
+import { SelectableRange } from "@/app/components/FormSelectInput/types";
 
 export default function Projeto() {
   const [rowCount, setRowCount] = useState(1);

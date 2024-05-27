@@ -23,7 +23,7 @@ import CalendarIcon from "../../../../../../public/calendaricon.svg";
 import TrashAnimation from "../../../../../../public/trashanimation.svg";
 import SelectInput from "../../../SelectInput";
 
-import { RowAndScrollDownContainerProps } from "../../../@types/types";
+import { RowAndScrollDownContainerProps } from "../../types";
 
 let offices = {
   office1: "Back-End PL",
