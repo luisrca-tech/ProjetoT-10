@@ -7,24 +7,41 @@ import {
   OthersRegisterContainer,
 } from "./styles";
 import { useRouter } from "next/navigation";
-import Input from "@/app/components/AuthenticationUp";
+import Input, {
+  InputProps,
+  InputSchema,
+} from "@/app/components/AuthenticationUp";
 import Button from "@/app/components/Button";
 import GoogleImage from "../../../../../public/google img.svg";
 import LinkedinImage from "../../../../../public/linkedin img.svg";
 import Image from "next/image";
 import { roboto } from "@/app/fonts";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function ForgotPassword() {
+  const {
+    handleSubmit,
+    formState: { isSubmitting, isSubmitted },
+  } = useForm<InputProps>({
+    resolver: zodResolver(InputSchema),
+  });
   const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [newPassword, setNewPassword] = useState<string>("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  async function handleBackupPassword(e: SubmitEvent) {
+    e.preventDefault();
+
+    setLoading(isSubmitting && !loading)
+  }
 
   return (
     <Container>
-      <Form>
+      <Form onSubmit={handleSubmit(() => handleBackupPassword)}>
         <Input
           label="E-MAIL"
           id="email"
@@ -33,6 +50,7 @@ export default function ForgotPassword() {
           autoComplete="useremail"
           onChange={(e) => setEmail(e.target.value)}
           value={email}
+          required={isSubmitted}
         />
         <Input
           label="Password"
@@ -43,8 +61,9 @@ export default function ForgotPassword() {
           autoComplete="current-password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
+          required={isSubmitted}
         />
-          <Input
+        <Input
           label="NewPassword"
           isPassword={true}
           id="Newpassword"
@@ -53,12 +72,13 @@ export default function ForgotPassword() {
           autoComplete="new-password"
           onChange={(e) => setNewPassword(e.target.value)}
           value={newPassword}
+          required={isSubmitted}
         />
         <Button
           className={roboto.className}
           type="submit"
           text="Confirmar"
-          loading={false}
+          loading={loading}
         />
 
         <OthersRegisterContainer>
