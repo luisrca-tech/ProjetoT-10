@@ -5,7 +5,7 @@ import { FaUnlockAlt, FaLock } from "react-icons/fa";
 import { z } from "zod";
 import { HTMLInputTypeAttribute, useState } from "react";
 
- const InputSchema = z.object({
+ export const InputSchema = z.object({
   isPassword: z.boolean().optional(),
   label: z.string(),
   value: z.string().optional(),
@@ -22,7 +22,7 @@ import { HTMLInputTypeAttribute, useState } from "react";
   required: z.boolean().optional(),
 });
 
-type InputProps = z.input<typeof InputSchema> &
+export type InputProps = z.input<typeof InputSchema> &
   React.InputHTMLAttributes<HTMLInputElement>;
 
 type MaskByType = Partial<
@@ -109,7 +109,7 @@ export default function AuthenticationInput({
 
   return (
     <Container type={rest.type}>
-      <label className={bebasNeue.className}>{rest.required && "*"}</label>
+      <label className={bebasNeue.className}>{rest.required && !value ? "Campo obrigátorio" : ""}</label>
       <div>
         <input
           {...rest}
