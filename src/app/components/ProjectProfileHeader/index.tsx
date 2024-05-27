@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ButtonDataMenu,
   CalendarDateValues,
@@ -15,7 +15,7 @@ import { roboto } from "@/app/fonts";
 import Image from "next/image";
 import CalendarIcon from "../../../../public/calendaricon.svg";
 import { RiPencilFill } from "react-icons/ri";
-import { ScrolldownContext } from "@/contexts/ScrolldownContext";
+
 import { Range } from "react-date-range";
 
 interface SelectableRange extends Range {
@@ -26,16 +26,15 @@ interface ProjectProfileProps {
   inputName: string;
   setStringRow: React.Dispatch<React.SetStateAction<string>>;
   value: { [key: string]: SelectableRange };
+  inputDataMenuClick: (row: string) => void;
+  checked: boolean;
 }
 
 export function ProjectProfileHeader({
-  inputName,
-  setStringRow,
   value,
+  inputDataMenuClick,
+  checked,
 }: ProjectProfileProps) {
-  const { checked, toggleDatePicker, hasDateValue, toggleEditPicker } =
-    useContext(ScrolldownContext);
-
   const [inputValue, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -45,7 +44,6 @@ export function ProjectProfileHeader({
   const initials = words.map((word) => word.charAt(0));
 
   const initialsString = initials.join("");
-  const { isDatePickerOpen, openDatePicker } = useContext(ScrolldownContext);
 
   useEffect(() => {
     const storedValue = localStorage.getItem("ProjectProfileInputHeader");
@@ -77,11 +75,6 @@ export function ProjectProfileHeader({
     return date ? date.toLocaleDateString("pt-BR") : "";
   };
 
-  function InputDataMenuClick(row: string) {
-    openDatePicker();
-    setStringRow(row);
-  }
-  let la = "global-project-data";
   return (
     <Container className={roboto.className}>
       <ContentContainer>
@@ -111,7 +104,7 @@ export function ProjectProfileHeader({
             <DataContainer>
               {!value["global-project-data"].isSelected ? (
                 <ButtonDataMenu
-                  onClick={() => InputDataMenuClick("global-project-data")}
+                  onClick={() => inputDataMenuClick("global-project-data")}
                 >
                   <span>Datas</span>
                   <Image
@@ -123,7 +116,7 @@ export function ProjectProfileHeader({
                 </ButtonDataMenu>
               ) : (
                 <CalendarDateValues
-                  onClick={() => InputDataMenuClick("global-project-data")}
+                  onClick={() => inputDataMenuClick("global-project-data")}
                 >
                   <p>{formatDate(value["global-project-data"].startDate)}</p>
                   <span>-</span>
