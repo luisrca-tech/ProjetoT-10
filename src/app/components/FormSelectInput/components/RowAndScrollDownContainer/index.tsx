@@ -18,12 +18,12 @@ import {
 import Image from "next/image";
 import { poppins } from "@/app/fonts";
 
-import AddButton from "../../../../public/add.svg";
-import CalendarIcon from "../../../../public/calendaricon.svg";
-import TrashAnimation from "../../../../public/trashanimation.svg";
-import SelectInput from "../SelectInput";
+import AddButton from "../../../../../../public/add.svg";
+import CalendarIcon from "../../../../../../public/calendaricon.svg";
+import TrashAnimation from "../../../../../../public/trashanimation.svg";
+import SelectInput from "../../../SelectInput";
 
-import { RowAndScrollDownContainerProps } from "../types";
+import { RowAndScrollDownContainerProps } from "../../../@types/types";
 
 let offices = {
   office1: "Back-End PL",
@@ -46,8 +46,6 @@ export default function RowAndScrollDownContainer({
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
   );
-  const [totalHours, setTotalHours] = useState<number>(0);
-  const [totalValue, setTotalValue] = useState<number>(0);
   const [startX, setStartX] = useState<number | null>(null);
   const [offsetXByRow, setOffsetXByRow] = useState<{ [key: string]: number }>(
     {},
@@ -190,28 +188,6 @@ export default function RowAndScrollDownContainer({
       setIsNewRowAdded(true);
     }
   }, [addRow, canAddRow, isNewRowAdded]);
-
-  useEffect(() => {
-    let totalHoursSum = 0;
-    let totalValueSum = 0;
-
-    rowsAndSelectedValues.rows.forEach((index) => {
-      const hours = parseInt(
-        rowsAndSelectedValues.selectedValues[`secondTextValue${index}`] || "0",
-        10,
-      );
-      const value = parseInt(
-        rowsAndSelectedValues.selectedValues[`thirdTextValue${index}`] || "0",
-        10,
-      );
-
-      totalHoursSum += hours;
-      totalValueSum += value;
-    });
-
-    setTotalHours(totalHoursSum);
-    setTotalValue(totalValueSum);
-  }, [rowsAndSelectedValues]);
 
   return (
     <Container

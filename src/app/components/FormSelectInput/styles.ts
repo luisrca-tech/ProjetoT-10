@@ -221,14 +221,3 @@ export const Footer = styled.div`
     width: 100%;
   }
 `;
-
-export const BudgetContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  span {
-    font-size: 0.875rem;
-    font-weight: bold;
-  }
-`;

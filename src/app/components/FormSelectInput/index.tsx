@@ -6,13 +6,16 @@ import {
   InputsDataContainer,
   Footer,
   EditDateContainer,
-  BudgetContainer,
   HeaderContent,
 } from "./styles";
 
 import { poppins } from "@/app/fonts";
-import RowAndScrollDownContainer from "../RowAndScrollDownContainer";
-import { FormSelectInputProps, RowsAndSelectedValueProps } from "../types";
+import RowAndScrollDownContainer from "./components/RowAndScrollDownContainer";
+import {
+  FormSelectInputProps,
+  RowsAndSelectedValueProps,
+} from "../@types/types";
+import { BudgetContainer } from "./components/FooterSumContainer";
 
 export default function FormSelectInput({
   checked,
@@ -23,9 +26,6 @@ export default function FormSelectInput({
   ranges,
   inputDataMenuClick,
 }: FormSelectInputProps) {
-  const [totalHours, setTotalHours] = useState<number>(0);
-  const [totalValue, setTotalValue] = useState<number>(0);
-
   const [rowsAndSelectedValues, setRowsAndSelectedValues] =
     useState<RowsAndSelectedValueProps>({
       rows: ["row-0"],
@@ -75,15 +75,7 @@ export default function FormSelectInput({
           ))}
       </InputsDataContainer>
       <Footer>
-        <BudgetContainer className={poppins.className}>
-          <span>Total:</span>
-        </BudgetContainer>
-        <BudgetContainer>
-          <span>{`${totalHours}h`}</span>
-        </BudgetContainer>
-        <BudgetContainer>
-          <span>{`R$${totalValue},00`}</span>
-        </BudgetContainer>
+        <BudgetContainer rowsAndSelectedValues={rowsAndSelectedValues} />
       </Footer>
     </Container>
   );
