@@ -9,9 +9,9 @@ import {
   BackgroundProgressBar,
   ProgressBar,
 } from "./styles";
-import GoogleImage from "../../../../public/google img.svg";
-import CardPhoto from "../../../../public/bg-photo.svg";
-import Mastercard from "../../../../public/mastercard.svg";
+import GoogleImage from "../../../../../public/google img.svg";
+import CardPhoto from "../../../../../public/bg-photo.svg";
+import Mastercard from "../../../../../public/mastercard.svg";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
