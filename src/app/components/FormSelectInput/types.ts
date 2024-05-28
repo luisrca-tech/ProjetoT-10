@@ -33,4 +33,6 @@ export interface RowAndScrollDownContainerProps extends CommonProps {}
 
 export interface BudgetContainerProps {
   rowsAndSelectedValues: RowsAndSelectedValueProps;
+  ranges: { [key: string]: SelectableRange };
+  checked: boolean;
 }
