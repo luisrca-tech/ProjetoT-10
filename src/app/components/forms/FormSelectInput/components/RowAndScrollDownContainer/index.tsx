@@ -12,9 +12,9 @@ import {
 import Image from "next/image";
 import { poppins } from "@/app/fonts";
 
-import AddButton from "../../../../../../public/add.svg";
-import CalendarIcon from "../../../../../../public/calendaricon.svg";
-import TrashAnimation from "../../../../../../public/trashanimation.svg";
+import AddButton from "../../../../../../../public/add.svg";
+import CalendarIcon from "../../../../../../../public/calendaricon.svg";
+import TrashAnimation from "../../../../../../../public/trashanimation.svg";
 import SelectInput from "@/app/components/inputs/SelectInput";
 
 import { RowAndScrollDownContainerProps } from "@/app/types/componentsTypes/type";
