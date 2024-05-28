@@ -15,26 +15,14 @@ import { roboto } from "@/app/fonts";
 import Image from "next/image";
 import CalendarIcon from "../../../../public/calendaricon.svg";
 import { RiPencilFill } from "react-icons/ri";
-
+import { ProjectProfileHeaderProps } from "@/app/types/componentsTypes/type";
 import { Range } from "react-date-range";
-
-interface SelectableRange extends Range {
-  isSelected?: boolean;
-}
-
-interface ProjectProfileProps {
-  inputName: string;
-  setStringRow: React.Dispatch<React.SetStateAction<string>>;
-  ranges: { [key: string]: SelectableRange };
-  inputDataMenuClick: (row: string) => void;
-  checked: boolean;
-}
 
 export function ProjectProfileHeader({
   inputDataMenuClick,
   checked,
   ranges,
-}: ProjectProfileProps) {
+}: ProjectProfileHeaderProps) {
   const [inputValue, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);

@@ -2,12 +2,7 @@ import { poppins } from "@/app/fonts";
 import { Container } from "./styles";
 import classnames from "classnames";
 import LoadingIndicator from "@/app/components/widgets/LoadingIndicator";
-
-type ButtonRegistrationType = {
-  text: string;
-  loading?: boolean;
-  disabled?: boolean;
-} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+import { ButtonRegistrationType } from "@/app/types/componentsTypes/type";
 export default function Button({
   text,
   loading,

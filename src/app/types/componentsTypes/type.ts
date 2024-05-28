@@ -1,3 +1,4 @@
+import { ChangeEvent } from "react";
 import { Range } from "react-date-range";
 
 export interface SelectableRangeProps extends Range {
@@ -33,4 +34,48 @@ export interface RowAndScrollDownContainerProps extends CommonProps {}
 
 export interface BudgetContainerProps {
   rowsAndSelectedValues: RowsAndSelectedValueProps;
+}
+
+export interface SelectComponentProps {
+  id: string;
+  value: string;
+  onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  hasValue: boolean;
+}
+
+export interface SelectInputProps {
+  id: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  hasValue: boolean;
+  checked: boolean;
+  values: { [key: string]: string };
+  inputValue: string;
+  isSelectOpen?: boolean;
+  setIsSelectOpen?: (boolean: boolean) => void;
+  value?: string;
+  type: string;
+}
+
+export interface ProjectProfileHeaderProps {
+  inputName: string;
+  setStringRow: React.Dispatch<React.SetStateAction<string>>;
+  ranges: { [key: string]: SelectableRangeProps };
+  inputDataMenuClick: (row: string) => void;
+  checked: boolean;
+}
+
+export type ButtonRegistrationType = {
+  text: string;
+  loading?: boolean;
+  disabled?: boolean;
+} & React.ButtonHTMLAttributes<HTMLButtonElement>;
+
+export interface CustomDateRangePickerProps {
+  rowCount: number;
+  ranges: { [key: string]: SelectableRangeProps };
+  setRanges: React.Dispatch<
+    React.SetStateAction<{ [key: string]: SelectableRangeProps }>
+  >;
+  stringRow: string;
 }

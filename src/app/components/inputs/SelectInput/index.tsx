@@ -3,20 +3,7 @@ import { Container, Input } from "./styles";
 import ArrowDown from "../../../../public/arrowdown.svg";
 import ArrowRight from "../../../../public/arrowright.svg";
 import Image from "next/image";
-
-interface SelectInputProps {
-  id: string;
-  onChange: (value: string) => void;
-  placeholder: string;
-  hasValue: boolean;
-  checked: boolean;
-  values: { [key: string]: string };
-  inputValue: string;
-  isSelectOpen?: boolean;
-  setIsSelectOpen?: (boolean: boolean) => void;
-  value?: string;
-  type: string;
-}
+import { SelectInputProps } from "@/app/types/componentsTypes/type";
 
 export default function SelectInput({
   id,
