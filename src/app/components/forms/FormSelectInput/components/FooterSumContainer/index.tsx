@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { BudgetContent, Container, ProjectDuration } from "./styles";
 import { poppins } from "@/app/fonts";
-import { BudgetContainerProps } from "@/app/components/FormSelectInput/types";
 import { eachDayOfInterval } from "date-fns";
+import { BudgetContainerProps } from "@/app/types/componentsTypes/type";
 
 export function BudgetContainer({
   rowsAndSelectedValues,

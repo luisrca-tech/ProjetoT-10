@@ -1,15 +1,10 @@
 "use client";
-import {
-  Container,
-  Form,
-  OthersRegisterContainer,
-} from "./styles";
+import { Container, Form, OthersRegisterContainer } from "./styles";
 import { useRouter } from "next/navigation";
 import Input, {
   InputProps,
   InputSchema,
-} from "@/app/components/AuthenticationUp";
-import Button from "@/app/components/Button";
+} from "@/app/components/inputs/AuthenticationInput";
 import GoogleImage from "../../../../../public/google img.svg";
 import LinkedinImage from "../../../../../public/linkedin img.svg";
 import Image from "next/image";
@@ -17,6 +12,7 @@ import { roboto } from "@/app/fonts";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Button from "@/app/components/widgets/Button";
 
 export default function Register() {
   const {

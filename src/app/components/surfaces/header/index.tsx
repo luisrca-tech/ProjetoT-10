@@ -21,7 +21,6 @@ import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
 
 export default function Header() {
-
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
   const currentPath = usePathname();
@@ -108,7 +107,7 @@ export default function Header() {
         </>
       );
     }
-    return null; // Retorna null se estiver na página de autenticação
+    return null;
   };
 
   return (

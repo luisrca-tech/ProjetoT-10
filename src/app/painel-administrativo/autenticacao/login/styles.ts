@@ -38,7 +38,8 @@ export const ButtonText = styled.button`
   }
 `;
 
-export const OthersLoginContainer = styled.div`
+export const AlternativesLoginsContainer = styled.div`
+  margin-top: 1.563rem;
   width: 100%;
   justify-content: center;
 
@@ -61,4 +62,10 @@ export const OthersLoginContainer = styled.div`
     gap: 0.75rem;
     padding: 1rem 0;
   }
+`;
+
+export const OtherOptionsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;

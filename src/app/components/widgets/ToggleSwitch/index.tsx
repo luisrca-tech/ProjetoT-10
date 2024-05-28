@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import { Container } from "./styles";
-
 import * as Switch from "@radix-ui/react-switch";
 
 type ButtonRegistrationType = {
