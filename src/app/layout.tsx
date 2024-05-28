@@ -48,10 +48,10 @@ const globalStyle = css`
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className={globalStyle}>
-        <ScrolldownContextProvider>
-          <body className={roboto.className}>{children}</body>
-        </ScrolldownContextProvider>
+    <html lang="pt-br" className={globalStyle}>
+      <ScrolldownContextProvider>
+        <body className={roboto.className}>{children}</body>
+      </ScrolldownContextProvider>
     </html>
   );
 }

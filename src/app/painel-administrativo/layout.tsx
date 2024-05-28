@@ -1,8 +1,7 @@
 "use client";
-import { ReactNode, useState } from "react";
-
+import { ReactNode } from "react";
 import { styled } from "@linaria/react";
-import Header from "../components/header";
+import Header from "../components/surfaces/header";
 
 const Container = styled.div`
   width: 100%;

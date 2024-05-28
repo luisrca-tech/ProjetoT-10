@@ -13,28 +13,16 @@ import {
 
 import { roboto } from "@/app/fonts";
 import Image from "next/image";
-import CalendarIcon from "../../../../public/calendaricon.svg";
+import CalendarIcon from "../../../../../public/calendaricon.svg";
 import { RiPencilFill } from "react-icons/ri";
-
+import { ProjectProfileHeaderProps } from "@/app/types/componentsTypes/type";
 import { Range } from "react-date-range";
 
-interface SelectableRange extends Range {
-  isSelected?: boolean;
-}
-
-interface ProjectProfileProps {
-  inputName: string;
-  setStringRow: React.Dispatch<React.SetStateAction<string>>;
-  value: { [key: string]: SelectableRange };
-  inputDataMenuClick: (row: string) => void;
-  checked: boolean;
-}
-
 export function ProjectProfileHeader({
-  value,
   inputDataMenuClick,
   checked,
-}: ProjectProfileProps) {
+  ranges,
+}: ProjectProfileHeaderProps) {
   const [inputValue, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -102,7 +90,7 @@ export function ProjectProfileHeader({
           )}
           {checked ? (
             <DataContainer>
-              {!value["global-project-data"].isSelected ? (
+              {!ranges["global-project-data"].isSelected ? (
                 <ButtonDataMenu
                   onClick={() => inputDataMenuClick("global-project-data")}
                 >
@@ -118,9 +106,9 @@ export function ProjectProfileHeader({
                 <CalendarDateValues
                   onClick={() => inputDataMenuClick("global-project-data")}
                 >
-                  <p>{formatDate(value["global-project-data"].startDate)}</p>
+                  <p>{formatDate(ranges["global-project-data"].startDate)}</p>
                   <span>-</span>
-                  <p>{formatDate(value["global-project-data"].endDate)}</p>
+                  <p>{formatDate(ranges["global-project-data"].endDate)}</p>
                 </CalendarDateValues>
               )}
             </DataContainer>

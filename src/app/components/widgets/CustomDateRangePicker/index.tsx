@@ -1,21 +1,11 @@
 import React from "react";
-import "react-date-range/dist/styles.css"; // main style file
-import "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRangePicker, Range, RangeKeyDict } from "react-date-range";
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
+import { DateRangePicker, RangeKeyDict } from "react-date-range";
 import { ptBR } from "date-fns/locale";
 import { Container } from "./styles";
-import { SelectableRange } from "../FormSelectInput/types";
-
 import "./DateRangePicker.css";
-
-interface CustomDateRangePickerProps {
-  rowCount: number;
-  ranges: { [key: string]: SelectableRange };
-  setRanges: React.Dispatch<
-    React.SetStateAction<{ [key: string]: SelectableRange }>
-  >;
-  stringRow: string;
-}
+import { CustomDateRangePickerProps } from "@/app/types/componentsTypes/type";
 
 export function CustomDateRangePicker({
   ranges,

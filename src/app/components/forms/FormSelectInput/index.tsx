@@ -1,17 +1,13 @@
 "use client";
 import { useState } from "react";
-import {
-  Container,
-  Header,
-  InputsDataContainer,
-  Footer,
-  EditDateContainer,
-  HeaderContent,
-} from "./styles";
+import { Container, InputsDataContainer, Footer } from "./styles";
 
-import { poppins } from "@/app/fonts";
+import { FormHeader } from "./components/FormHeader";
 import RowAndScrollDownContainer from "./components/RowAndScrollDownContainer";
-import { FormSelectInputProps, RowsAndSelectedValueProps } from "./types";
+import {
+  FormSelectInputProps,
+  RowsAndSelectedValueProps,
+} from "@/app/types/componentsTypes/type";
 import { BudgetContainer } from "./components/FooterSumContainer";
 
 export default function FormSelectInput({
@@ -31,25 +27,7 @@ export default function FormSelectInput({
 
   return (
     <Container>
-      <Header checked={checked}>
-        {!checked ? (
-          <>
-            <HeaderContent>
-              <span className="FirstRole">Cargo</span>
-
-              <span>Horas/mês</span>
-
-              <span>Valor Hora</span>
-            </HeaderContent>
-          </>
-        ) : (
-          <EditDateContainer>
-            <span className="FirstRole">Cargo</span>
-
-            <span>Data de trabalho</span>
-          </EditDateContainer>
-        )}
-      </Header>
+      <FormHeader checked={checked} />
 
       <InputsDataContainer>
         {rowsAndSelectedValues.rows

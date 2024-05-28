@@ -1,7 +1,7 @@
 "use client";
 
 import { Container } from "./styles";
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 
 type ModalProps = {
   onClickCallback?: () => void;

@@ -4,7 +4,6 @@ import { lighten } from "polished";
 import { ReactNode } from "react";
 import { styled } from "@linaria/react";
 import { theme } from "@/app/styles/theme";
-import Header from "@/app/components/header";
 
 const Container = styled.div`
   width: 100%;
