@@ -1,4 +1,3 @@
-import { ReactNode } from "react";
 import { poppins } from "@/app/fonts";
 import { Container } from "./styles";
 import classnames from "classnames";

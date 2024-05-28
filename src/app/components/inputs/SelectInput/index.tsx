@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Container, Input } from "./styles";
-
 import ArrowDown from "../../../../public/arrowdown.svg";
 import ArrowRight from "../../../../public/arrowright.svg";
 import Image from "next/image";

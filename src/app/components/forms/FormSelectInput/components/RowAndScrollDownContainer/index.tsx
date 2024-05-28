@@ -2,17 +2,11 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import {
   Container,
-  Header,
-  InputsDataContainer,
   InputsRow,
-  Footer,
   ScrollDownContainer,
   SeparatorContainer,
-  EditDateContainer,
-  BudgetContainer,
   InputDataMenu,
   DeleteButtonAnimationFrame,
-  HeaderContent,
   CalendarDateValues,
 } from "./styles";
 import Image from "next/image";
@@ -51,6 +45,19 @@ export default function RowAndScrollDownContainer({
     {},
   );
 
+  const [isNewRowAdded, setIsNewRowAdded] = useState(false);
+
+  const canAddRow = rowsAndSelectedValues.rows.every((index) => {
+    const firstTextValue =
+      rowsAndSelectedValues.selectedValues[`firstTextValue${index}`];
+    const secondTextValue =
+      rowsAndSelectedValues.selectedValues[`secondTextValue${index}`];
+    const thirdTextValue =
+      rowsAndSelectedValues.selectedValues[`thirdTextValue${index}`];
+
+    return firstTextValue && secondTextValue && thirdTextValue;
+  });
+
   const addRow = useCallback(() => {
     const newDateRange = {
       startDate: new Date(),
@@ -71,26 +78,6 @@ export default function RowAndScrollDownContainer({
 
     setRowCount((prevCount) => prevCount + 1);
   }, [rowCount, setRanges, setRowCount, setRowsAndSelectedValues]);
-
-  const [isNewRowAdded, setIsNewRowAdded] = useState(false);
-
-  const toggleSelectOpen = (index: string) => {
-    setSelectedItemIndex(selectedItemIndex === index ? null : index);
-  };
-
-  const isSelectOpen = (index: string) => {
-    return selectedItemIndex === index;
-  };
-
-  function handleInputChange(id: string, value: string) {
-    setRowsAndSelectedValues((prevState) => ({
-      ...prevState,
-      selectedValues: {
-        ...prevState.selectedValues,
-        [id]: value,
-      },
-    }));
-  }
 
   function removeRow(rowIndex: string) {
     setRowsAndSelectedValues((prevState) => {
@@ -114,16 +101,9 @@ export default function RowAndScrollDownContainer({
     });
   }
 
-  const canAddRow = rowsAndSelectedValues.rows.every((index) => {
-    const firstTextValue =
-      rowsAndSelectedValues.selectedValues[`firstTextValue${index}`];
-    const secondTextValue =
-      rowsAndSelectedValues.selectedValues[`secondTextValue${index}`];
-    const thirdTextValue =
-      rowsAndSelectedValues.selectedValues[`thirdTextValue${index}`];
-
-    return firstTextValue && secondTextValue && thirdTextValue;
-  });
+  const toggleSelectOpen = (index: string) => {
+    setSelectedItemIndex(selectedItemIndex === index ? null : index);
+  };
 
   const isValueInInput = (row: string, inputName: string) => {
     const { selectedValues } = rowsAndSelectedValues;
@@ -131,6 +111,20 @@ export default function RowAndScrollDownContainer({
 
     return textValue !== undefined && textValue.length > 0;
   };
+
+  const isSelectOpen = (index: string) => {
+    return selectedItemIndex === index;
+  };
+
+  function handleInputChange(id: string, value: string) {
+    setRowsAndSelectedValues((prevState) => ({
+      ...prevState,
+      selectedValues: {
+        ...prevState.selectedValues,
+        [id]: value,
+      },
+    }));
+  }
 
   const handleButtonClick = (value: string, row: string) => {
     handleInputChange(`firstTextValue${row}`, value);

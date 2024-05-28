@@ -4,10 +4,10 @@ import {
   Form,
   ButtonText,
   ButtonsTextContainer,
-  OthersLoginContainer,
+  AlternativesLoginsContainer,
+  OtherOptionsContainer,
 } from "./styles";
-import { useRouter } from "next/navigation";
-import Input, {
+import {
   InputProps,
   InputSchema,
 } from "@/app/components/inputs/AuthenticationInput";
@@ -30,13 +30,9 @@ export default function Login() {
     resolver: zodResolver(InputSchema),
   });
 
-  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  /*Dentro da funcao handleSubmit desta pagina, o loading sera settada para true antes da requisicao ser feita, 
-  e settada para false depois que ela terminar
-  */
 
   async function handleLogin(e: SubmitEvent) {
     e.preventDefault();
@@ -75,31 +71,41 @@ export default function Login() {
           loading={loading}
         />
 
-        <ButtonsTextContainer>
-          <ButtonText className={roboto.className}>
-            <Link href={"/painel-administrativo/autenticacao/register"}>
-              {" "}
-              Não tenho conta
-            </Link>
-          </ButtonText>
+        <OtherOptionsContainer>
+          <ButtonsTextContainer>
+            <ButtonText className={roboto.className}>
+              <Link href={"/painel-administrativo/autenticacao/register"}>
+                {" "}
+                Não tenho conta
+              </Link>
+            </ButtonText>
 
-          <ButtonText className={roboto.className}>
-            <Link href={"/painel-administrativo/autenticacao/forgot-password"}>
-              Esqueci minha senha
-            </Link>
-          </ButtonText>
-        </ButtonsTextContainer>
+            <ButtonText className={roboto.className}>
+              <Link
+                href={"/painel-administrativo/autenticacao/forgot-password"}
+              >
+                Esqueci minha senha
+              </Link>
+            </ButtonText>
+          </ButtonsTextContainer>
 
-        <OthersLoginContainer>
-          <div>
-            <span className={roboto.className}>Entre com sua conta</span>
-          </div>
+          <AlternativesLoginsContainer>
+            <div>
+              <span className={roboto.className}>Entre com sua conta</span>
+            </div>
 
-          <div>
-            <Image src={GoogleImage} alt="" width={50} height={50} priority />
-            <Image src={LinkedinImage} alt="" width={50} height={50} priority />
-          </div>
-        </OthersLoginContainer>
+            <div>
+              <Image src={GoogleImage} alt="" width={50} height={50} priority />
+              <Image
+                src={LinkedinImage}
+                alt=""
+                width={50}
+                height={50}
+                priority
+              />
+            </div>
+          </AlternativesLoginsContainer>
+        </OtherOptionsContainer>
       </Form>
     </Container>
   );

@@ -1,11 +1,9 @@
 "use client";
 
 import { Container, CustomFormSelect, Option } from "./styles";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-
+import React, { ChangeEvent, useState } from "react";
 import ArrowRight from "../../../../public/arrowright.svg";
 import ArrowDown from "../../../../public/arrowdown.svg";
-
 import Image from "next/image";
 
 interface SelectComponentProps {
