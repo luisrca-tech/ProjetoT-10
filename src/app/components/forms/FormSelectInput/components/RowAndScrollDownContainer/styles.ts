@@ -10,10 +10,6 @@ type InputsRowProps = {
   isLastRow?: boolean;
 };
 
-type HeaderProps = {
-  checked: boolean;
-};
-
 export const Container = styled.div<InputsRowProps>`
   background: ${theme.COLORS.SELECT_INPUT};
   border-radius: 20px;
@@ -29,33 +25,6 @@ export const Container = styled.div<InputsRowProps>`
           ? "-1.5rem"
           : "0"}
   );
-`;
-
-export const Header = styled.div<HeaderProps>`
-  display: flex;
-  gap: ${(props) => (props.checked ? "5.5rem" : "2.9rem")};
-  padding: 0 0.5rem;
-`;
-
-export const EditDateContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-
-  span {
-    width: 100%;
-    font-size: 0.875rem;
-    font-weight: bold;
-    text-align: end;
-  }
-
-  span:nth-of-type(1) {
-    text-align: start;
-  }
-
-  span:nth-of-type(2) {
-    text-align: end;
-  }
 `;
 
 export const HeaderContent = styled.div`
@@ -80,12 +49,6 @@ export const HeaderContent = styled.div`
   span:nth-of-type(3) {
     text-align: end;
   }
-`;
-
-export const InputsDataContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 `;
 
 export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
@@ -218,27 +181,5 @@ export const SeparatorContainer = styled.div`
       color: ${theme.COLORS.DARK};
       font-weight: ExtraLight;
     }
-  }
-`;
-
-export const Footer = styled.div`
-  display: flex;
-  width: 100%;
-  padding: 0 0.5rem;
-  gap: 5rem;
-
-  > div {
-    width: 100%;
-  }
-`;
-
-export const BudgetContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  span {
-    font-size: 0.875rem;
-    font-weight: bold;
   }
 `;
