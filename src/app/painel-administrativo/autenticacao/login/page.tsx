@@ -10,15 +10,15 @@ import { useRouter } from "next/navigation";
 import Input, {
   InputProps,
   InputSchema,
-} from "@/app/components/AuthenticationUp";
-import Button from "@/app/components/Button";
+} from "@/app/components/inputs/AuthenticationInput";
+import Button from "@/app/components/widgets/Button";
 import GoogleImage from "../../../../../public/google img.svg";
 import LinkedinImage from "../../../../../public/linkedin img.svg";
 import Image from "next/image";
 import { roboto } from "@/app/fonts";
 import { useState } from "react";
 import Link from "next/link";
-
+import AuthenticationInput from "@/app/components/inputs/AuthenticationInput";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -47,7 +47,7 @@ export default function Login() {
   return (
     <Container>
       <Form onSubmit={handleSubmit(() => handleLogin)}>
-        <Input
+        <AuthenticationInput
           label="E-MAIL"
           id="email"
           type="email"
@@ -57,7 +57,7 @@ export default function Login() {
           value={email}
           required={isSubmitted}
         />
-        <Input
+        <AuthenticationInput
           label="Password"
           isPassword={true}
           id="password"

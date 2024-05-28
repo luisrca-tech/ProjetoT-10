@@ -25,15 +25,15 @@ interface SelectableRange extends Range {
 interface ProjectProfileProps {
   inputName: string;
   setStringRow: React.Dispatch<React.SetStateAction<string>>;
-  value: { [key: string]: SelectableRange };
+  ranges: { [key: string]: SelectableRange };
   inputDataMenuClick: (row: string) => void;
   checked: boolean;
 }
 
 export function ProjectProfileHeader({
-  value,
   inputDataMenuClick,
   checked,
+  ranges,
 }: ProjectProfileProps) {
   const [inputValue, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -102,7 +102,7 @@ export function ProjectProfileHeader({
           )}
           {checked ? (
             <DataContainer>
-              {!value["global-project-data"].isSelected ? (
+              {!ranges["global-project-data"].isSelected ? (
                 <ButtonDataMenu
                   onClick={() => inputDataMenuClick("global-project-data")}
                 >
@@ -118,9 +118,9 @@ export function ProjectProfileHeader({
                 <CalendarDateValues
                   onClick={() => inputDataMenuClick("global-project-data")}
                 >
-                  <p>{formatDate(value["global-project-data"].startDate)}</p>
+                  <p>{formatDate(ranges["global-project-data"].startDate)}</p>
                   <span>-</span>
-                  <p>{formatDate(value["global-project-data"].endDate)}</p>
+                  <p>{formatDate(ranges["global-project-data"].endDate)}</p>
                 </CalendarDateValues>
               )}
             </DataContainer>

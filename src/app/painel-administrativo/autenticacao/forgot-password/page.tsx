@@ -10,8 +10,8 @@ import { useRouter } from "next/navigation";
 import Input, {
   InputProps,
   InputSchema,
-} from "@/app/components/AuthenticationUp";
-import Button from "@/app/components/Button";
+} from "@/app/components/inputs/AuthenticationInput";
+import Button from "@/app/components/widgets/Button";
 import GoogleImage from "../../../../../public/google img.svg";
 import LinkedinImage from "../../../../../public/linkedin img.svg";
 import Image from "next/image";
@@ -36,7 +36,7 @@ export default function ForgotPassword() {
   async function handleBackupPassword(e: SubmitEvent) {
     e.preventDefault();
 
-    setLoading(isSubmitting && !loading)
+    setLoading(isSubmitting && !loading);
   }
 
   return (

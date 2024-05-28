@@ -4,15 +4,15 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRangePicker, Range, RangeKeyDict } from "react-date-range";
 import { ptBR } from "date-fns/locale";
 import { Container } from "./styles";
-import { SelectableRange } from "../FormSelectInput/types";
+import { SelectableRangeProps } from "@/app/types/componentsTypes/type";
 
 import "./DateRangePicker.css";
 
 interface CustomDateRangePickerProps {
   rowCount: number;
-  ranges: { [key: string]: SelectableRange };
+  ranges: { [key: string]: SelectableRangeProps };
   setRanges: React.Dispatch<
-    React.SetStateAction<{ [key: string]: SelectableRange }>
+    React.SetStateAction<{ [key: string]: SelectableRangeProps }>
   >;
   stringRow: string;
 }

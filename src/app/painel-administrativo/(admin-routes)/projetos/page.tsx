@@ -1,4 +1,4 @@
-import { ProjectCard } from "@/app/components/project-card";
+import { ProjectCard } from "@/app/components/surfaces/project-card";
 import { Container } from "./styles";
 
 export default function Projetos() {

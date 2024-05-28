@@ -1,6 +1,6 @@
 "use client";
 
-import FormSelectInput from "@/app/components/FormSelectInput";
+import FormSelectInput from "@/app/components/forms/FormSelectInput";
 import {
   CloseCalendarContainer,
   Container,
@@ -8,32 +8,33 @@ import {
   MainContainer,
   SwitchContainer,
 } from "./styles";
-import { ProjectProfileHeader } from "@/app/components/ProjectProfileHeader";
+import { ProjectProfileHeader } from "../../../components/surfaces/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
 import { useState } from "react";
-import ToggleSwitch from "@/app/components/ToggleSwitch";
-import { CustomDateRangePicker } from "@/app/components/CustomDateRangePicker";
-
-import { SelectableRange } from "@/app/components/FormSelectInput/types";
+import ToggleSwitch from "@/app/components/widgets/ToggleSwitch";
+import { CustomDateRangePicker } from "@/app/components/widgets/CustomDateRangePicker";
+import { SelectableRangeProps } from "@/app/types/componentsTypes/type";
 
 export default function Projeto() {
   const [rowCount, setRowCount] = useState(1);
   const [stringRow, setStringRow] = useState<string>("row-0");
   const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
-  const [ranges, setRanges] = useState<{ [key: string]: SelectableRange }>({
-    "global-project-data": {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection-global-project-data",
-      isSelected: false,
+  const [ranges, setRanges] = useState<{ [key: string]: SelectableRangeProps }>(
+    {
+      "global-project-data": {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: "selection-global-project-data",
+        isSelected: false,
+      },
+      "row-0": {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: "selection-row-0",
+        isSelected: false,
+      },
     },
-    "row-0": {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection-row-0",
-      isSelected: false,
-    },
-  });
+  );
   const [checked, setChecked] = useState<boolean>(false);
 
   const openDatePicker = () => {
@@ -58,7 +59,7 @@ export default function Projeto() {
       <ProjectProfileHeader
         inputName="Nomeie seu projeto..."
         setStringRow={setStringRow}
-        value={ranges}
+        ranges={ranges}
         inputDataMenuClick={inputDataMenuClick}
         checked={checked}
       />

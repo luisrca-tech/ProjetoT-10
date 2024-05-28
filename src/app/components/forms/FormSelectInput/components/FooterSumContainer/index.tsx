@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BudgetContent, Container } from "./styles";
 import { poppins } from "@/app/fonts";
-import { BudgetContainerProps } from "@/app/components/FormSelectInput/types";
+import { BudgetContainerProps } from "@/app/types/componentsTypes/type";
 
 export function BudgetContainer({
   rowsAndSelectedValues,

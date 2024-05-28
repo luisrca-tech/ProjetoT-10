@@ -1,14 +1,10 @@
 "use client";
-import {
-  Container,
-  Form,
-  OthersRegisterContainer,
-} from "./styles";
+import { Container, Form, OthersRegisterContainer } from "./styles";
 import { useRouter } from "next/navigation";
 import Input, {
   InputProps,
   InputSchema,
-} from "@/app/components/AuthenticationUp";
+} from "@/app/components/inputs/AuthenticationInput";
 import Button from "@/app/components/Button";
 import GoogleImage from "../../../../../public/google img.svg";
 import LinkedinImage from "../../../../../public/linkedin img.svg";

@@ -21,9 +21,9 @@ import { poppins } from "@/app/fonts";
 import AddButton from "../../../../../../public/add.svg";
 import CalendarIcon from "../../../../../../public/calendaricon.svg";
 import TrashAnimation from "../../../../../../public/trashanimation.svg";
-import SelectInput from "../../../SelectInput";
+import SelectInput from "@/app/components/inputs/SelectInput";
 
-import { RowAndScrollDownContainerProps } from "../../types";
+import { RowAndScrollDownContainerProps } from "@/app/types/componentsTypes/type";
 
 let offices = {
   office1: "Back-End PL",
