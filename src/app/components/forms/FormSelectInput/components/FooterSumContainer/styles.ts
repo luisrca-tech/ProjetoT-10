@@ -11,6 +11,16 @@ export const Container = styled.div`
   }
 `;
 
+export const ProjectDuration = styled.div`
+  display: flex;
+  justify-content: space-between;
+
+  span {
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
+`;
+
 export const BudgetContent = styled.div`
   display: flex;
   justify-content: space-between;

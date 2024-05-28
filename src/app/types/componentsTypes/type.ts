@@ -30,6 +30,12 @@ export interface CommonProps extends FormSelectInputProps {
   >;
 }
 
+export interface BudgetContainerProps {
+  rowsAndSelectedValues: RowsAndSelectedValueProps;
+  ranges: { [key: string]: SelectableRangeProps };
+  checked: boolean;
+}
+
 export interface RowAndScrollDownContainerProps extends CommonProps {}
 
 export interface BudgetContainerProps {

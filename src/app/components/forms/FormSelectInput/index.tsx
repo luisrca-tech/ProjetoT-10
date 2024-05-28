@@ -50,7 +50,7 @@ export default function FormSelectInput({
           ))}
       </InputsDataContainer>
       <Footer>
-        <BudgetContainer rowsAndSelectedValues={rowsAndSelectedValues} />
+        <BudgetContainer ranges={ranges} checked={checked} rowsAndSelectedValues={rowsAndSelectedValues} />
       </Footer>
     </Container>
   );
