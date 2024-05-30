@@ -9,48 +9,36 @@ export function BudgetContainer({
   ranges,
   checked,
 }: BudgetContainerProps) {
-  const [totalHours, setTotalHours] = useState<number>(0);
-  const [totalValue, setTotalValue] = useState<number>(0);
-  const [totalDays, setTotalDays] = useState<number>(0);
 
-  useEffect(() => {
-    let totalHoursSum = 0;
-    let totalValueSum = 0;
+ const totalHoursSum = rowsAndSelectedValues.rows.reduce((acc, row) => {
+    const hours = parseInt(
+      rowsAndSelectedValues.selectedValues[`secondTextValue${row}`] || "0",
+      10,
+    );
+    const value = parseInt(
+      rowsAndSelectedValues.selectedValues[`thirdTextValue${row}`] || "0",
+      10,
+    );
+    acc.hours += hours;
+    acc.value += hours * value;
+    return acc;
+  }, { hours: 0, value: 0 });
 
-    rowsAndSelectedValues.rows.forEach((row: string) => {
-      const hours = parseInt(
-        rowsAndSelectedValues.selectedValues[`secondTextValue${row}`] || "0",
-        10,
-      );
-      const value = parseInt(
-        rowsAndSelectedValues.selectedValues[`thirdTextValue${row}`] || "0",
-        10,
-      );
+const { hours: totalHours, value: totalValue } = totalHoursSum;
 
-      totalHoursSum += hours;
-      totalValueSum += hours * value;
-    });
+const totalDaysSum = Object.values(ranges).reduce((acc, range) => {
+    if (range.startDate && range.endDate) {
+      const daysArray = eachDayOfInterval({
+        start: range.startDate,
+        end: range.endDate,
+      });
+      acc += daysArray.length;
+    }
+    return acc;
+  }, 0);
 
-    setTotalHours(totalHoursSum);
-    setTotalValue(totalValueSum);
-  }, [rowsAndSelectedValues]);
+const totalDays = totalDaysSum - 2;
 
-  useEffect(() => {
-    let totalDaysSum = - 1;
-
-    Object.keys(ranges).forEach((key: string) => {
-      const range = ranges[key];
-      if (range.startDate && range.endDate) {
-        const daysArray = eachDayOfInterval({
-          start: range.startDate,
-          end: range.endDate,
-        });
-        totalDaysSum += daysArray.length;
-      }
-    });
-
-    setTotalDays(totalDaysSum - 1)
-  }, [ranges]);
 
   return (
     <Container>
