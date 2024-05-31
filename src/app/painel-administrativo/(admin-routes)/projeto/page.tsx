@@ -57,8 +57,6 @@ export default function Projeto() {
   return (
     <Container className={roboto.className}>
       <ProjectProfileHeader
-        inputName="Nomeie seu projeto..."
-        setStringRow={setStringRow}
         ranges={ranges}
         inputDataMenuClick={inputDataMenuClick}
         checked={checked}
@@ -69,7 +67,6 @@ export default function Projeto() {
           <CustomDateRangePicker
             ranges={ranges}
             setRanges={setRanges}
-            rowCount={rowCount}
             stringRow={stringRow}
           />
         )}
@@ -83,7 +80,6 @@ export default function Projeto() {
             rowCount={rowCount}
             setRanges={setRanges}
             setRowCount={setRowCount}
-            setStringRow={setStringRow}
             ranges={ranges}
             inputDataMenuClick={inputDataMenuClick}
           />

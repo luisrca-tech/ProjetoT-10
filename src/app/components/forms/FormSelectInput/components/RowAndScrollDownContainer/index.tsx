@@ -165,7 +165,6 @@ export default function RowAndScrollDownContainer({
         removeRow(rowIndex);
       }
     } else {
-      // Restaura a posição inicial
       setOffsetXByRow((prevOffsetX) => ({
         ...prevOffsetX,
         [rowIndex]: 0,

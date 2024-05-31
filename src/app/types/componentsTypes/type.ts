@@ -11,7 +11,6 @@ export interface RowsAndSelectedValueProps {
 }
 
 export interface FormSelectInputProps {
-  setStringRow: React.Dispatch<React.SetStateAction<string>>;
   rowCount: number;
   setRanges: React.Dispatch<
     React.SetStateAction<{ [key: string]: SelectableRangeProps }>
@@ -64,8 +63,6 @@ export interface SelectInputProps {
 }
 
 export interface ProjectProfileHeaderProps {
-  inputName: string;
-  setStringRow: React.Dispatch<React.SetStateAction<string>>;
   ranges: { [key: string]: SelectableRangeProps };
   inputDataMenuClick: (row: string) => void;
   checked: boolean;
@@ -78,7 +75,6 @@ export type ButtonRegistrationType = {
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export interface CustomDateRangePickerProps {
-  rowCount: number;
   ranges: { [key: string]: SelectableRangeProps };
   setRanges: React.Dispatch<
     React.SetStateAction<{ [key: string]: SelectableRangeProps }>

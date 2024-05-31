@@ -15,7 +15,6 @@ export default function FormSelectInput({
   setRanges,
   setRowCount,
   rowCount,
-  setStringRow,
   ranges,
   inputDataMenuClick,
 }: FormSelectInputProps) {
@@ -36,7 +35,6 @@ export default function FormSelectInput({
           .map((row) => (
             <RowAndScrollDownContainer
               row={row}
-              setStringRow={setStringRow}
               key={row}
               rowCount={rowCount}
               ranges={ranges}
@@ -50,7 +48,11 @@ export default function FormSelectInput({
           ))}
       </InputsDataContainer>
       <Footer>
-        <BudgetContainer ranges={ranges} checked={checked} rowsAndSelectedValues={rowsAndSelectedValues} />
+        <BudgetContainer
+          ranges={ranges}
+          checked={checked}
+          rowsAndSelectedValues={rowsAndSelectedValues}
+        />
       </Footer>
     </Container>
   );

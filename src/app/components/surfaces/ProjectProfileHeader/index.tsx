@@ -16,7 +16,6 @@ import Image from "next/image";
 import CalendarIcon from "../../../../../public/calendaricon.svg";
 import { RiPencilFill } from "react-icons/ri";
 import { ProjectProfileHeaderProps } from "@/app/types/componentsTypes/type";
-import { Range } from "react-date-range";
 
 export function ProjectProfileHeader({
   inputDataMenuClick,
