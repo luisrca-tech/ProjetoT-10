@@ -16,11 +16,18 @@ import { poppins } from "@/app/fonts";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Modal from "../Modal";
+import PostTaskCheckButton from "./components/PostTaskCheckButton";
+import UpdateTaskCheckButton from "./components/UpdateTaskCheckButton";
 import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
 
-export default function Header() {
+interface HeaderTypes {
+  onTaskPost: () => Promise<void>;
+  onTaskUpdate: () => Promise<void>;
+}
+
+export default function Header({ onTaskPost, onTaskUpdate }: HeaderTypes) {
   const router = useRouter();
   const [showModal, setShowModal] = useState<boolean>(false);
   const currentPath = usePathname();
@@ -33,6 +40,10 @@ export default function Header() {
 
   const isProjectPage = () => {
     return currentPath.startsWith("/painel-administrativo/projeto");
+  };
+
+  const isPersonsPage = () => {
+    return currentPath.startsWith("/painel-administrativo/pessoas");
   };
 
   const noRenderIconsAndSidebar = () => {
@@ -92,9 +103,9 @@ export default function Header() {
             </TitleContainer>
             <ButtonsContainer>
               {isProjectPage() ? (
-                <CheckProjectButton>
-                  <RiCheckFill size={24} />
-                </CheckProjectButton>
+                <PostTaskCheckButton onTaskPost={onTaskPost} />
+              ) : isPersonsPage() ? (
+                <UpdateTaskCheckButton onTaskUpdate={onTaskUpdate} />
               ) : (
                 <AddProjectButton
                   onClick={() => router.push("/painel-administrativo/projeto")}

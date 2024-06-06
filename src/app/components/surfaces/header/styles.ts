@@ -17,6 +17,7 @@ export const Container = styled.header<ContainerType>`
     props.isAutentication ? "center" : "space-between"};
   height: 7.594rem;
   position: fixed;
+  top: 0;
   background-color: white;
   z-index: 3;
 `;
@@ -104,7 +105,7 @@ export const AddProjectButton = styled.button`
   justify-content: center;
 `;
 
-export const CheckProjectButton = styled.form`
+export const CheckProjectButton = styled.button`
   width: 1.5rem;
   height: 1.5rem;
   border: none;
