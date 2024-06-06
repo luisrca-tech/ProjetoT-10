@@ -18,5 +18,6 @@ export async function getCustomFields(listId: string) {
     return responseBody.err;
   }
   console.log(responseBody, `responseBody`);
-  return responseBody;
+  console.log(responseBody.fields, `responseBody.fields`);
+  return responseBody.fields;
 }

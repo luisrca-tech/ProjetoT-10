@@ -18,6 +18,7 @@ import { getCustomFields } from "./getCustomFields";
 import { postTasks } from "./postTask";
 import { updateTask } from "./updateTask";
 import Header from "@/app/components/surfaces/header";
+import { array } from "zod";
 
 export default function Projeto() {
   const [rowCount, setRowCount] = useState(1);
@@ -39,6 +40,7 @@ export default function Projeto() {
       },
     },
   );
+  const [customFieldsResponse, setCustomFieldsResponse] = useState([]);
   const [checked, setChecked] = useState<boolean>(false);
   const listId = "901302288467";
   //Este listId sera disponibilizado em algum momento na app e importado para ca.
@@ -61,11 +63,12 @@ export default function Projeto() {
   };
 
   async function customFieldsGetRequest() {
-    await getCustomFields(listId);
+    const response = await getCustomFields(listId);
+    setCustomFieldsResponse(response);
   }
 
   async function taskPostRequest() {
-    await postTasks(listId);
+    await postTasks({ listId, customFieldsResponse });
   }
 
   async function updateTaskRequest() {
@@ -75,6 +78,10 @@ export default function Projeto() {
   useEffect(() => {
     customFieldsGetRequest();
   }, []); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
+
+  useEffect(() => {
+    console.log(customFieldsResponse, `customFieldsResponse`);
+  }, [customFieldsResponse]); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
 
   return (
     <Container className={roboto.className}>
