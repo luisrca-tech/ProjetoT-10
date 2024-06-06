@@ -14,11 +14,11 @@ import { useEffect, useState } from "react";
 import ToggleSwitch from "@/app/components/widgets/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/widgets/CustomDateRangePicker";
 import { SelectableRangeProps } from "@/app/types/componentsTypes/type";
-import { getCustomFields } from "./getCustomFields";
-import { postTasks } from "./postTask";
-import { updateTask } from "./updateTask";
+import { getCustomFields } from "../../../services/api/customFields/getCustomFields";
+import { postTasks } from "../../../services/api/tasks/postTask";
+import { updateTask } from "../../../services/api/tasks/updateTask";
 import Header from "@/app/components/surfaces/header";
-import { array } from "zod";
+
 
 export default function Projeto() {
   const [rowCount, setRowCount] = useState(1);
