@@ -10,10 +10,15 @@ import {
 } from "./styles";
 import { ProjectProfileHeader } from "../../../components/surfaces/ProjectProfileHeader";
 import { roboto } from "@/app/fonts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ToggleSwitch from "@/app/components/widgets/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/widgets/CustomDateRangePicker";
 import { SelectableRangeProps } from "@/app/types/componentsTypes/type";
+import { getCustomFields } from "./getCustomFields";
+import { postTasks } from "./postTask";
+import { updateTask } from "./updateTask";
+import Header from "@/app/components/surfaces/header";
+import { array } from "zod";
 
 export default function Projeto() {
   const [rowCount, setRowCount] = useState(1);
@@ -35,7 +40,10 @@ export default function Projeto() {
       },
     },
   );
+  const [customFieldsResponse, setCustomFieldsResponse] = useState([]);
   const [checked, setChecked] = useState<boolean>(false);
+  const listId = "901302288467";
+  //Este listId sera disponibilizado em algum momento na app e importado para ca.
 
   const openDatePicker = () => {
     setIsDatePickerOpen(true);
@@ -54,8 +62,31 @@ export default function Projeto() {
     setIsDatePickerOpen(false);
   };
 
+  async function customFieldsGetRequest() {
+    const response = await getCustomFields(listId);
+    setCustomFieldsResponse(response);
+  }
+
+  async function taskPostRequest() {
+    await postTasks({ listId, customFieldsResponse });
+  }
+
+  async function updateTaskRequest() {
+    await updateTask();
+  }
+
+  useEffect(() => {
+    customFieldsGetRequest();
+  }, []); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
+
+  useEffect(() => {
+    console.log(customFieldsResponse, `customFieldsResponse`);
+  }, [customFieldsResponse]); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
+
   return (
     <Container className={roboto.className}>
+      <Header onTaskPost={taskPostRequest} onTaskUpdate={updateTaskRequest} />
+
       <ProjectProfileHeader
         ranges={ranges}
         inputDataMenuClick={inputDataMenuClick}
@@ -92,4 +123,7 @@ export default function Projeto() {
       ></CloseCalendarContainer>
     </Container>
   );
+}
+function foodFetch() {
+  throw new Error("Function not implemented.");
 }

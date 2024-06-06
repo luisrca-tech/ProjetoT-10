@@ -15,7 +15,6 @@ type AuthHeaderProps = {
 export default function PrivateLayout({ children }: AuthHeaderProps) {
   return (
     <>
-      <Header />
       <Container>{children}</Container>
     </>
   );
