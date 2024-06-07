@@ -1,10 +1,14 @@
+import { useAtom } from "jotai";
 import { Container, HeaderContent, EditDateContainer } from "./styles";
+import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
 
 type FormHeaderProps = {
   checked: boolean;
 };
 
-export function FormHeader({ checked }: FormHeaderProps) {
+export function FormHeader() {
+  const [checked] = useAtom(checkedAtom)
+
   return (
     <Container checked={checked}>
       {!checked ? (

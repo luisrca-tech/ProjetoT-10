@@ -13,50 +13,36 @@ import { roboto } from "@/app/fonts";
 import { useEffect, useState } from "react";
 import ToggleSwitch from "@/app/components/widgets/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/widgets/CustomDateRangePicker";
-import { SelectableRangeProps } from "@/app/types/componentsTypes/type";
-import { getCustomFields } from "./getCustomFields";
-import { postTasks } from "./postTask";
-import { updateTask } from "./updateTask";
 import Header from "@/app/components/surfaces/header";
-import { array } from "zod";
+import { useAtom } from "jotai";
+import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
+import { isDatePickerOpenAtom } from "@/@atom/ProjectStates/isDatePickerOpenAtom";
+import { stringRowAtom } from "@/@atom/ProjectStates/stringRowAtom";
+import { getCustomFields } from "@/api/get-custom-fields";
+import { postTasks } from "@/api/post-task";
+import { updateTask } from "@/api/update-taks";
 
 export default function Projeto() {
-  const [rowCount, setRowCount] = useState(1);
-  const [stringRow, setStringRow] = useState<string>("row-0");
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
-  const [ranges, setRanges] = useState<{ [key: string]: SelectableRangeProps }>(
-    {
-      "global-project-data": {
-        startDate: new Date(),
-        endDate: new Date(),
-        key: "selection-global-project-data",
-        isSelected: false,
-      },
-      "row-0": {
-        startDate: new Date(),
-        endDate: new Date(),
-        key: "selection-row-0",
-        isSelected: false,
-      },
-    },
-  );
+  const [ checked, setChecked ] = useAtom(checkedAtom)
+  const [isDatePickerOpen, setIsDatePickerOpen] = useAtom(isDatePickerOpenAtom)
+  const [ , setStringRow ] = useAtom(stringRowAtom)
+
   const [customFieldsResponse, setCustomFieldsResponse] = useState([]);
-  const [checked, setChecked] = useState<boolean>(false);
   const listId = "901302288467";
   //Este listId sera disponibilizado em algum momento na app e importado para ca.
 
-  const openDatePicker = () => {
+  function openDatePicker() {
     setIsDatePickerOpen(true);
-  };
-
-  const handleCheckedChange = () => {
-    setChecked(!checked);
   };
 
   function inputDataMenuClick(row: string) {
     openDatePicker();
     setStringRow(row);
   }
+
+  const handleCheckedChange = () => {
+    setChecked(!checked);
+  };
 
   const handleBlurCalendar = () => {
     setIsDatePickerOpen(false);
@@ -87,33 +73,18 @@ export default function Projeto() {
     <Container className={roboto.className}>
       <Header onTaskPost={taskPostRequest} onTaskUpdate={updateTaskRequest} />
 
-      <ProjectProfileHeader
-        ranges={ranges}
-        inputDataMenuClick={inputDataMenuClick}
-        checked={checked}
-      />
+      <ProjectProfileHeader inputDataMenuClick={inputDataMenuClick} />
 
       <MainContainer>
         {isDatePickerOpen && (
-          <CustomDateRangePicker
-            ranges={ranges}
-            setRanges={setRanges}
-            stringRow={stringRow}
-          />
+          <CustomDateRangePicker />
         )}
         <FormContainer isDatePickerOpen={isDatePickerOpen}>
           <SwitchContainer>
             <span>Editar datas</span>
             <ToggleSwitch onChange={handleCheckedChange} />
           </SwitchContainer>
-          <FormSelectInput
-            checked={checked}
-            rowCount={rowCount}
-            setRanges={setRanges}
-            setRowCount={setRowCount}
-            ranges={ranges}
-            inputDataMenuClick={inputDataMenuClick}
-          />
+          <FormSelectInput inputDataMenuClick={inputDataMenuClick}/>
         </FormContainer>
       </MainContainer>
 

@@ -1,12 +1,17 @@
 "use client";
 
 import { Container, CustomFormSelect, Option } from "./styles";
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import ArrowRight from "../../../../public/arrowright.svg";
 import ArrowDown from "../../../../public/arrowdown.svg";
 import Image from "next/image";
 
-import { SelectComponentProps } from "@/app/types/componentsTypes/type";
+ interface SelectComponentProps {
+  id: string;
+  value: string;
+  onChange: (event: ChangeEvent<HTMLSelectElement>) => void;
+  hasValue: boolean;
+}
 
 export function SelectComponent({
   id,

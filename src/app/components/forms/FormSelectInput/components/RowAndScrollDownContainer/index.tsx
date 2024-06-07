@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Container,
   InputsRow,
@@ -17,7 +17,11 @@ import CalendarIcon from "../../../../../../../public/calendaricon.svg";
 import TrashAnimation from "../../../../../../../public/trashanimation.svg";
 import SelectInput from "@/app/components/inputs/SelectInput";
 
-import { RowAndScrollDownContainerProps } from "@/app/types/componentsTypes/type";
+import { useAtom } from "jotai";
+import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
+import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
+import { rowCountAtom } from "@/@atom/ProjectStates/rowCountAtom";
+import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 
 let offices = {
   office1: "Back-End PL",
@@ -26,17 +30,20 @@ let offices = {
   office4: "Front-End SR",
 };
 
+interface RowAndScrollDownContainerProps {
+  row: string
+  inputDataMenuClick: (row: string) => void;
+}
+
 export default function RowAndScrollDownContainer({
   row,
-  rowCount,
-  setRanges,
-  setRowCount,
-  checked,
-  ranges,
-  rowsAndSelectedValues,
-  setRowsAndSelectedValues,
   inputDataMenuClick,
 }: RowAndScrollDownContainerProps) {
+  const [checked] = useAtom(checkedAtom)
+  const [ranges, setRanges] = useAtom(rangesAtom)
+  const [ rowCount, setRowCount ] = useAtom(rowCountAtom)
+  const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom)
+
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
   );
@@ -201,7 +208,6 @@ export default function RowAndScrollDownContainer({
           id={`firstTextValue${row}`}
           onChange={(value) => handleInputChange(`firstTextValue${row}`, value)}
           hasValue={isValueInInput(row, "firstTextValue")}
-          checked={checked}
           values={offices}
           inputValue={
             rowsAndSelectedValues.selectedValues[`firstTextValue${row}`]
@@ -226,7 +232,6 @@ export default function RowAndScrollDownContainer({
                 handleInputChange(`secondTextValue${row}`, value)
               }
               hasValue={isValueInInput(row, "secondTextValue")}
-              checked={checked}
               values={offices}
               inputValue={
                 rowsAndSelectedValues.selectedValues[`secondTextValue${row}`]
@@ -240,7 +245,6 @@ export default function RowAndScrollDownContainer({
                 handleInputChange(`thirdTextValue${row}`, value)
               }
               hasValue={isValueInInput(row, "thirdTextValue")}
-              checked={checked}
               values={offices}
               inputValue={
                 rowsAndSelectedValues.selectedValues[`thirdTextValue${row}`]
