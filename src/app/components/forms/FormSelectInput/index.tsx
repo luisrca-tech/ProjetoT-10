@@ -17,6 +17,7 @@ export default function FormSelectInput({
   rowCount,
   ranges,
   inputDataMenuClick,
+  dropdownOptions,
 }: FormSelectInputProps) {
   const [rowsAndSelectedValues, setRowsAndSelectedValues] =
     useState<RowsAndSelectedValueProps>({
@@ -44,6 +45,7 @@ export default function FormSelectInput({
               rowsAndSelectedValues={rowsAndSelectedValues}
               setRowsAndSelectedValues={setRowsAndSelectedValues}
               inputDataMenuClick={inputDataMenuClick}
+              dropdownOptions={dropdownOptions}
             />
           ))}
       </InputsDataContainer>

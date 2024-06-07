@@ -10,6 +10,13 @@ export interface RowsAndSelectedValueProps {
   selectedValues: { [key: string]: string };
 }
 
+export type ChargeOption = {
+  id: string;
+  name: string;
+  color: string | null;
+  orderindex: number;
+};
+
 export interface FormSelectInputProps {
   rowCount: number;
   setRanges: React.Dispatch<
@@ -19,6 +26,7 @@ export interface FormSelectInputProps {
   checked: boolean;
   ranges: { [key: string]: SelectableRangeProps };
   inputDataMenuClick: (row: string) => void;
+  dropdownOptions: ChargeOption[];
 }
 
 export interface CommonProps extends FormSelectInputProps {
