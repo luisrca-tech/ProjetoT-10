@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
 import { BudgetContent, Container, ProjectDuration } from "./styles";
 import { poppins } from "@/app/fonts";
 import { eachDayOfInterval } from "date-fns";
-import { BudgetContainerProps } from "@/app/types/componentsTypes/type";
+import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
+import { useAtom } from "jotai";
+import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
+import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 
-export function BudgetContainer({
-  rowsAndSelectedValues,
-  ranges,
-  checked,
-}: BudgetContainerProps) {
+export function BudgetContainer() {
+  const [checked] = useAtom(checkedAtom)
+  const [ranges] = useAtom(rangesAtom)
+  const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom)
 
  const totalHoursSum = rowsAndSelectedValues.rows.reduce((acc, row) => {
     const hours = parseInt(

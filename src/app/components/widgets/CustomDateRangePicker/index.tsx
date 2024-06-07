@@ -5,13 +5,15 @@ import { DateRangePicker, RangeKeyDict } from "react-date-range";
 import { ptBR } from "date-fns/locale";
 import { Container } from "./styles";
 import "./DateRangePicker.css";
-import { CustomDateRangePickerProps } from "@/app/types/componentsTypes/type";
+import { useAtom } from "jotai";
+import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
+import { stringRowAtom } from "@/@atom/ProjectStates/stringRowAtom";
 
 export function CustomDateRangePicker({
-  ranges,
-  setRanges,
-  stringRow,
-}: CustomDateRangePickerProps) {
+}) {
+  const [ranges, setRanges] = useAtom(rangesAtom)
+  const [stringRow] = useAtom(stringRowAtom)
+
   const currentRange = ranges[stringRow] || {
     startDate: new Date(),
     endDate: new Date(),

@@ -13,48 +13,23 @@ import { roboto } from "@/app/fonts";
 import { useEffect, useState } from "react";
 import ToggleSwitch from "@/app/components/widgets/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/widgets/CustomDateRangePicker";
-import { SelectableRangeProps } from "@/app/types/componentsTypes/type";
-import { getCustomFields } from "../../../services/api/customFields/getCustomFields";
-import { postTasks } from "../../../services/api/tasks/postTask";
-import { updateTask } from "../../../services/api/tasks/updateTask";
 import Header from "@/app/components/surfaces/header";
-import { ChargeOption } from "@/app/types/componentsTypes/type";
+import { useAtom } from "jotai";
+import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
+import { isDatePickerOpenAtom } from "@/@atom/ProjectStates/isDatePickerOpenAtom";
+import { stringRowAtom } from "@/@atom/ProjectStates/stringRowAtom";
+import { getCustomFields } from "@/app/services/api/customFields/getCustomFields";
+import { postTasks } from "@/app/services/api/tasks/postTask";
+import { updateTask } from "@/app/services/api/tasks/updateTask";
+import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
 
 export default function Projeto() {
-  const [rowCount, setRowCount] = useState(1);
-  const [stringRow, setStringRow] = useState<string>("row-0");
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState<boolean>(false);
-  const [ranges, setRanges] = useState<{ [key: string]: SelectableRangeProps }>(
-    {
-      "global-project-data": {
-        startDate: new Date(),
-        endDate: new Date(),
-        key: "selection-global-project-data",
-        isSelected: false,
-      },
-      "row-0": {
-        startDate: new Date(),
-        endDate: new Date(),
-        key: "selection-row-0",
-        isSelected: false,
-      },
-    },
-  );
-  const [chargeOptions, setChargeOptions] = useState<ChargeOption[]>([]);
-  const [charge, setCharge] = useState({});
-  const [getCustomFieldsResponse, setGetCustomFieldsResponse] = useState([]);
-  const [checked, setChecked] = useState<boolean>(false);
-  const [newCustomFields, setNewCustomFields] = useState<Array<{}>>([]);
+  const [ checked, setChecked ] = useAtom(checkedAtom)
+  const [isDatePickerOpen, setIsDatePickerOpen] = useAtom(isDatePickerOpenAtom)
+  const [ , setStringRow ] = useAtom(stringRowAtom)
 
-  const listId = "901302288467";
-  //Este listId sera disponibilizado em algum momento na app e importado para ca.
-
-  const openDatePicker = () => {
+  function openDatePicker() {
     setIsDatePickerOpen(true);
-  };
-
-  const handleCheckedChange = () => {
-    setChecked(!checked);
   };
 
   function inputDataMenuClick(row: string) {
@@ -62,72 +37,30 @@ export default function Projeto() {
     setStringRow(row);
   }
 
+  const handleCheckedChange = () => {
+    setChecked(!checked);
+  };
+
   const handleBlurCalendar = () => {
     setIsDatePickerOpen(false);
   };
 
-  async function customFieldsGetRequest() {
-    const response = await getCustomFields(listId);
-    setGetCustomFieldsResponse(response);
-    const chargeCustomField = response.find(
-      (field: { name: string }) => field.name === "Cargo",
-    );
-    console.log(chargeCustomField, `chargeCustomField`);
-    setCharge(chargeCustomField);
-    setChargeOptions(chargeCustomField.type_config.options);
-  }
-
-  useEffect(() => {
-    setNewCustomFields((prev) => [...prev, charge]);
-  }, [charge]);
-  // aqui vai vir os 3 estados que vao armazenar os customFields que queremos ja enviar no POST, por enquanto
-  // so tem charge
-
-  async function taskPostRequest() {
-    setCharge((prev) => ({ ...prev, value: 0 })); // value mockado, esse value vai vir do click da option do dropdown
-    await postTasks({ listId, newCustomFields });
-  }
-
-  async function updateTaskRequest() {
-    await updateTask();
-  }
-
-  useEffect(() => {
-    customFieldsGetRequest();
-  }, []); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
-
   return (
     <Container className={roboto.className}>
-      <Header onTaskPost={taskPostRequest} onTaskUpdate={updateTaskRequest} />
+      <Header />
 
-      <ProjectProfileHeader
-        ranges={ranges}
-        inputDataMenuClick={inputDataMenuClick}
-        checked={checked}
-      />
+      <ProjectProfileHeader inputDataMenuClick={inputDataMenuClick} />
 
       <MainContainer>
         {isDatePickerOpen && (
-          <CustomDateRangePicker
-            ranges={ranges}
-            setRanges={setRanges}
-            stringRow={stringRow}
-          />
+          <CustomDateRangePicker />
         )}
         <FormContainer isDatePickerOpen={isDatePickerOpen}>
           <SwitchContainer>
             <span>Editar datas</span>
             <ToggleSwitch onChange={handleCheckedChange} />
           </SwitchContainer>
-          <FormSelectInput
-            checked={checked}
-            rowCount={rowCount}
-            setRanges={setRanges}
-            setRowCount={setRowCount}
-            ranges={ranges}
-            inputDataMenuClick={inputDataMenuClick}
-            dropdownOptions={chargeOptions}
-          />
+          <FormSelectInput inputDataMenuClick={inputDataMenuClick}/>
         </FormContainer>
       </MainContainer>
 

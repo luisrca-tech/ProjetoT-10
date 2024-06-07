@@ -3,19 +3,36 @@ import { Container, Input } from "./styles";
 import ArrowDown from "../../../../../public/arrowdown.svg";
 import ArrowRight from "../../../../../public/arrowright.svg";
 import Image from "next/image";
-import { SelectInputProps } from "@/app/types/componentsTypes/type";
+import { useAtom } from "jotai";
+import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
+
+interface SelectInputProps {
+  id: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  hasValue: boolean;
+  values: { [key: string]: string };
+  inputValue: string;
+  isSelectOpen?: boolean;
+  setIsSelectOpen?: (boolean: boolean) => void;
+  value?: string;
+  type: string;
+}
+
+
 
 export default function SelectInput({
   id,
   onChange,
   placeholder,
   hasValue,
-  checked,
   inputValue,
   isSelectOpen,
   setIsSelectOpen,
   ...rest
 }: SelectInputProps) {
+  const [checked] = useAtom(checkedAtom)
+
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const handleChange = (

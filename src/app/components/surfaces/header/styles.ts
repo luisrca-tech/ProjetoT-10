@@ -132,3 +132,29 @@ export const ButtonContainer = styled.div`
     border: none;
   }
 `;
+
+export const PostTaskCheckButton = styled.button`
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  background-color: transparent;
+  color: ${theme.COLORS.PRIMARY};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`
+
+export const UpdateTaskCheckButton = styled.button`
+  width: 1.5rem;
+  height: 1.5rem;
+  border: none;
+  background-color: transparent;
+  color: ${theme.COLORS.PRIMARY};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`
