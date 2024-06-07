@@ -6,8 +6,7 @@ import Image from "next/image";
 import { useAtom } from "jotai";
 import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
 
-
-export interface SelectInputProps {
+interface SelectInputProps {
   id: string;
   onChange: (value: string) => void;
   placeholder: string;
@@ -19,6 +18,7 @@ export interface SelectInputProps {
   value?: string;
   type: string;
 }
+
 
 
 export default function SelectInput({

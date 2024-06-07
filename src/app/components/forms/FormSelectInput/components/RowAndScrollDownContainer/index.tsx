@@ -22,6 +22,7 @@ import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
 import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
 import { rowCountAtom } from "@/@atom/ProjectStates/rowCountAtom";
 import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
 
 let offices = {
   office1: "Back-End PL",
@@ -43,6 +44,7 @@ export default function RowAndScrollDownContainer({
   const [ranges, setRanges] = useAtom(rangesAtom)
   const [ rowCount, setRowCount ] = useAtom(rowCountAtom)
   const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom)
+  const [chargeOptions] = useAtom(chargeOptionsAtom)
 
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
@@ -278,7 +280,7 @@ export default function RowAndScrollDownContainer({
           className={poppins.className}
           onMouseDown={(e) => e.preventDefault()}
         >
-          {Object.values(offices).map((value, index) => (
+          {Object.values(chargeOptions).map((value, index) => (
             <SeparatorContainer
               key={index}
               className={row === getLastRowIndex() ? "last-row" : ""}
@@ -286,11 +288,11 @@ export default function RowAndScrollDownContainer({
               <button
                 onMouseDown={(e) => {
                   e.preventDefault();
-                  handleButtonClick(value, row);
+                  handleButtonClick(value.name, row);
                 }}
               >
                 <Image src={AddButton} alt="" />
-                <span>{value}</span>
+                <span>{value.name}</span>
               </button>
             </SeparatorContainer>
           ))}

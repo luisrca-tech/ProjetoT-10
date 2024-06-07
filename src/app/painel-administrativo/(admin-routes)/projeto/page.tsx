@@ -18,18 +18,15 @@ import { useAtom } from "jotai";
 import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
 import { isDatePickerOpenAtom } from "@/@atom/ProjectStates/isDatePickerOpenAtom";
 import { stringRowAtom } from "@/@atom/ProjectStates/stringRowAtom";
-import { getCustomFields } from "@/api/get-custom-fields";
-import { postTasks } from "@/api/post-task";
-import { updateTask } from "@/api/update-taks";
+import { getCustomFields } from "@/app/services/api/customFields/getCustomFields";
+import { postTasks } from "@/app/services/api/tasks/postTask";
+import { updateTask } from "@/app/services/api/tasks/updateTask";
+import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
 
 export default function Projeto() {
   const [ checked, setChecked ] = useAtom(checkedAtom)
   const [isDatePickerOpen, setIsDatePickerOpen] = useAtom(isDatePickerOpenAtom)
   const [ , setStringRow ] = useAtom(stringRowAtom)
-
-  const [customFieldsResponse, setCustomFieldsResponse] = useState([]);
-  const listId = "901302288467";
-  //Este listId sera disponibilizado em algum momento na app e importado para ca.
 
   function openDatePicker() {
     setIsDatePickerOpen(true);
@@ -48,30 +45,9 @@ export default function Projeto() {
     setIsDatePickerOpen(false);
   };
 
-  async function customFieldsGetRequest() {
-    const response = await getCustomFields(listId);
-    setCustomFieldsResponse(response);
-  }
-
-  async function taskPostRequest() {
-    await postTasks({ listId, customFieldsResponse });
-  }
-
-  async function updateTaskRequest() {
-    await updateTask();
-  }
-
-  useEffect(() => {
-    customFieldsGetRequest();
-  }, []); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
-
-  useEffect(() => {
-    console.log(customFieldsResponse, `customFieldsResponse`);
-  }, [customFieldsResponse]); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
-
   return (
     <Container className={roboto.className}>
-      <Header onTaskPost={taskPostRequest} onTaskUpdate={updateTaskRequest} />
+      <Header />
 
       <ProjectProfileHeader inputDataMenuClick={inputDataMenuClick} />
 
@@ -94,7 +70,4 @@ export default function Projeto() {
       ></CloseCalendarContainer>
     </Container>
   );
-}
-function foodFetch() {
-  throw new Error("Function not implemented.");
 }

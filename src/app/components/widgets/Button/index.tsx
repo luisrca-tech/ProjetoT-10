@@ -3,7 +3,7 @@ import { Container } from "./styles";
 import classnames from "classnames";
 import LoadingIndicator from "@/app/components/widgets/LoadingIndicator";
 
-export type ButtonRegistrationType = {
+type ButtonRegistrationType = {
   text: string;
   loading?: boolean;
   disabled?: boolean;
