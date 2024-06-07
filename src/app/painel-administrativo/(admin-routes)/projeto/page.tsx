@@ -14,11 +14,11 @@ import { useEffect, useState } from "react";
 import ToggleSwitch from "@/app/components/widgets/ToggleSwitch";
 import { CustomDateRangePicker } from "@/app/components/widgets/CustomDateRangePicker";
 import { SelectableRangeProps } from "@/app/types/componentsTypes/type";
-import { getCustomFields } from "./getCustomFields";
-import { postTasks } from "./postTask";
-import { updateTask } from "./updateTask";
+import { getCustomFields } from "../../../services/api/customFields/getCustomFields";
+import { postTasks } from "../../../services/api/tasks/postTask";
+import { updateTask } from "../../../services/api/tasks/updateTask";
 import Header from "@/app/components/surfaces/header";
-import { array } from "zod";
+import { ChargeOption } from "@/app/types/componentsTypes/type";
 
 export default function Projeto() {
   const [rowCount, setRowCount] = useState(1);
@@ -40,8 +40,12 @@ export default function Projeto() {
       },
     },
   );
-  const [customFieldsResponse, setCustomFieldsResponse] = useState([]);
+  const [chargeOptions, setChargeOptions] = useState<ChargeOption[]>([]);
+  const [charge, setCharge] = useState({});
+  const [getCustomFieldsResponse, setGetCustomFieldsResponse] = useState([]);
   const [checked, setChecked] = useState<boolean>(false);
+  const [newCustomFields, setNewCustomFields] = useState<Array<{}>>([]);
+
   const listId = "901302288467";
   //Este listId sera disponibilizado em algum momento na app e importado para ca.
 
@@ -64,11 +68,24 @@ export default function Projeto() {
 
   async function customFieldsGetRequest() {
     const response = await getCustomFields(listId);
-    setCustomFieldsResponse(response);
+    setGetCustomFieldsResponse(response);
+    const chargeCustomField = response.find(
+      (field: { name: string }) => field.name === "Cargo",
+    );
+    console.log(chargeCustomField, `chargeCustomField`);
+    setCharge(chargeCustomField);
+    setChargeOptions(chargeCustomField.type_config.options);
   }
 
+  useEffect(() => {
+    setNewCustomFields((prev) => [...prev, charge]);
+  }, [charge]);
+  // aqui vai vir os 3 estados que vao armazenar os customFields que queremos ja enviar no POST, por enquanto
+  // so tem charge
+
   async function taskPostRequest() {
-    await postTasks({ listId, customFieldsResponse });
+    setCharge((prev) => ({ ...prev, value: 0 })); // value mockado, esse value vai vir do click da option do dropdown
+    await postTasks({ listId, newCustomFields });
   }
 
   async function updateTaskRequest() {
@@ -78,10 +95,6 @@ export default function Projeto() {
   useEffect(() => {
     customFieldsGetRequest();
   }, []); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
-
-  useEffect(() => {
-    console.log(customFieldsResponse, `customFieldsResponse`);
-  }, [customFieldsResponse]); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
 
   return (
     <Container className={roboto.className}>
@@ -113,6 +126,7 @@ export default function Projeto() {
             setRowCount={setRowCount}
             ranges={ranges}
             inputDataMenuClick={inputDataMenuClick}
+            dropdownOptions={chargeOptions}
           />
         </FormContainer>
       </MainContainer>
@@ -123,7 +137,4 @@ export default function Projeto() {
       ></CloseCalendarContainer>
     </Container>
   );
-}
-function foodFetch() {
-  throw new Error("Function not implemented.");
 }

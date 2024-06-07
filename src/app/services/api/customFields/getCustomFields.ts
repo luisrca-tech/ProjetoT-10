@@ -17,7 +17,6 @@ export async function getCustomFields(listId: string) {
     //tratamento de erro de autorizacao.
     return responseBody.err;
   }
-  console.log(responseBody, `responseBody`);
-  console.log(responseBody.fields, `responseBody.fields`);
+
   return responseBody.fields;
 }

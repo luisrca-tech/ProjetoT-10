@@ -36,6 +36,7 @@ export default function RowAndScrollDownContainer({
   rowsAndSelectedValues,
   setRowsAndSelectedValues,
   inputDataMenuClick,
+  dropdownOptions,
 }: RowAndScrollDownContainerProps) {
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
@@ -274,7 +275,7 @@ export default function RowAndScrollDownContainer({
           className={poppins.className}
           onMouseDown={(e) => e.preventDefault()}
         >
-          {Object.values(offices).map((value, index) => (
+          {Object.values(dropdownOptions).map((value, index) => (
             <SeparatorContainer
               key={index}
               className={row === getLastRowIndex() ? "last-row" : ""}
@@ -282,11 +283,11 @@ export default function RowAndScrollDownContainer({
               <button
                 onMouseDown={(e) => {
                   e.preventDefault();
-                  handleButtonClick(value, row);
+                  handleButtonClick(value.name, row);
                 }}
               >
                 <Image src={AddButton} alt="" />
-                <span>{value}</span>
+                <span>{value.name}</span>
               </button>
             </SeparatorContainer>
           ))}

@@ -2,14 +2,11 @@
 import { useEffect } from "react";
 
 interface postTasksProps {
-  customFieldsResponse: Array<{}>;
+  newCustomFields: Array<{}>;
   listId: string;
 }
 
-export async function postTasks({
-  listId,
-  customFieldsResponse,
-}: postTasksProps) {
+export async function postTasks({ listId, newCustomFields }: postTasksProps) {
   const query = new URLSearchParams({
     custom_task_ids: "true",
     team_id: "123",
@@ -25,7 +22,7 @@ export async function postTasks({
       },
       body: JSON.stringify({
         name: "Pessoa 1",
-        customFields: customFieldsResponse,
+        customFields: newCustomFields,
         /*Aqui na verdade, sera passado o customField Cargo filtrado, 
        ja com os valores de cargo, valor hora e horas/mes preenchidos. */
       }),
