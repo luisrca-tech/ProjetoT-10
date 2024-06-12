@@ -21,59 +21,73 @@ import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
 import { postTasks } from "@/app/services/api/tasks/postTask";
-import { updateTask } from "@/app/services/api/tasks/updateTask";
+
 import { getCustomFields } from "@/app/services/api/customFields/getCustomFields";
 import { useAtom } from "jotai";
 import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
+import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectFieldAtom";
+
+import { loading } from "@/@atom/LoadingState/loadingAtom";
+import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 
 export default function Header() {
-  const [, setChargeOptions] = useAtom(chargeOptionsAtom)
+  const [, setProjectOptions] = useAtom(projectOptionsAtom);
+  const [, setChargeOptions] = useAtom(chargeOptionsAtom);
+  const [, setLoading] = useAtom(loading);
+  const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
 
-  const [newCustomFields, setNewCustomFields] = useState<Array<{}>>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [customFieldsResponse, setCustomFieldsResponse] = useState([]);
-  const [getCustomFieldsResponse, setGetCustomFieldsResponse] = useState([]);
-  const [charge, setCharge] = useState({});
+  const [customFieldsResponse, setGetCustomFieldsResponse] = useState([]);
 
-  const listId = "901302288467";
-  //Este listId sera disponibilizado em algum momento na app e importado para ca.
+  const [fieldId, setFieldId] = useState<string>("");
+  const [customFiledLoading, setCustomFieldLoading] = useState<boolean>();
+
+  const listId = "901303987731";
 
   const router = useRouter();
   const currentPath = usePathname();
 
-   async function customFieldsGetRequest() {
-    const response = await getCustomFields(listId);
-    setGetCustomFieldsResponse(response);
-    const chargeCustomField = response.find(
-      (field: { name: string }) => field.name === "Cargo",
-    );
-    console.log(chargeCustomField, `chargeCustomField`);
-    setCharge(chargeCustomField);
-    setChargeOptions(chargeCustomField.type_config.options);
-  }
+  useEffect(() => {
+    async function customFieldsGetRequest() {
+      setLoading(true);
+
+      const getCustomFieldResp = await getCustomFields(listId);
+      setGetCustomFieldsResponse(getCustomFieldResp);
+      const chargeCustomField = getCustomFieldResp.find(
+        (field: { name: string }) => field.name === "PixelCraft_cargos",
+      );
+
+      const projectCustomField = getCustomFieldResp.find(
+        (field: { name: string }) => field.name === "PixelCraft_projeto",
+      );
+
+      const projectOptions = projectCustomField.type_config.options;
+      setProjectOptions(projectOptions);
+
+      const chargeFieldId = chargeCustomField.id;
+      setFieldId(chargeFieldId);
+
+      const chargeOptions = chargeCustomField.type_config.options;
+      setChargeOptions(chargeOptions);
+
+      setLoading(false);
+    }
+
+    customFieldsGetRequest();
+  }, [setChargeOptions, setLoading, setProjectOptions]);
 
   async function taskPostRequest() {
-    setCharge((prev) => ({ ...prev, value: 0 })); // value mockado, esse value vai vir do click da option do dropdown
-    await postTasks({ listId, newCustomFields });
+    await postTasks({
+      listId,
+      fieldId,
+      rowsAndSelectedValues,
+    });
   }
 
-  async function updateTaskRequest() {
-    await updateTask();
-  }
-
-  useEffect(() => {
-    setNewCustomFields((prev) => [...prev, charge]);
-  }, [charge]);
-  // aqui vai vir os 3 estados que vao armazenar os customFields que queremos ja enviar no POST, por enquanto so tem charge
-
-  useEffect(() => {
-    customFieldsGetRequest();
-  }, []); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
-
-  
   const handleMenu = () => {
     setShowModal((current) => !current);
   };
+
   const isAuthPage = () => {
     return currentPath.startsWith("/painel-administrativo/autenticacao");
   };
@@ -143,11 +157,16 @@ export default function Header() {
             </TitleContainer>
             <ButtonsContainer>
               {isProjectPage() ? (
-                <PostTaskCheckButton onClick={taskPostRequest}>
+                <PostTaskCheckButton
+                  onClick={taskPostRequest}
+                  disabled={customFiledLoading}
+                >
                   <RiCheckFill size={24} />
                 </PostTaskCheckButton>
               ) : isPersonsPage() ? (
-                <UpdateTaskCheckButton onClick={updateTask}></UpdateTaskCheckButton>
+                <UpdateTaskCheckButton
+                /* onClick ={updateTaskReq}*/
+                ></UpdateTaskCheckButton>
               ) : (
                 <AddProjectButton
                   onClick={() => router.push("/painel-administrativo/projeto")}
