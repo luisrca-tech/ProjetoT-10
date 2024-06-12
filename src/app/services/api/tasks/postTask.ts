@@ -1,6 +1,6 @@
 "use client";
 
-import { postTaskForRow } from "./postTaskFormRow";
+import { postTaskForRow } from "./postTaskForRow";
 
 export interface RowsAndSelectedValueProps {
   rows: string[];
