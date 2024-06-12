@@ -1,34 +1,45 @@
 "use client";
-import { useEffect } from "react";
 
-interface postTasksProps {
-  newCustomFields: Array<{}>;
-  listId: string;
+import { postTaskForRow } from "./postTaskFormRow";
+
+export interface RowsAndSelectedValueProps {
+  rows: string[];
+  selectedValues: { [key: string]: string };
 }
 
-export async function postTasks({ listId, newCustomFields }: postTasksProps) {
-  const query = new URLSearchParams({
-    custom_task_ids: "true",
-    team_id: "123",
-  }).toString();
+interface postTasksProps {
+  listId: string;
+  fieldId: string;
+  rowsAndSelectedValues: RowsAndSelectedValueProps;
+}
 
-  const resp = await fetch(
-    `https://api.clickup.com/api/v2/list/${listId}/task?${query}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
-      },
-      body: JSON.stringify({
-        name: "Pessoa 1",
-        customFields: newCustomFields,
-        /*Aqui na verdade, sera passado o customField Cargo filtrado, 
-       ja com os valores de cargo, valor hora e horas/mes preenchidos. */
-      }),
-    },
-  );
+function getOptionValueForRow(
+  row: string,
+  selectedValues: { [key: string]: string },
+): number {
+  const optionKey = `firstTextValue${row}-option`;
+  console.log(`cargo da posicao atual`, Number(selectedValues[optionKey]));
+  return Number(selectedValues[optionKey]);
+}
 
-  const data = await resp.json();
-  console.log(data, `postTaskResponse`);
+export async function postTasks({
+  listId,
+  fieldId,
+  rowsAndSelectedValues,
+}: postTasksProps) {
+  const rows = rowsAndSelectedValues.rows;
+  for (let i = 0; i < rows.length - 1; i++) {
+    const row = rows[i];
+    const selectedValue = getOptionValueForRow(
+      row,
+      rowsAndSelectedValues.selectedValues,
+    );
+    await postTaskForRow({
+      listId,
+      fieldId,
+      row,
+      selectedValue,
+      rowsAndSelectedValues,
+    });
+  }
 }
