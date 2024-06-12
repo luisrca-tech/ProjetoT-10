@@ -1,7 +1,14 @@
 import { ReactNode } from "react";
 import { roboto } from "./fonts";
 import { css } from "@linaria/core";
+import FullScreenLoading from "./components/widgets/FullScreenLoading";
+import { Provider } from "jotai";
 
+interface Props extends React.PropsWithChildren {}
+
+function JotaiProvider({ children }: Props): JSX.Element {
+  return <Provider>{children}</Provider>;
+}
 const globalStyle = css`
   :root {
     font-size: 62.5%;
@@ -48,7 +55,11 @@ const globalStyle = css`
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-br" className={globalStyle}>
-        <body className={roboto.className}>{children}</body>
+      <body className={roboto.className}>
+        <JotaiProvider>
+          <FullScreenLoading>{children}</FullScreenLoading>
+        </JotaiProvider>
+      </body>
     </html>
   );
 }
