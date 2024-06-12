@@ -19,7 +19,7 @@ const Main = styled.main`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: calc(100% - 7.594rem);
+  height: 100%;
   width: 100%;
   margin: 0 auto;
   border: 1px solid ${() => lighten(0.34, theme.COLORS.GRAY)};
