@@ -32,7 +32,7 @@ let offices = {
 };
 
 interface RowAndScrollDownContainerProps {
-  row: string
+  row: string;
   inputDataMenuClick: (row: string) => void;
 }
 
@@ -40,11 +40,13 @@ export default function RowAndScrollDownContainer({
   row,
   inputDataMenuClick,
 }: RowAndScrollDownContainerProps) {
-  const [checked] = useAtom(checkedAtom)
-  const [ranges, setRanges] = useAtom(rangesAtom)
-  const [ rowCount, setRowCount ] = useAtom(rowCountAtom)
-  const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom)
-  const [chargeOptions] = useAtom(chargeOptionsAtom)
+  const [checked] = useAtom(checkedAtom);
+  const [ranges, setRanges] = useAtom(rangesAtom);
+  const [rowCount, setRowCount] = useAtom(rowCountAtom);
+  const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
+    rowsAndSelectedValuesAtom,
+  );
+  const [chargeOptions] = useAtom(chargeOptionsAtom);
 
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
@@ -58,11 +60,11 @@ export default function RowAndScrollDownContainer({
 
   const canAddRow = rowsAndSelectedValues.rows.every((index) => {
     const firstTextValue =
-      rowsAndSelectedValues.selectedValues[`firstTextValue${index}`];
+      rowsAndSelectedValues.selectedValues[`firstTextValue${index}-text`];
     const secondTextValue =
-      rowsAndSelectedValues.selectedValues[`secondTextValue${index}`];
+      rowsAndSelectedValues.selectedValues[`secondTextValue${index}-text`];
     const thirdTextValue =
-      rowsAndSelectedValues.selectedValues[`thirdTextValue${index}`];
+      rowsAndSelectedValues.selectedValues[`thirdTextValue${index}-text`];
 
     return firstTextValue && secondTextValue && thirdTextValue;
   });
@@ -125,18 +127,25 @@ export default function RowAndScrollDownContainer({
     return selectedItemIndex === index;
   };
 
-  function handleInputChange(id: string, value: string) {
+  function handleInputChange(id: string, value: string, index?: number) {
     setRowsAndSelectedValues((prevState) => ({
       ...prevState,
       selectedValues: {
         ...prevState.selectedValues,
-        [id]: value,
+        [`${id}-text`]: value,
+        [`${id}-option`]: `${index}`,
       },
     }));
   }
 
-  const handleButtonClick = (value: string, row: string) => {
-    handleInputChange(`firstTextValue${row}`, value);
+  useEffect(() => {
+    console.log(rowsAndSelectedValues, `rowsAndSelectedValues`);
+  }, [rowsAndSelectedValues]);
+
+  const handleButtonClick = (value: string, row: string, index: number) => {
+    if (value) {
+      handleInputChange(`firstTextValue${row}`, value, index);
+    }
   };
 
   const handleTouchStartForRow = (
@@ -193,6 +202,9 @@ export default function RowAndScrollDownContainer({
     }
   }, [addRow, canAddRow, isNewRowAdded]);
 
+  useEffect(() => {
+    console.log(chargeOptions, `chargeOptions`);
+  }, [chargeOptions]);
   return (
     <Container
       key={row}
@@ -212,7 +224,7 @@ export default function RowAndScrollDownContainer({
           hasValue={isValueInInput(row, "firstTextValue")}
           values={offices}
           inputValue={
-            rowsAndSelectedValues.selectedValues[`firstTextValue${row}`]
+            rowsAndSelectedValues.selectedValues[`firstTextValue${row}-text`]
           }
           setIsSelectOpen={() => toggleSelectOpen(row)}
         />
@@ -236,7 +248,9 @@ export default function RowAndScrollDownContainer({
               hasValue={isValueInInput(row, "secondTextValue")}
               values={offices}
               inputValue={
-                rowsAndSelectedValues.selectedValues[`secondTextValue${row}`]
+                rowsAndSelectedValues.selectedValues[
+                  `secondTextValue${row}-text`
+                ]
               }
             />
             <SelectInput
@@ -249,7 +263,9 @@ export default function RowAndScrollDownContainer({
               hasValue={isValueInInput(row, "thirdTextValue")}
               values={offices}
               inputValue={
-                rowsAndSelectedValues.selectedValues[`thirdTextValue${row}`]
+                rowsAndSelectedValues.selectedValues[
+                  `thirdTextValue${row}-text`
+                ]
               }
             />
           </>
@@ -288,7 +304,7 @@ export default function RowAndScrollDownContainer({
               <button
                 onMouseDown={(e) => {
                   e.preventDefault();
-                  handleButtonClick(value.name, row);
+                  handleButtonClick(value.name, row, index);
                 }}
               >
                 <Image src={AddButton} alt="" />

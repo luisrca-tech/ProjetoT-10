@@ -9,4 +9,6 @@ const initialRowsAndSelectedValuesState: RowsAndSelectedValueProps = {
   selectedValues: {},
 };
 
-export const rowsAndSelectedValuesAtom = atom(initialRowsAndSelectedValuesState);
+export const rowsAndSelectedValuesAtom = atom(
+  initialRowsAndSelectedValuesState,
+);

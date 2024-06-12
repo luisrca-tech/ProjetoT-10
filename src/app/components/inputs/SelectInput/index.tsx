@@ -19,8 +19,6 @@ interface SelectInputProps {
   type: string;
 }
 
-
-
 export default function SelectInput({
   id,
   onChange,
@@ -31,7 +29,7 @@ export default function SelectInput({
   setIsSelectOpen,
   ...rest
 }: SelectInputProps) {
-  const [checked] = useAtom(checkedAtom)
+  const [checked] = useAtom(checkedAtom);
 
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
