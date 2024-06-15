@@ -11,7 +11,7 @@ export const Container = styled.div`
 `;
 
 export const MainContainer = styled.div`
-  margin-top: 12.594rem;
+  margin-top: 10.594rem;
   width: 100%;
   height: 100%;
   display: flex;
