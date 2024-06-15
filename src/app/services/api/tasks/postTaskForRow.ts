@@ -2,22 +2,32 @@
 
 export interface RowsAndSelectedValueProps {
   rows: string[];
-  selectedValues: { [key: string]: string };
+  chargeFieldSelectedValue: { [key: string]: string };
 }
 
 interface postTaskForRowProps {
   listId: string;
-  fieldsIds: { chargeFieldId: string; projectFieldId: string };
+  fieldsIds: {
+    chargeFieldId: string;
+    projectFieldId: string;
+    valueFieldId: string;
+    hoursPerMonthCustomFieldId: string;
+  };
   row: string;
-  selectedValue: number;
-  rowsAndSelectedValues: RowsAndSelectedValueProps;
+  chargeFieldSelectedValue: number;
+  projectFieldSelectedValue: string;
+  valueSelectedValue: number;
+  hoursPerMonthCustom: number;
 }
 
 export async function postTaskForRow({
   listId,
   fieldsIds,
   row,
-  selectedValue,
+  chargeFieldSelectedValue,
+  projectFieldSelectedValue,
+  valueSelectedValue,
+  hoursPerMonthCustom,
 }: postTaskForRowProps) {
   const query = new URLSearchParams({
     custom_task_ids: "true",
@@ -51,11 +61,10 @@ export async function postTaskForRow({
           "Content-Type": "application/json",
           Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
         },
-        body: JSON.stringify({ value: selectedValue }),
+        body: JSON.stringify({ value: chargeFieldSelectedValue }),
       },
     );
     const postCustomFieldCharge = await postChargeCustomFieldResp.json();
-    console.log(postCustomFieldCharge, `postCustomFieldCharge`);
 
     const postProjectCustomFieldResp = await fetch(
       `https://api.clickup.com/api/v2/task/${postTaskData.id}/field/${fieldsIds.projectFieldId}?`,
@@ -65,10 +74,38 @@ export async function postTaskForRow({
           "Content-Type": "application/json",
           Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
         },
-        body: JSON.stringify({ value: selectedValue }),
+        body: JSON.stringify({ value: [projectFieldSelectedValue] }),
       },
     );
     const postCustomFieldProject = await postProjectCustomFieldResp.json();
-    console.log(postCustomFieldProject, `postCustomFieldCharge`);
+
+    const valueCustomFieldResp = await fetch(
+      `https://api.clickup.com/api/v2/task/${postTaskData.id}/field/${fieldsIds.valueFieldId}?`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+        },
+        body: JSON.stringify({ value: valueSelectedValue }),
+      },
+    );
+
+    const postCustomFieldValue = await valueCustomFieldResp.json();
+
+    const hoursPerMonthCustomFieldResp = await fetch(
+      `https://api.clickup.com/api/v2/task/${postTaskData.id}/field/${fieldsIds.hoursPerMonthCustomFieldId}?`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+        },
+        body: JSON.stringify({ value: hoursPerMonthCustom }),
+      },
+    );
+
+    const postCustomFieldhoursPerMonth =
+      await hoursPerMonthCustomFieldResp.json();
   }
 }

@@ -26,12 +26,14 @@ import { getCustomFields } from "@/app/services/api/customFields/getCustomFields
 import { useAtom } from "jotai";
 import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
 import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectFieldAtom";
-
+import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
 import { loading } from "@/@atom/LoadingState/loadingAtom";
 import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 type FieldsIdType = {
   chargeFieldId: string;
   projectFieldId: string;
+  valueFieldId: string;
+  hoursPerMonthCustomFieldId: string;
 };
 
 export default function Header() {
@@ -39,13 +41,15 @@ export default function Header() {
   const [, setChargeOptions] = useAtom(chargeOptionsAtom);
   const [, setLoading] = useAtom(loading);
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
-
+  const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [customFieldsResponse, setGetCustomFieldsResponse] = useState([]);
+  const [, setGetCustomFieldsResponse] = useState([]);
   const listId = "901303987731"; //mocado.
   const [fieldsIds, setFieldsIds] = useState<FieldsIdType>({
     chargeFieldId: "",
     projectFieldId: "",
+    valueFieldId: "",
+    hoursPerMonthCustomFieldId: "",
   });
   const [customFiledLoading, setCustomFieldLoading] = useState<boolean>();
 
@@ -65,16 +69,32 @@ export default function Header() {
       const projectCustomField = getCustomFieldResp.find(
         (field: { name: string }) => field.name === "PixelCraft_projeto",
       );
+
+      const hoursPerMonthCustomField = getCustomFieldResp.find(
+        (field: { name: string }) => field.name === "PixelCraft_Horas_Mes",
+      );
+
+      const ValueCustomField = getCustomFieldResp.find(
+        (field: { name: string }) => field.name === "PixelCraft_Valor",
+      );
+
+      const valueFieldId = ValueCustomField.id;
+      const hoursPerMonthCustomFieldId = hoursPerMonthCustomField.id;
+
       const chargeFieldId = chargeCustomField.id;
       const projectFieldId = projectCustomField.id;
-      console.log(`projectCustomField`, projectCustomField.id);
-      const fields = { chargeFieldId, projectFieldId };
-      console.log(fields, `fields`);
 
-      setFieldsIds(fields);
+      const fieldsIds = {
+        chargeFieldId,
+        projectFieldId,
+        valueFieldId,
+        hoursPerMonthCustomFieldId,
+      };
+      setFieldsIds(fieldsIds);
+
       const projectOptions = projectCustomField.type_config.options;
-
       setProjectOptions(projectOptions);
+
       const chargeOptions = chargeCustomField.type_config.options;
       setChargeOptions(chargeOptions);
 
@@ -82,13 +102,16 @@ export default function Header() {
     }
 
     customFieldsGetRequest();
-  }, [setChargeOptions, setLoading, setProjectOptions]);
+  }, [projectSelectedValue, setChargeOptions, setLoading, setProjectOptions]);
 
   async function taskPostRequest() {
+    setLoading(true);
     await postTasks({
       fieldsIds,
       rowsAndSelectedValues,
+      projectSelectedValue,
     });
+    setLoading(false);
   }
 
   const handleMenu = () => {
