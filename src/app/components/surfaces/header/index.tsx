@@ -37,7 +37,7 @@ export default function Header() {
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [customFieldsResponse, setGetCustomFieldsResponse] = useState([]);
+  const [, setGetCustomFieldsResponse] = useState([]);
 
   const [fieldId, setFieldId] = useState<string>("");
   const [customFiledLoading, setCustomFieldLoading] = useState<boolean>();

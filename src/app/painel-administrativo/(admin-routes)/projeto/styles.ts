@@ -3,6 +3,7 @@ import { styled } from "@linaria/react";
 
 type FormContainer = {
   isDatePickerOpen: boolean;
+  isProjectOptionsOpen?: boolean;
 };
 
 export const Container = styled.div`
@@ -33,6 +34,7 @@ export const MainContainer = styled.div`
 `;
 
 export const FormContainer = styled.div<FormContainer>`
+  padding-top: ${(props) => (props.isProjectOptionsOpen ? "120px" : "0")};
   filter: ${(props) => (props.isDatePickerOpen ? `blur(2px)` : `none`)};
   width: 100%;
   pointer-events: ${(props) => (props.isDatePickerOpen ? `none` : `auto`)};

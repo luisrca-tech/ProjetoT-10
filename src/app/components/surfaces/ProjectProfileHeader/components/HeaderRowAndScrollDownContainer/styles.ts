@@ -1,30 +1,12 @@
 import { styled } from "@linaria/react";
 import { theme } from "@/app/styles/theme";
 
-type InputsRowProps = {
-  checked?: boolean;
-  offsetX?: number;
-  offsetXByRow?: {
-    [key: number]: number;
-  };
-  isLastRow?: boolean;
-};
-
-export const Container = styled.div<InputsRowProps>`
+export const Container = styled.div`
   background: ${theme.COLORS.SELECT_INPUT};
   border-radius: 20px;
   position: relative;
   transition: transform 0.5s ease;
-  transform: translateX(
-    ${(props) =>
-      props.isLastRow
-        ? props.offsetXByRow && props.offsetX
-          ? "0"
-          : "0"
-        : props.offsetXByRow && props.offsetX
-          ? "-1.5rem"
-          : "0"}
-  );
+  width: 50%;
 `;
 
 export const HeaderContent = styled.div`
@@ -51,29 +33,18 @@ export const HeaderContent = styled.div`
   }
 `;
 
-export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
+export const RowAndScrollDownContainer = styled.div`
   background: ${theme.COLORS.SELECT_INPUT};
   border-radius: 20px;
   position: relative;
   transition: transform 0.5s ease;
-  transform: translateX(
-    ${(props) =>
-      props.isLastRow
-        ? props.offsetXByRow && props.offsetX
-          ? "0"
-          : "0"
-        : props.offsetXByRow && props.offsetX
-          ? "-1.5rem"
-          : "0"}
-  );
 `;
 
-export const InputsRow = styled.div<InputsRowProps>`
+export const InputContainer = styled.div`
   display: flex;
   border-radius: 20px;
   justify-content: space-between;
-  gap: ${(props) => (props.checked ? "28px" : "")};
-  background: ${theme.COLORS.LIGHT};
+  background: ${theme.COLORS.SECONDARY_EXTRA_LIGTH};
   width: 100%;
   position: relative;
   height: 100%;
@@ -88,37 +59,6 @@ export const CalendarDateValues = styled.div`
   font-size: 1rem;
   font-weight: Regular;
   padding: 11px 10px 0;
-`;
-
-export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
-  width: 100%;
-  height: 100%;
-  padding-right: 5px;
-  display: ${(props) => (props.isLastRow ? "none" : "flex")};
-  align-items: center;
-  justify-content: end;
-  text-align: center;
-
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  z-index: -1;
-  transition: transform 0.5s ease;
-  transform: translateX(
-    ${(props) =>
-      props.isLastRow
-        ? props.offsetXByRow && props.offsetX
-          ? "0"
-          : "0"
-        : props.offsetXByRow && props.offsetX
-          ? "1.5rem"
-          : "0"}
-  );
-
-  background: ${theme.COLORS.SECONDARY};
-  border-radius: 20px;
-  border: 1px solid ${theme.COLORS.WHITE};
-  outline: none;
 `;
 
 export const ScrollDownContainer = styled.div`
@@ -158,4 +98,28 @@ export const InputDataMenu = styled.button`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+`;
+
+export const SeparatorContainer = styled.div`
+  border-bottom: 1px solid #dadada;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  > button {
+    padding: 0.75rem;
+    display: flex;
+    outline: none;
+    border: none;
+    gap: 0.5rem;
+    border-radius: 60px;
+    background: ${theme.COLORS.SELECT_INPUT};
+
+    > span {
+      font-size: 0.875rem;
+      color: ${theme.COLORS.DARK};
+      font-weight: ExtraLight;
+    }
+  }
 `;

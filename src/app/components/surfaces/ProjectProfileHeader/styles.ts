@@ -1,6 +1,10 @@
 import { theme } from "@/app/styles/theme";
 import { styled } from "@linaria/react";
 
+interface InputContentProps {
+  checked: boolean;
+}
+
 export const Container = styled.div`
   width: 100%;
   height: 5rem;
@@ -53,24 +57,42 @@ export const HeaderBoxProfileImage = styled.label`
   }
 `;
 
-export const InputContent = styled.div`
-  height: 3rem;
+export const InputContent = styled.div<InputContentProps>`
+  height: 40px;
   width: 90%;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
+
+  justify-content: space-between;
+
   position: relative;
   cursor: pointer;
+`;
 
-  input {
-    text-align: center;
+export const EditProjectContainer = styled.div`
+  display: flex;
+  width: 100%;
+
+  position: relative;
+
+  > svg {
+    position: relative;
+    right: 0;
+  }
+
+  > div:nth-of-type(2) {
+    position: absolute;
+    right: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 `;
 
 export const DataContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  position: relative;
+  width: 100%;
+  justify-content: space-around;
+  align-items: center;
 `;
 
 export const ButtonDataMenu = styled.div`

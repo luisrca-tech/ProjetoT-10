@@ -18,7 +18,6 @@ export default function FullScreenLoading({
 
   useEffect(() => {
     document.body.style.overflow = loading ? "hidden" : "unset";
-    // console.log(loading, `loading`);
   }, []);
 
   return (

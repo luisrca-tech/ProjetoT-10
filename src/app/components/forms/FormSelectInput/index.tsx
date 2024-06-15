@@ -7,13 +7,14 @@ import { BudgetContainer } from "./components/FooterSumContainer";
 import { useAtom } from "jotai";
 import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 
- interface FormSelectInputProps {
+interface FormSelectInputProps {
   inputDataMenuClick: (row: string) => void;
 }
 
-
-export default function FormSelectInput({ inputDataMenuClick }: FormSelectInputProps) {
-  const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom)
+export default function FormSelectInput({
+  inputDataMenuClick,
+}: FormSelectInputProps) {
+  const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
 
   return (
     <Container>
@@ -32,8 +33,7 @@ export default function FormSelectInput({ inputDataMenuClick }: FormSelectInputP
           ))}
       </InputsDataContainer>
       <Footer>
-        <BudgetContainer
-        />
+        <BudgetContainer />
       </Footer>
     </Container>
   );

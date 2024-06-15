@@ -19,13 +19,13 @@ import { isDatePickerOpenAtom } from "@/@atom/ProjectStates/isDatePickerOpenAtom
 import { stringRowAtom } from "@/@atom/ProjectStates/stringRowAtom";
 
 export default function Projeto() {
-  const [ checked, setChecked ] = useAtom(checkedAtom)
-  const [isDatePickerOpen, setIsDatePickerOpen] = useAtom(isDatePickerOpenAtom)
-  const [ , setStringRow ] = useAtom(stringRowAtom)
+  const [checked, setChecked] = useAtom(checkedAtom);
+  const [isDatePickerOpen, setIsDatePickerOpen] = useAtom(isDatePickerOpenAtom);
+  const [, setStringRow] = useAtom(stringRowAtom);
 
   function openDatePicker() {
     setIsDatePickerOpen(true);
-  };
+  }
 
   function inputDataMenuClick(row: string) {
     openDatePicker();
@@ -47,15 +47,13 @@ export default function Projeto() {
       <ProjectProfileHeader inputDataMenuClick={inputDataMenuClick} />
 
       <MainContainer>
-        {isDatePickerOpen && (
-          <CustomDateRangePicker />
-        )}
+        {isDatePickerOpen && <CustomDateRangePicker />}
         <FormContainer isDatePickerOpen={isDatePickerOpen}>
           <SwitchContainer>
             <span>Editar datas</span>
             <ToggleSwitch onChange={handleCheckedChange} />
           </SwitchContainer>
-          <FormSelectInput inputDataMenuClick={inputDataMenuClick}/>
+          <FormSelectInput inputDataMenuClick={inputDataMenuClick} />
         </FormContainer>
       </MainContainer>
 

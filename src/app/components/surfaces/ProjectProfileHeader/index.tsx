@@ -9,8 +9,9 @@ import {
   DataContainer,
   HeaderBoxProfileImage,
   InputContent,
+  EditProjectContainer,
 } from "./styles";
-
+import HeaderRowAndScrollDownContainer from "./components/HeaderRowAndScrollDownContainer";
 import { roboto } from "@/app/fonts";
 import Image from "next/image";
 import CalendarIcon from "../../../../../public/calendaricon.svg";
@@ -18,25 +19,27 @@ import { RiPencilFill } from "react-icons/ri";
 import { useAtom } from "jotai";
 import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
 import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
-
-
+import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
 interface ProjectProfileHeaderProps {
   inputDataMenuClick: (row: string) => void;
 }
 
-export function ProjectProfileHeader({ inputDataMenuClick }: ProjectProfileHeaderProps) {
-  const [ ranges ] = useAtom(rangesAtom)
-  const [ checked ] = useAtom(checkedAtom)
-
-  const [inputValue, setInputValue] = useState("");
+export function ProjectProfileHeader({
+  inputDataMenuClick,
+}: ProjectProfileHeaderProps) {
+  const [ranges] = useAtom(rangesAtom);
+  const [checked] = useAtom(checkedAtom);
+  const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
+  const [, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const words = inputValue.split(" ");
+  const words =
+    projectSelectedValue?.selectedValues[`projectRow-text`]?.split(" ");
 
-  const initials = words.map((word) => word.charAt(0));
+  const initials = words?.map((word) => word.charAt(0));
 
-  const initialsString = initials.join("");
+  const initialsString = initials?.join("");
 
   useEffect(() => {
     const storedValue = localStorage.getItem("ProjectProfileInputHeader");
@@ -50,12 +53,6 @@ export function ProjectProfileHeader({ inputDataMenuClick }: ProjectProfileHeade
     if (file) {
       setSelectedFile(file);
     }
-  };
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    setInputValue(newValue);
-    localStorage.setItem("ProjectProfileInputHeader", newValue);
   };
 
   const handlePencilClick = () => {
@@ -78,23 +75,21 @@ export function ProjectProfileHeader({ inputDataMenuClick }: ProjectProfileHeade
               alt="Imagem selecionada"
             />
           ) : (
-            <span>{initialsString}</span>
+            <span>{initialsString?.toUpperCase()}</span>
           )}
           <input type="file" onChange={handleFileChange} accept="image/*" />
         </HeaderBoxProfileImage>
-        <InputContent>
-          {checked ? (
-            <strong>Duração:</strong>
+        <InputContent checked={checked}>
+          {!checked ? (
+            <EditProjectContainer>
+              <HeaderRowAndScrollDownContainer />
+              <div>
+                <RiPencilFill size={24} onClick={handlePencilClick} />
+              </div>
+            </EditProjectContainer>
           ) : (
-            <input
-              type="text"
-              value={inputValue}
-              onChange={handleChange}
-              ref={inputRef}
-            />
-          )}
-          {checked ? (
             <DataContainer>
+              <strong>Duração:</strong>
               {!ranges["global-project-data"].isSelected ? (
                 <ButtonDataMenu
                   onClick={() => inputDataMenuClick("global-project-data")}
@@ -117,8 +112,6 @@ export function ProjectProfileHeader({ inputDataMenuClick }: ProjectProfileHeade
                 </CalendarDateValues>
               )}
             </DataContainer>
-          ) : (
-            <RiPencilFill size={24} onClick={handlePencilClick} />
           )}
         </InputContent>
       </ContentContainer>
