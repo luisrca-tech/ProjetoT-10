@@ -3,26 +3,34 @@ import { styled } from "@linaria/react";
 
 type ContainerProps = {
   checked: boolean;
+  isInProjectHeader: boolean;
+};
+
+type InputProps = {
+  hasValue: Boolean;
 };
 
 export const Container = styled.div<ContainerProps>`
   display: flex;
-  width: ${(props) => (props.checked ? "calc(100% - 28px)" : "32%")};
+
+  width: ${(props) =>
+    props.checked
+      ? "calc(100% - 28px)"
+      : props.isInProjectHeader
+        ? "100%"
+        : "32%"};
   height: 2.5rem;
   align-items: center;
   position: relative;
 
   img {
+    display: ${(props) => (props.isInProjectHeader ? "none" : "flex")};
     position: absolute;
     top: 5;
     right: 1rem;
     z-index: 2;
   }
 `;
-
-type InputProps = {
-  hasValue: Boolean;
-};
 
 export const Input = styled.input<InputProps>`
   display: inline-block;
@@ -39,13 +47,11 @@ export const Input = styled.input<InputProps>`
   border: none;
   outline: none;
   z-index: 1;
+  font-size: 1rem;
 
   &::placeholder {
-    font-size: 1rem;
-    color: ${theme.COLORS.SECONDARY_DARK};
+    color: ${theme.COLORS.GRAY};
   }
-
-  box-shadow: -3px 1px 3px rgba(0, 0, 0, 0.25);
 
   &::-webkit-inner-spin-button,
   &::-webkit-outer-spin-button {

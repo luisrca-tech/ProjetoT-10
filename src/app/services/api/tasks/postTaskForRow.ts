@@ -40,10 +40,7 @@ export async function postTaskForRow({
     },
   );
 
-  console.log(selectedValue, `SelectedValue`);
-
   const postTaskData = await postTaskResp.json();
-  console.log(postTaskData, `postTaskData`);
 
   if (postTaskData && postTaskData.id && fieldsIds) {
     const postChargeCustomFieldResp = await fetch(

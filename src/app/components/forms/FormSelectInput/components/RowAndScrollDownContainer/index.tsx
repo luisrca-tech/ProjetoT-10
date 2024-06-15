@@ -3,16 +3,13 @@ import { useCallback, useEffect, useState } from "react";
 import {
   Container,
   InputsRow,
-  ScrollDownContainer,
-  SeparatorContainer,
   InputDataMenu,
   DeleteButtonAnimationFrame,
   CalendarDateValues,
 } from "./styles";
 import Image from "next/image";
-import { poppins } from "@/app/fonts";
 
-import AddButton from "../../../../../../../public/add.svg";
+import ScrollDownContainer from "../ScrollDownContainer";
 import CalendarIcon from "../../../../../../../public/calendaricon.svg";
 import TrashAnimation from "../../../../../../../public/trashanimation.svg";
 import SelectInput from "@/app/components/inputs/SelectInput";
@@ -46,7 +43,6 @@ export default function RowAndScrollDownContainer({
   const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
     rowsAndSelectedValuesAtom,
   );
-  const [chargeOptions] = useAtom(chargeOptionsAtom);
 
   const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
     null,
@@ -138,16 +134,6 @@ export default function RowAndScrollDownContainer({
     }));
   }
 
-  useEffect(() => {
-    console.log(rowsAndSelectedValues, `rowsAndSelectedValues`);
-  }, [rowsAndSelectedValues]);
-
-  const handleButtonClick = (value: string, row: string, index: number) => {
-    if (value) {
-      handleInputChange(`firstTextValue${row}`, value, index);
-    }
-  };
-
   const handleTouchStartForRow = (
     event: React.TouchEvent,
     rowIndex: string,
@@ -162,7 +148,6 @@ export default function RowAndScrollDownContainer({
   const handleTouchMove = (event: React.TouchEvent, rowIndex: string) => {
     if (startX !== null) {
       const newOffsetX = event.touches[0].clientX - startX;
-      // Permitir o arrasto apenas para a esquerda
       if (newOffsetX < 0) {
         setOffsetXByRow((prevState) => ({
           ...prevState,
@@ -202,9 +187,6 @@ export default function RowAndScrollDownContainer({
     }
   }, [addRow, canAddRow, isNewRowAdded]);
 
-  useEffect(() => {
-    console.log(chargeOptions, `chargeOptions`);
-  }, [chargeOptions]);
   return (
     <Container
       key={row}
@@ -222,7 +204,6 @@ export default function RowAndScrollDownContainer({
           id={`firstTextValue${row}`}
           onChange={(value) => handleInputChange(`firstTextValue${row}`, value)}
           hasValue={isValueInInput(row, "firstTextValue")}
-          values={offices}
           inputValue={
             rowsAndSelectedValues.selectedValues[`firstTextValue${row}-text`]
           }
@@ -246,7 +227,6 @@ export default function RowAndScrollDownContainer({
                 handleInputChange(`secondTextValue${row}`, value)
               }
               hasValue={isValueInInput(row, "secondTextValue")}
-              values={offices}
               inputValue={
                 rowsAndSelectedValues.selectedValues[
                   `secondTextValue${row}-text`
@@ -261,7 +241,6 @@ export default function RowAndScrollDownContainer({
                 handleInputChange(`thirdTextValue${row}`, value)
               }
               hasValue={isValueInInput(row, "thirdTextValue")}
-              values={offices}
               inputValue={
                 rowsAndSelectedValues.selectedValues[
                   `thirdTextValue${row}-text`
@@ -291,29 +270,7 @@ export default function RowAndScrollDownContainer({
           </>
         )}
       </InputsRow>
-      {isSelectOpen(row) && (
-        <ScrollDownContainer
-          className={poppins.className}
-          onMouseDown={(e) => e.preventDefault()}
-        >
-          {Object.values(chargeOptions).map((value, index) => (
-            <SeparatorContainer
-              key={index}
-              className={row === getLastRowIndex() ? "last-row" : ""}
-            >
-              <button
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  handleButtonClick(value.name, row, index);
-                }}
-              >
-                <Image src={AddButton} alt="" />
-                <span>{value.name}</span>
-              </button>
-            </SeparatorContainer>
-          ))}
-        </ScrollDownContainer>
-      )}
+      {isSelectOpen(row) && <ScrollDownContainer row={row} />}
     </Container>
   );
 }

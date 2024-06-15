@@ -7,27 +7,32 @@ import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
 import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 
 export function BudgetContainer() {
-  const [checked] = useAtom(checkedAtom)
-  const [ranges] = useAtom(rangesAtom)
-  const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom)
+  const [checked] = useAtom(checkedAtom);
+  const [ranges] = useAtom(rangesAtom);
+  const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
 
- const totalHoursSum = rowsAndSelectedValues.rows.reduce((acc, row) => {
-    const hours = parseInt(
-      rowsAndSelectedValues.selectedValues[`secondTextValue${row}`] || "0",
-      10,
-    );
-    const value = parseInt(
-      rowsAndSelectedValues.selectedValues[`thirdTextValue${row}`] || "0",
-      10,
-    );
-    acc.hours += hours;
-    acc.value += hours * value;
-    return acc;
-  }, { hours: 0, value: 0 });
+  const totalHoursSum = rowsAndSelectedValues.rows.reduce(
+    (acc, row) => {
+      const hours = parseInt(
+        rowsAndSelectedValues.selectedValues[`secondTextValue${row}-text`] ||
+          "0",
+        10,
+      );
+      const value = parseInt(
+        rowsAndSelectedValues.selectedValues[`thirdTextValue${row}-text`] ||
+          "0",
+        10,
+      );
+      acc.hours += hours;
+      acc.value += hours * value;
+      return acc;
+    },
+    { hours: 0, value: 0 },
+  );
 
-const { hours: totalHours, value: totalValue } = totalHoursSum;
+  const { hours: totalHours, value: totalValue } = totalHoursSum;
 
-const totalDaysSum = Object.values(ranges).reduce((acc, range) => {
+  const totalDaysSum = Object.values(ranges).reduce((acc, range) => {
     if (range.startDate && range.endDate) {
       const daysArray = eachDayOfInterval({
         start: range.startDate,
@@ -38,8 +43,7 @@ const totalDaysSum = Object.values(ranges).reduce((acc, range) => {
     return acc;
   }, 0);
 
-const totalDays = totalDaysSum - 2;
-
+  const totalDays = totalDaysSum - 2;
 
   return (
     <Container>

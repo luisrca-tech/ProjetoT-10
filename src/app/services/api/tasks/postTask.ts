@@ -17,7 +17,7 @@ function getOptionValueForRow(
   selectedValues: { [key: string]: string },
 ): number {
   const optionKey = `firstTextValue${row}-option`;
-  console.log(`cargo da posicao atual`, Number(selectedValues[optionKey]));
+
   return Number(selectedValues[optionKey]);
 }
 

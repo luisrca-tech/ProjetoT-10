@@ -1,4 +1,4 @@
-import { ChargeOptionType } from "./type";
+import { ProjectOptionType } from "./type";
 import { atom } from "jotai";
 
-export const projectOptionsAtom = atom<ChargeOptionType[]>([]);
+export const projectOptionsAtom = atom<ProjectOptionType[]>([]);
