@@ -8,8 +8,7 @@ export interface RowsAndSelectedValueProps {
 }
 
 interface postTasksProps {
-  listId: string;
-  fieldId: string;
+  fieldsIds: { chargeFieldId: string; projectFieldId: string };
   rowsAndSelectedValues: RowsAndSelectedValueProps;
 }
 
@@ -23,11 +22,12 @@ function getOptionValueForRow(
 }
 
 export async function postTasks({
-  listId,
-  fieldId,
+  fieldsIds,
   rowsAndSelectedValues,
 }: postTasksProps) {
   const rows = rowsAndSelectedValues.rows;
+  const listId = "901303987731"; //mocado.
+
   for (let i = 0; i < rows.length - 1; i++) {
     const row = rows[i];
     const selectedValue = getOptionValueForRow(
@@ -36,7 +36,7 @@ export async function postTasks({
     );
     await postTaskForRow({
       listId,
-      fieldId,
+      fieldsIds,
       row,
       selectedValue,
       rowsAndSelectedValues,

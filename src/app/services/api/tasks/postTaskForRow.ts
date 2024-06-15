@@ -7,7 +7,7 @@ export interface RowsAndSelectedValueProps {
 
 interface postTaskForRowProps {
   listId: string;
-  fieldId: string;
+  fieldsIds: { chargeFieldId: string; projectFieldId: string };
   row: string;
   selectedValue: number;
   rowsAndSelectedValues: RowsAndSelectedValueProps;
@@ -15,7 +15,7 @@ interface postTaskForRowProps {
 
 export async function postTaskForRow({
   listId,
-  fieldId,
+  fieldsIds,
   row,
   selectedValue,
 }: postTaskForRowProps) {
@@ -45,9 +45,9 @@ export async function postTaskForRow({
   const postTaskData = await postTaskResp.json();
   console.log(postTaskData, `postTaskData`);
 
-  if (postTaskData && postTaskData.id && fieldId) {
-    const postCustomFieldResp = await fetch(
-      `https://api.clickup.com/api/v2/task/${postTaskData.id}/field/${fieldId}?`,
+  if (postTaskData && postTaskData.id && fieldsIds) {
+    const postChargeCustomFieldResp = await fetch(
+      `https://api.clickup.com/api/v2/task/${postTaskData.id}/field/${fieldsIds.chargeFieldId}?`,
       {
         method: "POST",
         headers: {
@@ -57,7 +57,21 @@ export async function postTaskForRow({
         body: JSON.stringify({ value: selectedValue }),
       },
     );
-    const postCustomFieldCharge = await postCustomFieldResp.json();
+    const postCustomFieldCharge = await postChargeCustomFieldResp.json();
     console.log(postCustomFieldCharge, `postCustomFieldCharge`);
+
+    const postProjectCustomFieldResp = await fetch(
+      `https://api.clickup.com/api/v2/task/${postTaskData.id}/field/${fieldsIds.projectFieldId}?`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+        },
+        body: JSON.stringify({ value: selectedValue }),
+      },
+    );
+    const postCustomFieldProject = await postProjectCustomFieldResp.json();
+    console.log(postCustomFieldProject, `postCustomFieldCharge`);
   }
 }

@@ -29,6 +29,10 @@ import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectFieldAtom";
 
 import { loading } from "@/@atom/LoadingState/loadingAtom";
 import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+type FieldsIdType = {
+  chargeFieldId: string;
+  projectFieldId: string;
+};
 
 export default function Header() {
   const [, setProjectOptions] = useAtom(projectOptionsAtom);
@@ -38,11 +42,12 @@ export default function Header() {
 
   const [showModal, setShowModal] = useState<boolean>(false);
   const [customFieldsResponse, setGetCustomFieldsResponse] = useState([]);
-
-  const [fieldId, setFieldId] = useState<string>("");
+  const listId = "901303987731"; //mocado.
+  const [fieldsIds, setFieldsIds] = useState<FieldsIdType>({
+    chargeFieldId: "",
+    projectFieldId: "",
+  });
   const [customFiledLoading, setCustomFieldLoading] = useState<boolean>();
-
-  const listId = "901303987731";
 
   const router = useRouter();
   const currentPath = usePathname();
@@ -60,13 +65,16 @@ export default function Header() {
       const projectCustomField = getCustomFieldResp.find(
         (field: { name: string }) => field.name === "PixelCraft_projeto",
       );
-
-      const projectOptions = projectCustomField.type_config.options;
-      setProjectOptions(projectOptions);
-
       const chargeFieldId = chargeCustomField.id;
-      setFieldId(chargeFieldId);
+      const projectFieldId = projectCustomField.id;
+      console.log(`projectCustomField`, projectCustomField.id);
+      const fields = { chargeFieldId, projectFieldId };
+      console.log(fields, `fields`);
 
+      setFieldsIds(fields);
+      const projectOptions = projectCustomField.type_config.options;
+
+      setProjectOptions(projectOptions);
       const chargeOptions = chargeCustomField.type_config.options;
       setChargeOptions(chargeOptions);
 
@@ -78,8 +86,7 @@ export default function Header() {
 
   async function taskPostRequest() {
     await postTasks({
-      listId,
-      fieldId,
+      fieldsIds,
       rowsAndSelectedValues,
     });
   }
