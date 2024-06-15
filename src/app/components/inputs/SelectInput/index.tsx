@@ -1,22 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Input } from "./styles";
 import ArrowDown from "../../../../../public/arrowdown.svg";
 import ArrowRight from "../../../../../public/arrowright.svg";
 import Image from "next/image";
 import { useAtom } from "jotai";
 import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
+import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { poppins } from "@/app/fonts";
 
 interface SelectInputProps {
   id: string;
   onChange: (value: string) => void;
   placeholder: string;
   hasValue: boolean;
-  values: { [key: string]: string };
   inputValue: string;
   isSelectOpen?: boolean;
   setIsSelectOpen?: (boolean: boolean) => void;
   value?: string;
   type: string;
+  isInProjectHeader?: boolean;
 }
 
 export default function SelectInput({
@@ -27,10 +29,13 @@ export default function SelectInput({
   inputValue,
   isSelectOpen,
   setIsSelectOpen,
+  isInProjectHeader,
   ...rest
 }: SelectInputProps) {
   const [checked] = useAtom(checkedAtom);
-
+  const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
+    rowsAndSelectedValuesAtom,
+  );
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const handleChange = (
@@ -61,7 +66,7 @@ export default function SelectInput({
   };
 
   return (
-    <Container checked={checked}>
+    <Container checked={checked} isInProjectHeader>
       <Input
         {...rest}
         onBlur={handleInputBlur}
@@ -73,6 +78,7 @@ export default function SelectInput({
         value={inputValue || ""}
         onChange={handleChange}
         onFocus={handleInputFocus}
+        className={poppins.className}
       />
 
       {!hasValue ? (
