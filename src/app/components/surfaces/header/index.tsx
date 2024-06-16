@@ -21,7 +21,7 @@ import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
 import { postTasks } from "@/app/services/api/tasks/postTask";
-
+import { toast } from "react-toastify";
 import { getCustomFields } from "@/app/services/api/customFields/getCustomFields";
 import { useAtom } from "jotai";
 import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
@@ -61,6 +61,11 @@ export default function Header() {
       setLoading(true);
 
       const getCustomFieldResp = await getCustomFields(listId);
+
+      if (!getCustomFieldResp) {
+        toast.error("Nao foi possível acessar customFields deste listId !");
+      }
+
       setGetCustomFieldsResponse(getCustomFieldResp);
       const chargeCustomField = getCustomFieldResp.find(
         (field: { name: string }) => field.name === "PixelCraft_cargos",
@@ -102,15 +107,24 @@ export default function Header() {
     }
 
     customFieldsGetRequest();
+    toast.success("CustomFields da lista acessados !");
   }, [projectSelectedValue, setChargeOptions, setLoading, setProjectOptions]);
 
   async function taskPostRequest() {
     setLoading(true);
-    await postTasks({
-      fieldsIds,
-      rowsAndSelectedValues,
-      projectSelectedValue,
-    });
+    try {
+      await postTasks({
+        fieldsIds,
+        rowsAndSelectedValues,
+        projectSelectedValue,
+      });
+      toast.success("Tasks criadas e vinculadas ao NOME DO PROJETO");
+    } catch (error) {
+      toast.error("Não foi possível concluir a criação das Tasks");
+    } finally {
+      setLoading(false);
+    }
+
     setLoading(false);
   }
 
