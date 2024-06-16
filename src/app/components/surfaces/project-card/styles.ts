@@ -2,6 +2,7 @@ import { styled } from "@linaria/react";
 import { theme } from "@/app/styles/theme";
 
 export const Container = styled.div`
+  margin-top: 8rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
