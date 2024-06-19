@@ -29,6 +29,8 @@ import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectFieldAtom";
 import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
 import { loading } from "@/@atom/LoadingState/loadingAtom";
 import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
+
 type FieldsIdType = {
   chargeFieldId: string;
   projectFieldId: string;
@@ -39,6 +41,7 @@ type FieldsIdType = {
 export default function Header() {
   const [, setProjectOptions] = useAtom(projectOptionsAtom);
   const [, setChargeOptions] = useAtom(chargeOptionsAtom);
+  const [ranges] = useAtom(rangesAtom);
   const [, setLoading] = useAtom(loading);
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
@@ -51,8 +54,6 @@ export default function Header() {
     valueFieldId: "",
     hoursPerMonthCustomFieldId: "",
   });
-  const [customFiledLoading, setCustomFieldLoading] = useState<boolean>();
-
   const router = useRouter();
   const currentPath = usePathname();
 
@@ -108,24 +109,24 @@ export default function Header() {
 
     customFieldsGetRequest();
     toast.success("CustomFields da lista acessados !");
-  }, [projectSelectedValue, setChargeOptions, setLoading, setProjectOptions]);
+  }, [setChargeOptions, setLoading, setProjectOptions]);
 
   async function taskPostRequest() {
-    setLoading(true);
     try {
+      setLoading(true);
       await postTasks({
         fieldsIds,
         rowsAndSelectedValues,
         projectSelectedValue,
+        ranges,
       });
+
       toast.success("Tasks criadas e vinculadas ao NOME DO PROJETO");
     } catch (error) {
       toast.error("Não foi possível concluir a criação das Tasks");
     } finally {
       setLoading(false);
     }
-
-    setLoading(false);
   }
 
   const handleMenu = () => {
@@ -158,6 +159,30 @@ export default function Header() {
     }
     return null;
   };
+  let rangesCondition = true;
+  const keys = Object.keys(ranges);
+  for (let i = 0; i < keys.length - 1; i++) {
+    const key = keys[i];
+    if (!ranges[key].startDate || !ranges[key].endDate) {
+      rangesCondition = false;
+      break;
+    }
+  }
+
+  // Verificar se selectedValues não está vazio em rowsAndSelectedValues
+  const selectedValuesNotEmpty1 = Object.values(
+    rowsAndSelectedValues.selectedValues,
+  ).every((value) => value !== "");
+
+  // Verificar se selectedValues não está vazio em projectSelectedValue
+  const selectedValuesNotEmpty2 =
+    Object.keys(projectSelectedValue.selectedValue).length > 0;
+
+  const isConditionMet =
+    rangesCondition &&
+    selectedValuesNotEmpty1 &&
+    selectedValuesNotEmpty2 &&
+    loading;
 
   const renderIconsAndSidebar = () => {
     if (!isAuthPage()) {
@@ -203,7 +228,7 @@ export default function Header() {
               {isProjectPage() ? (
                 <PostTaskCheckButton
                   onClick={taskPostRequest}
-                  disabled={customFiledLoading}
+                  disabled={!isConditionMet}
                 >
                   <RiCheckFill size={24} />
                 </PostTaskCheckButton>
