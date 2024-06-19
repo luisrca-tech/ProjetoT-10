@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
-import { Container, Input } from "./styles";
-import ArrowDown from "../../../../../public/arrowdown.svg";
-import ArrowRight from "../../../../../public/arrowright.svg";
-import Image from "next/image";
+import { useState } from "react";
+import { Container, Input, InputContainer } from "./styles";
+
 import { useAtom } from "jotai";
 import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
 import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
@@ -10,7 +8,7 @@ import { poppins } from "@/app/fonts";
 
 interface SelectInputProps {
   id: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   placeholder: string;
   hasValue: boolean;
   inputValue: string;
@@ -19,6 +17,8 @@ interface SelectInputProps {
   value?: string;
   type: string;
   isInProjectHeader?: boolean;
+  isLastRow?: boolean;
+  readOnly?: boolean;
 }
 
 export default function SelectInput({
@@ -30,13 +30,14 @@ export default function SelectInput({
   isSelectOpen,
   setIsSelectOpen,
   isInProjectHeader,
+  isLastRow,
+  readOnly,
   ...rest
 }: SelectInputProps) {
   const [checked] = useAtom(checkedAtom);
-  const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
-    rowsAndSelectedValuesAtom,
-  );
-  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const showError = !isLastRow && hasValue === false ? true : false;
+
+  const [, setIsFocused] = useState<boolean>(false);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>,
@@ -46,8 +47,9 @@ export default function SelectInput({
       event.target instanceof HTMLInputElement
     ) {
       const newValue = event.target.value;
-
-      onChange(newValue);
+      if (onChange) {
+        onChange(newValue);
+      }
     }
   };
 
@@ -60,36 +62,31 @@ export default function SelectInput({
 
   const handleInputBlur = () => {
     setIsFocused(false);
+
     if (setIsSelectOpen) {
       setIsSelectOpen(false);
     }
   };
 
   return (
-    <Container checked={checked} isInProjectHeader>
-      <Input
-        {...rest}
-        onBlur={handleInputBlur}
-        autoComplete="off"
-        hasValue={hasValue}
-        placeholder={placeholder}
-        type={!rest.type ? "text" : rest.type}
-        id={id}
-        value={inputValue || ""}
-        onChange={handleChange}
-        onFocus={handleInputFocus}
-        className={poppins.className}
-      />
-
-      {!hasValue ? (
-        !isFocused ? (
-          <Image src={ArrowRight} alt="" />
-        ) : (
-          <Image src={ArrowDown} alt="" />
-        )
-      ) : (
-        ""
-      )}
-    </Container>
+    <InputContainer>
+      <Container checked={checked} isInProjectHeader>
+        <Input
+          {...rest}
+          onBlur={handleInputBlur}
+          autoComplete="off"
+          hasValue={hasValue}
+          placeholder={placeholder}
+          type={!rest.type ? "text" : rest.type}
+          id={id}
+          value={inputValue || ""}
+          onChange={handleChange}
+          onFocus={handleInputFocus}
+          className={poppins.className}
+          showError={showError}
+          readOnly={readOnly}
+        />
+      </Container>
+    </InputContainer>
   );
 }
