@@ -37,7 +37,7 @@ export async function postTasks({
   const rows = rowsAndSelectedValues.rows;
 
   const projectFieldSelectedValue =
-    projectSelectedValue.selectedValues["projectRow-option"];
+    projectSelectedValue.selectedValue["projectRow-option"];
 
   const listId = "901303987731"; //mocado.
 
