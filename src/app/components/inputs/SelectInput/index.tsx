@@ -3,7 +3,6 @@ import { Container, Input, InputContainer } from "./styles";
 
 import { useAtom } from "jotai";
 import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { poppins } from "@/app/fonts";
 
 interface SelectInputProps {
@@ -36,7 +35,6 @@ export default function SelectInput({
 }: SelectInputProps) {
   const [checked] = useAtom(checkedAtom);
   const showError = !isLastRow && hasValue === false ? true : false;
-
   const [, setIsFocused] = useState<boolean>(false);
 
   const handleChange = (
