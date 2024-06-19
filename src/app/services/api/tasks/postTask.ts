@@ -1,5 +1,6 @@
 "use client";
 
+import { SelectableRangeProps } from "@/@atom/ProjectStates/rangesAtom";
 import { postTaskForRow } from "./postTaskForRow";
 import { ProjectSelectedValueProps } from "@/@atom/ProjectStates/projectSelectedValue";
 export interface RowsAndSelectedValueProps {
@@ -7,6 +8,10 @@ export interface RowsAndSelectedValueProps {
   selectedValues: { [key: string]: string };
 }
 
+interface DatesFieldSelectedValue {
+  row: string;
+  ranges: { [key: string]: SelectableRangeProps };
+}
 interface postTasksProps {
   fieldsIds: {
     chargeFieldId: string;
@@ -16,6 +21,7 @@ interface postTasksProps {
   };
   rowsAndSelectedValues: RowsAndSelectedValueProps;
   projectSelectedValue: ProjectSelectedValueProps;
+  ranges: { [key: string]: SelectableRangeProps };
 }
 interface ChargeFieldSelectedValue {
   chargeValueNumber: number;
@@ -26,6 +32,7 @@ export async function postTasks({
   fieldsIds,
   rowsAndSelectedValues,
   projectSelectedValue,
+  ranges,
 }: postTasksProps) {
   const rows = rowsAndSelectedValues.rows;
 
@@ -53,6 +60,12 @@ export async function postTasks({
     };
   }
 
+  function getOptionDateForRow({ row, ranges }: DatesFieldSelectedValue) {
+    const valueDateRow = ranges[row];
+
+    return valueDateRow;
+  }
+
   for (let i = 0; i < rows.length - 1; i++) {
     const row = rows[i];
     const FieldSelectedValue = getOptionValueForRow(
@@ -63,6 +76,8 @@ export async function postTasks({
     const valueSelectedValue = FieldSelectedValue.hourPerValueNumber;
     const hoursPerMonthCustom = FieldSelectedValue.hoursPerMonthValueNumber;
 
+    const FieldDateSelectedValue = getOptionDateForRow({ row, ranges });
+
     await postTaskForRow({
       listId,
       fieldsIds,
@@ -71,6 +86,7 @@ export async function postTasks({
       projectFieldSelectedValue,
       valueSelectedValue,
       hoursPerMonthCustom,
+      FieldDateSelectedValue,
     });
   }
 }
