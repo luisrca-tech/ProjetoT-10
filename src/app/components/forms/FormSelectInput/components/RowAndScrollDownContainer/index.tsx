@@ -64,12 +64,7 @@ export default function RowAndScrollDownContainer({
   };
 
   const lastRowIndex = useGetLastRowIndex();
-  console.log(lastRowIndex, `lastRowIndex`);
   const isLastRow = row === lastRowIndex;
-  useEffect(() => {
-    console.log(row, `row`);
-    console.log(isLastRow, `isLastRow`);
-  }, [isLastRow, row]);
   const toggleSelectOpen = useToggleSelectOpen(row);
   const isValueInFirstInput = useIsValueInInput(row, "firstTextValue");
   const isValueInSecondInput = useIsValueInInput(row, "secondTextValue");
