@@ -1,13 +1,13 @@
 import { atom } from "jotai";
 
 export interface ProjectSelectedValueProps {
-  selectedValues: { [key: string]: string };
+  selectedValue: { [key: string]: string };
 }
 
-const initialRowsAndSelectedValuesState: ProjectSelectedValueProps = {
-  selectedValues: {},
+const initialProjectSelectedValueState: ProjectSelectedValueProps = {
+  selectedValue: {},
 };
 
 export const projectSelectedValuePropAtom = atom(
-  initialRowsAndSelectedValuesState,
+  initialProjectSelectedValueState,
 );
