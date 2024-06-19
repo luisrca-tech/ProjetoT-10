@@ -1,6 +1,5 @@
 import { BudgetContent, Container, ProjectDuration } from "./styles";
 import { poppins } from "@/app/fonts";
-import { eachDayOfInterval } from "date-fns";
 import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
 import { useAtom } from "jotai";
 import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
@@ -31,19 +30,13 @@ export function BudgetContainer() {
   );
 
   const { hours: totalHours, value: totalValue } = totalHoursSum;
+  const startDate = ranges["global-project-data"]?.startDate;
+  const endDate = ranges["global-project-data"]?.endDate;
 
-  const totalDaysSum = Object.values(ranges).reduce((acc, range) => {
-    if (range.startDate && range.endDate) {
-      const daysArray = eachDayOfInterval({
-        start: range.startDate,
-        end: range.endDate,
-      });
-      acc += daysArray.length;
-    }
-    return acc;
-  }, 0);
-
-  const totalDays = totalDaysSum - 2;
+  const totalDays =
+    startDate && endDate
+      ? (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+      : 0;
 
   return (
     <Container>
