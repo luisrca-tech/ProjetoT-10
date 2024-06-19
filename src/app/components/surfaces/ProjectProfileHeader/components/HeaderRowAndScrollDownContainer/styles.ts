@@ -6,7 +6,7 @@ export const Container = styled.div`
   border-radius: 20px;
   position: relative;
   transition: transform 0.5s ease;
-  width: 50%;
+  width: 100%;
 `;
 
 export const HeaderContent = styled.div`
