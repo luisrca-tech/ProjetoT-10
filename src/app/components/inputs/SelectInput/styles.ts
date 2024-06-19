@@ -8,11 +8,16 @@ type ContainerProps = {
 
 type InputProps = {
   hasValue: Boolean;
+  showError: boolean;
 };
+
+export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const Container = styled.div<ContainerProps>`
   display: flex;
-
   width: ${(props) =>
     props.checked
       ? "calc(100% - 28px)"
@@ -44,7 +49,8 @@ export const Input = styled.input<InputProps>`
   background-color: ${(props) =>
     props.hasValue ? "transparent" : `${theme.COLORS.SELECT_INPUT}`};
   border-radius: 60px;
-  border: none;
+  border: ${(props) =>
+    props.showError ? `1px solid ${theme.COLORS.ERROR}` : `none`};
   outline: none;
   z-index: 1;
   font-size: 1rem;
