@@ -142,12 +142,17 @@ export const PostTaskCheckButton = styled.button<PostTaskCheckButtonType>`
   height: 1.5rem;
   border: none;
   background-color: transparent;
-  color: ${theme.COLORS.PRIMARY};
-  opacity: ${(props) => (props.disabled ? "0.5" : 1)};
+  color: ${(props) =>
+    props.disabled ? `${theme.COLORS.GRAY}` : `${theme.COLORS.PRIMARY}`};
+
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  &:hover {
+    transform: scale(1.3);
+  }
 `;
 
 export const UpdateTaskCheckButton = styled.button`
