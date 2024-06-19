@@ -221,3 +221,19 @@ export const Footer = styled.div`
     width: 100%;
   }
 `;
+
+export const ValidationDateError = styled.button`
+  border: none;
+  background-color: transparent;
+  align-self: flex-start;
+  cursor: pointer;
+
+  > span {
+    font-size: 14px;
+    color: ${theme.COLORS.ERROR};
+  }
+
+  &:hover {
+    transform: scale(1.02);
+  }
+`;
