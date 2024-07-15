@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
   if (!WEBHOOK_SECRET) {
     throw new Error(
-      "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local",
+      "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local"
     );
   }
 
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
     console.error("Error handling event", error);
     return Response.json(
       { success: false, eventType: evt.type },
-      { status: 500 },
+      { status: 500 }
     );
   }
   // Do something with the payload
