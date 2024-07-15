@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { roboto } from "./fonts";
 import { css } from "@linaria/core";
+import { ClerkProvider } from "@clerk/nextjs";
 
 const globalStyle = css`
   :root {
@@ -47,8 +48,12 @@ const globalStyle = css`
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-br" className={globalStyle}>
-        <body className={roboto.className}>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="pt-br" className={globalStyle}>
+        <body className={roboto.className}>
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

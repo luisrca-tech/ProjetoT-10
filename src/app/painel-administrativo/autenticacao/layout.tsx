@@ -1,9 +1,10 @@
-"use client";
-
 import { lighten } from "polished";
 import { ReactNode } from "react";
 import { styled } from "@linaria/react";
 import { theme } from "@/app/styles/theme";
+import { auth } from "@clerk/nextjs/server";
+import { Toaster } from "sonner";
+import { redirect } from "next/navigation";
 
 const Container = styled.div`
   width: 100%;
@@ -27,8 +28,12 @@ const Main = styled.main`
 `;
 
 export default function AuthLayout({ children }: AuthHeaderProps) {
+  const { userId } = auth();
+
+  if (userId) redirect("/painel-administrativo/projetos");
   return (
     <Container>
+      <Toaster richColors />
       <Main>{children}</Main>
     </Container>
   );

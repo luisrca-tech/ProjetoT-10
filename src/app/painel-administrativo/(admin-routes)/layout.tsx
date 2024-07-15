@@ -1,7 +1,8 @@
-"use client";
 import { ReactNode } from "react";
 import { styled } from "@linaria/react";
-import Header from "../components/surfaces/header";
+import { Toaster } from "sonner";
+import { redirect } from "next/navigation";
+import { auth } from "@clerk/nextjs/server";
 
 const Container = styled.div`
   width: 100%;
@@ -13,8 +14,14 @@ type AuthHeaderProps = {
 };
 
 export default function PrivateLayout({ children }: AuthHeaderProps) {
+  auth().protect({
+    unauthenticatedUrl: "/painel-administrativo/autenticacao/login",
+    unauthorizedUrl: "/",
+  });
+
   return (
     <>
+      <Toaster richColors />
       <Container>{children}</Container>
     </>
   );

@@ -21,7 +21,7 @@ export const Container = styled.div<ContainerProps>`
 `;
 
 type InputProps = {
-  hasValue: Boolean;
+  hasValue?: Boolean;
 };
 
 export const Input = styled.input<InputProps>`

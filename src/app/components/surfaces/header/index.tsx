@@ -11,8 +11,12 @@ import {
   AddProjectButton,
   PostTaskCheckButton,
   UpdateTaskCheckButton,
+  SignOutAndProfileContainer,
+  UserData,
+  SignOutButton,
+  UserDataContainer,
 } from "./styles";
-import { IoMenu, IoAdd } from "react-icons/io5";
+import { IoMenu, IoAdd, IoLogOutOutline } from "react-icons/io5";
 import { poppins } from "@/app/fonts";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -20,14 +24,16 @@ import Modal from "../Modal";
 import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
-import { postTasks } from "@/app/services/api/tasks/postTask";
-import { updateTask } from "@/app/services/api/tasks/updateTask";
-import { getCustomFields } from "@/app/services/api/customFields/getCustomFields";
 import { useAtom } from "jotai";
 import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
+import { getCustomFields } from "@/app/api/customFields/getCustomFields";
+import { updateTask } from "@/app/api/tasks/updateTask";
+import { postTasks } from "@/app/api/tasks/postTask";
+import { signOut } from "next-auth/react";
+import { UserButton } from "@clerk/nextjs";
 
 export default function Header() {
-  const [, setChargeOptions] = useAtom(chargeOptionsAtom)
+  const [, setChargeOptions] = useAtom(chargeOptionsAtom);
 
   const [newCustomFields, setNewCustomFields] = useState<Array<{}>>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -41,7 +47,7 @@ export default function Header() {
   const router = useRouter();
   const currentPath = usePathname();
 
-   async function customFieldsGetRequest() {
+  async function customFieldsGetRequest() {
     const response = await getCustomFields(listId);
     setGetCustomFieldsResponse(response);
     const chargeCustomField = response.find(
@@ -70,7 +76,6 @@ export default function Header() {
     customFieldsGetRequest();
   }, []); // aqui sera colocado listId como dependencia, pois ele chegara nessa pagina por param.
 
-  
   const handleMenu = () => {
     setShowModal((current) => !current);
   };
@@ -101,11 +106,18 @@ export default function Header() {
     return null;
   };
 
+  async function handleLogout() {
+    await signOut({ redirect: false });
+
+    router.push("/painel-administrativo/autenticacao/login");
+  }
+
   const renderIconsAndSidebar = () => {
     if (!isAuthPage()) {
       return (
         <>
           <SidebarContainer isShow={showModal}>
+            <UserButton />
             <CloseContainer>
               <button onClick={() => setShowModal(false)}>
                 <span className={poppins.className}>Fechar</span>
@@ -130,7 +142,7 @@ export default function Header() {
               <ButtonContainer>
                 <button className={poppins.className}>Férias</button>
               </ButtonContainer>
-            </OptionsContainer>
+            </OptionsContainer> 
           </SidebarContainer>
           <Container isAutentication={false}>
             <ButtonsContainer>
@@ -147,7 +159,9 @@ export default function Header() {
                   <RiCheckFill size={24} />
                 </PostTaskCheckButton>
               ) : isPersonsPage() ? (
-                <UpdateTaskCheckButton onClick={updateTask}></UpdateTaskCheckButton>
+                <UpdateTaskCheckButton
+                  onClick={updateTask}
+                ></UpdateTaskCheckButton>
               ) : (
                 <AddProjectButton
                   onClick={() => router.push("/painel-administrativo/projeto")}

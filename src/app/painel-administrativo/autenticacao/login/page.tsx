@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Container,
   Form,
@@ -6,6 +7,7 @@ import {
   ButtonsTextContainer,
   AlternativesLoginsContainer,
   OtherOptionsContainer,
+  AuthActions,
 } from "./styles";
 import {
   InputProps,
@@ -16,33 +18,74 @@ import GoogleImage from "../../../../../public/google img.svg";
 import LinkedinImage from "../../../../../public/linkedin img.svg";
 import Image from "next/image";
 import { roboto } from "@/app/fonts";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import Link from "next/link";
 import AuthenticationInput from "@/app/components/inputs/AuthenticationInput";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { SignIn, useSignIn } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+import { toast } from "sonner";
 
 export default function Login() {
   const {
     handleSubmit,
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { isSubmitting, isSubmitted },
   } = useForm<InputProps>({
     resolver: zodResolver(InputSchema),
   });
 
+  const router = useRouter();
+
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState(false);
+  const [isloading, setIsLoading] = useState(false);
 
-  async function handleLogin(e: SubmitEvent) {
+  const { isLoaded, signIn, setActive } = useSignIn();
+
+  if (!isLoaded) return null;
+
+  async function handleLogin(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    setLoading(isSubmitting && !loading);
+    setIsLoading(true);
+
+    try {
+      const result = await signIn?.create({
+        identifier: email,
+        password,
+      });
+
+      if (result?.status === "complete") {
+        if (!setActive) {
+          return null;
+        }
+
+        await setActive({ session: result.createdSessionId });
+        router.push("/painel-administrativo/projetos");
+      }
+    } catch (error) {
+      if (isClerkAPIResponseError(error)) {
+        return toast.error(error.errors[0]?.message);
+      }
+      toast.error("Something went wrong. Try again");
+    } finally {
+      setIsLoading(false);
+    }
   }
+
+  const signInWith = () => {
+    return signIn.authenticateWithRedirect({
+      strategy: "oauth_google",
+      redirectUrl: "/painel-administrativo/projetos",
+      redirectUrlComplete: "/",
+    });
+  };
 
   return (
     <Container>
-      <Form onSubmit={handleSubmit(() => handleLogin)}>
+      <Form onSubmit={handleLogin}>
         <AuthenticationInput
           label="E-MAIL"
           id="email"
@@ -66,9 +109,9 @@ export default function Login() {
         />
         <Button
           className={roboto.className}
-          type="submit"
+          loading={isloading}
           text="Entrar"
-          loading={loading}
+          type="submit"
         />
 
         <OtherOptionsContainer>
@@ -88,25 +131,22 @@ export default function Login() {
               </Link>
             </ButtonText>
           </ButtonsTextContainer>
-
-          <AlternativesLoginsContainer>
-            <div>
-              <span className={roboto.className}>Entre com sua conta</span>
-            </div>
-
-            <div>
-              <Image src={GoogleImage} alt="" width={50} height={50} priority />
-              <Image
-                src={LinkedinImage}
-                alt=""
-                width={50}
-                height={50}
-                priority
-              />
-            </div>
-          </AlternativesLoginsContainer>
         </OtherOptionsContainer>
       </Form>
+      <AlternativesLoginsContainer>
+        <div>
+          <span className={roboto.className}>Entre com sua conta</span>
+        </div>
+
+        <div>
+          <AuthActions onClick={() => signInWith()}>
+            <Image src={GoogleImage} alt="" width={50} height={50} priority />
+          </AuthActions>
+          <AuthActions>
+            <Image src={LinkedinImage} alt="" width={50} height={50} priority />
+          </AuthActions>
+        </div>
+      </AlternativesLoginsContainer>
     </Container>
   );
 }

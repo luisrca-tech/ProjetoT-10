@@ -4,7 +4,7 @@ import classnames from "classnames";
 import LoadingIndicator from "@/app/components/widgets/LoadingIndicator";
 
 type ButtonRegistrationType = {
-  text: string;
+  text?: string;
   loading?: boolean;
   disabled?: boolean;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;

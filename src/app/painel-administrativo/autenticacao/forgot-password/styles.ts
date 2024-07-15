@@ -17,6 +17,10 @@ export const Form = styled.form`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+
+  strong {
+    font-size: 0.875rem;
+  }
 `;
 
 export const ButtonsTextContainer = styled.div`

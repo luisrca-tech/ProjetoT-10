@@ -6,6 +6,8 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 1rem;
   padding: 0 1.25rem;
+
+  z-index: 2;
 `;
 
 export const ProjectContainer = styled.div`

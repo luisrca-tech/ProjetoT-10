@@ -69,3 +69,7 @@ export const OtherOptionsContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
+
+export const AuthActions = styled.button`
+  all: unset;
+`
