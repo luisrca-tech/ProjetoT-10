@@ -1,3 +1,5 @@
+import { toast } from "react-toastify";
+
 export async function getCustomFields(listId: string) {
   const response = await fetch(
     `https://api.clickup.com/api/v2/list/${listId}/field`,
@@ -9,14 +11,8 @@ export async function getCustomFields(listId: string) {
       },
     },
   );
-  const responseBody = await response.json();
-  if (response.status === 401) {
-    console.log(`Erro :${responseBody.err}`);
-    console.log(`Erro :listId sem autorizacao.`);
 
-    //tratamento de erro de autorizacao.
-    return responseBody.err;
-  }
+  const responseBody = await response.json();
 
   return responseBody.fields;
 }
