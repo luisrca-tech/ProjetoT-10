@@ -1,7 +1,6 @@
 "use client";
 import { ReactNode } from "react";
 import { styled } from "@linaria/react";
-import Header from "../components/surfaces/header";
 
 const Container = styled.div`
   width: 100%;
