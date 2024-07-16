@@ -66,6 +66,8 @@ export async function postTasks({
     return valueDateRow;
   }
 
+  const promises = [];
+
   for (let i = 0; i < rows.length - 1; i++) {
     const row = rows[i];
     const FieldSelectedValue = getOptionValueForRow(
@@ -75,10 +77,9 @@ export async function postTasks({
     const chargeFieldSelectedValue = FieldSelectedValue.chargeValueNumber;
     const valueSelectedValue = FieldSelectedValue.hourPerValueNumber;
     const hoursPerMonthCustom = FieldSelectedValue.hoursPerMonthValueNumber;
-
     const FieldDateSelectedValue = getOptionDateForRow({ row, ranges });
 
-    await postTaskForRow({
+    const postTask = postTaskForRow({
       listId,
       fieldsIds,
       row,
@@ -88,5 +89,9 @@ export async function postTasks({
       hoursPerMonthCustom,
       FieldDateSelectedValue,
     });
+
+    promises.push(postTask);
   }
+
+  await Promise.all;
 }
