@@ -17,6 +17,15 @@ import { useAtom } from "jotai";
 import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
 import { isDatePickerOpenAtom } from "@/@atom/ProjectStates/isDatePickerOpenAtom";
 import { stringRowAtom } from "@/@atom/ProjectStates/stringRowAtom";
+import useClickUpFetch from "@/app/hooks/useClickUpFetch";
+import { EndPointClickUpApiEnum } from "@/clickUpApi/EndPointClickUpApiEnum";
+
+type FieldsIdType = {
+  chargeFieldId: string;
+  projectFieldId: string;
+  valueFieldId: string;
+  hoursPerMonthCustomFieldId: string;
+};
 
 export default function Projeto() {
   const [checked, setChecked] = useAtom(checkedAtom);
@@ -40,27 +49,34 @@ export default function Projeto() {
     setIsDatePickerOpen(false);
   };
 
+  const { isFetchAllCustomFields } = useClickUpFetch(
+    EndPointClickUpApiEnum.FIELD,
+  );
+
   return (
     <Container className={roboto.className}>
       <Header />
+      {isFetchAllCustomFields && (
+        <>
+          <ProjectProfileHeader inputDataMenuClick={inputDataMenuClick} />
 
-      <ProjectProfileHeader inputDataMenuClick={inputDataMenuClick} />
+          <MainContainer>
+            {isDatePickerOpen && <CustomDateRangePicker />}
+            <FormContainer isDatePickerOpen={isDatePickerOpen}>
+              <SwitchContainer>
+                <span>Editar datas</span>
+                <ToggleSwitch onChange={handleCheckedChange} />
+              </SwitchContainer>
+              <FormSelectInput inputDataMenuClick={inputDataMenuClick} />
+            </FormContainer>
+          </MainContainer>
 
-      <MainContainer>
-        {isDatePickerOpen && <CustomDateRangePicker />}
-        <FormContainer isDatePickerOpen={isDatePickerOpen}>
-          <SwitchContainer>
-            <span>Editar datas</span>
-            <ToggleSwitch onChange={handleCheckedChange} />
-          </SwitchContainer>
-          <FormSelectInput inputDataMenuClick={inputDataMenuClick} />
-        </FormContainer>
-      </MainContainer>
-
-      <CloseCalendarContainer
-        isDatePickerOpen={isDatePickerOpen}
-        onClick={handleBlurCalendar}
-      ></CloseCalendarContainer>
+          <CloseCalendarContainer
+            isDatePickerOpen={isDatePickerOpen}
+            onClick={handleBlurCalendar}
+          ></CloseCalendarContainer>
+        </>
+      )}
     </Container>
   );
 }
