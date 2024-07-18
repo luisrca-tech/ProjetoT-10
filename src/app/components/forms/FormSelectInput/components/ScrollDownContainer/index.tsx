@@ -2,7 +2,7 @@
 
 import { poppins } from "@/app/fonts";
 import { Container, SeparatorContainer } from "./styles";
-import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectFieldAtom";
+import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectOptionsAtom";
 import { useAtom } from "jotai";
 import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
@@ -22,14 +22,13 @@ interface handleInputChange {
 }
 
 export default function ScrollDownContainer({ row }: ScrollDownContainer) {
-  const [projectOptions] = useAtom(projectOptionsAtom);
-  const [chargeOptions] = useAtom(chargeOptionsAtom);
   const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
     rowsAndSelectedValuesAtom,
   );
+  const [projectOptions] = useAtom(projectOptionsAtom);
+  const [chargeOptions] = useAtom(chargeOptionsAtom);
   const currentRow = row ? row : "projectRow";
   const correctOptions = row === "projectRow" ? projectOptions : chargeOptions;
-
   const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
 
   function getLastRowIndex() {
@@ -72,6 +71,7 @@ export default function ScrollDownContainer({ row }: ScrollDownContainer) {
   ) {
     handleInputChange({ valueLabel, valueCharge, optionId, index });
   }
+
   return (
     <Container
       className={poppins.className}

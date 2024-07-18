@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { bebasNeue, roboto } from "./fonts";
+import { bebasNeue, poppins, roboto } from "./fonts";
 import { css } from "@linaria/core";
 import FullScreenLoading from "./components/widgets/FullScreenLoading";
 import { Provider } from "jotai";
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className={roboto.className}>
         <JotaiProvider>
           <FullScreenLoading>{children}</FullScreenLoading>
-          <ToastContainer className={bebasNeue.className} />
+          <ToastContainer className={poppins.className} />
         </JotaiProvider>
       </body>
     </html>
