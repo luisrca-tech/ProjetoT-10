@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react";
-import { theme } from "@/app/styles/theme";
+import { theme } from "~/app/styles/theme";
 
 export const Container = styled.div`
   display: flex;
@@ -17,6 +17,10 @@ export const Form = styled.form`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+
+  strong {
+    font-size: 0.875rem;
+  }
 `;
 
 export const ButtonsTextContainer = styled.div`

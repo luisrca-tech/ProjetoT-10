@@ -1,14 +1,11 @@
-const withLinaria = require("next-with-linaria");
+import withLinaria from 'next-with-linaria'
 
-const nextConfig = {
+/** @type {import('next').NextConfig} */
+const config = {
   reactStrictMode: true,
   compiler: {
     styledComponents: true,
   },
-
-  typescript: {
-    ignoreBuildErrors: true,
-  },
 };
 
-module.exports = withLinaria(nextConfig);
+export default withLinaria(config)

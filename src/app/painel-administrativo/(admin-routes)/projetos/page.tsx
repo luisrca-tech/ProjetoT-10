@@ -1,7 +1,7 @@
 "use client";
-import { ProjectsCards } from "@/app/components/surfaces/project-card";
+import Header from "~/components/surfaces/header";
 import { Container } from "./styles";
-import Header from "@/app/components/surfaces/header";
+import { ProjectsCards } from "~/components/surfaces/project-card";
 
 export default function Projetos() {
   return (

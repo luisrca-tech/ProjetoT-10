@@ -1,9 +1,10 @@
-"use client";
-
 import { lighten } from "polished";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { styled } from "@linaria/react";
-import { theme } from "@/app/styles/theme";
+import { Toaster } from "sonner";
+import { redirect } from "next/navigation";
+import { theme } from "~/app/styles/theme";
+import { auth } from "@clerk/nextjs/server";
 
 const Container = styled.div`
   width: 100%;
@@ -19,7 +20,7 @@ const Main = styled.main`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  height: 100%;
+  height: calc(100% - 7.594rem);
   width: 100%;
   margin: 0 auto;
   border: 1px solid ${() => lighten(0.34, theme.COLORS.GRAY)};
@@ -27,8 +28,12 @@ const Main = styled.main`
 `;
 
 export default function AuthLayout({ children }: AuthHeaderProps) {
+  const { userId } = auth();
+
+  if (userId) redirect("/painel-administrativo/projetos");
   return (
     <Container>
+      <Toaster richColors />
       <Main>{children}</Main>
     </Container>
   );

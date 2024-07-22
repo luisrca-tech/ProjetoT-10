@@ -1,12 +1,16 @@
-import { ReactNode } from "react";
-import { bebasNeue, poppins, roboto } from "./fonts";
-import { css } from "@linaria/core";
-import FullScreenLoading from "./components/widgets/FullScreenLoading";
+import { type ReactNode } from "react";
 import { Provider } from "jotai";
-import { ToastContainer } from "react-toastify";
-import "../ReactToastify.css";
+import FullScreenLoading from "~/components/widgets/FullScreenLoading";
+import { roboto } from "~/assets/fonts/fonts";
+import { css } from "@linaria/core";
+import { ClerkProvider } from "@clerk/nextjs";
+import { TRPCReactProvider } from "~/trpc/react";
 
-interface Props extends React.PropsWithChildren {}
+type Props = React.PropsWithChildren;
+
+function JotaiProvider({ children }: Props): JSX.Element {
+  return <Provider>{children}</Provider>;
+}
 const globalStyle = css`
   :root {
     font-size: 62.5%;
@@ -51,17 +55,16 @@ const globalStyle = css`
 `;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
-  function JotaiProvider({ children }: Props): JSX.Element {
-    return <Provider>{children}</Provider>;
-  }
-
   return (
     <html lang="pt-br" className={globalStyle}>
       <body className={roboto.className}>
-        <JotaiProvider>
-          <FullScreenLoading>{children}</FullScreenLoading>
-          <ToastContainer className={poppins.className} />
-        </JotaiProvider>
+        <TRPCReactProvider>
+          <ClerkProvider>
+            <JotaiProvider>
+              <FullScreenLoading>{children}</FullScreenLoading>
+            </JotaiProvider>
+          </ClerkProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

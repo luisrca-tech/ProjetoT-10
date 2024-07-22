@@ -1,7 +1,6 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import FormSelectInput from "@/app/components/forms/FormSelectInput";
 import {
   CloseCalendarContainer,
   Container,
@@ -9,22 +8,22 @@ import {
   MainContainer,
   SwitchContainer,
 } from "./styles";
-import { ProjectProfileHeader } from "../../../components/surfaces/ProjectProfileHeader";
-import { roboto } from "@/app/fonts";
-import ToggleSwitch from "@/app/components/widgets/ToggleSwitch";
-import { CustomDateRangePicker } from "@/app/components/widgets/CustomDateRangePicker";
-import Header from "@/app/components/surfaces/header";
 import { useAtom } from "jotai";
-import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
-import { isDatePickerOpenAtom } from "@/@atom/ProjectStates/isDatePickerOpenAtom";
-import { stringRowAtom } from "@/@atom/ProjectStates/stringRowAtom";
-import useClickUpFetch from "@/app/hooks/useClickUpFetch";
-import { EndPointClickUpApiEnum } from "@/clickUpApi/EndPointClickUpApiEnum";
-import { Task } from "@/app/types/clickUpApi";
-import { rowCountAtom } from "@/@atom/ProjectStates/rowCountAtom";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { useEffect, useCallback } from "react";
-import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { isDatePickerOpenAtom } from "~/@atom/ProjectStates/isDatePickerOpenAtom";
+import { stringRowAtom } from "~/@atom/ProjectStates/stringRowAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import useClickUpFetch from "~/hooks/useClickUpFetch";
+import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
+import { type Task } from "~/server/types/Clickup.type";
+import { roboto } from "~/assets/fonts/fonts";
+import Header from "~/components/surfaces/header";
+import { ProjectProfileHeader } from "~/components/surfaces/ProjectProfileHeader";
+import { CustomDateRangePicker } from "~/components/widgets/CustomDateRangePicker";
+import ToogleSwitch from "~/components/widgets/ToggleSwitch";
+import FormSelectInput from "~/components/forms/FormSelectInput";
 
 type FieldsIdType = {
   chargeFieldId: string;
@@ -37,13 +36,10 @@ export default function Projeto() {
   const [checked, setChecked] = useAtom(checkedAtom);
   const [isDatePickerOpen, setIsDatePickerOpen] = useAtom(isDatePickerOpenAtom);
   const [, setStringRow] = useAtom(stringRowAtom);
-  const [rowCount, setRowCount] = useAtom(rowCountAtom);
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId");
-  const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
-    rowsAndSelectedValuesAtom,
-  );
-  const [ranges, setRanges] = useAtom(rangesAtom);
+  const [, setRowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
+  const [, setRanges] = useAtom(rangesAtom);
 
   function openDatePicker() {
     setIsDatePickerOpen(true);
@@ -63,11 +59,11 @@ export default function Projeto() {
   };
 
   const { projectOptions, isFetchAllCustomFields } = useClickUpFetch(
-    EndPointClickUpApiEnum.FIELD,
+    EndPointClickUpApiEnum.FIELD
   );
 
   const { data: getTaskResp } = useClickUpFetch<Task[]>(
-    EndPointClickUpApiEnum.TASK,
+    EndPointClickUpApiEnum.TASK
   );
 
   const updateRowsAndSelectedValues = useCallback(
@@ -77,13 +73,13 @@ export default function Projeto() {
         count = index;
 
         const cargoField = task.custom_fields.find(
-          (field) => field.name === "PixelCraft_cargos",
+          (field) => field.name === "PixelCraft_cargos"
         );
         const horasField = task.custom_fields.find(
-          (field) => field.name === "PixelCraft_Horas_Mes",
+          (field) => field.name === "PixelCraft_Horas_Mes"
         );
         const valorField = task.custom_fields.find(
-          (field) => field.name === "PixelCraft_Valor",
+          (field) => field.name === "PixelCraft_Valor"
         );
         const taskStartDate = task.start_date
           ? new Date(parseInt(task.start_date))
@@ -98,7 +94,7 @@ export default function Projeto() {
         let cargoName = "";
         if (cargoField && Array.isArray(cargoField.type_config?.options)) {
           const option = cargoField.type_config.options.find(
-            (opt) => opt.id === cargoField.value,
+            (opt) => opt.id === cargoField.value
           );
           cargoName = option ? option.name : "";
         }
@@ -150,7 +146,7 @@ export default function Projeto() {
         },
       }));
     },
-    [setRanges, setRowsAndSelectedValues],
+    [setRanges, setRowsAndSelectedValues]
   );
 
   useEffect(() => {
@@ -161,7 +157,7 @@ export default function Projeto() {
             return field.value.includes(projectId);
           }
           return false;
-        }),
+        })
       );
       console.log(tasksForProject, "tasksForProject");
       if (tasksForProject.length > 0) {
@@ -182,7 +178,7 @@ export default function Projeto() {
             <FormContainer isDatePickerOpen={isDatePickerOpen}>
               <SwitchContainer>
                 <span>Editar datas</span>
-                <ToggleSwitch onChange={handleCheckedChange} />
+                <ToogleSwitch onChange={handleCheckedChange} />
               </SwitchContainer>
               <FormSelectInput inputDataMenuClick={inputDataMenuClick} />
             </FormContainer>

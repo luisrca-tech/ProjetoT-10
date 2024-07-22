@@ -1,5 +1,5 @@
 "use client";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 import { styled } from "@linaria/react";
 
 const Container = styled.div`
