@@ -12,6 +12,7 @@ export function useGetInputValueAtIndex(
 
   if (inProfileHeader) {
     const { selectedValue } = projectSelectedValue;
+
     const inputValue = selectedValue[`${row}-text`];
 
     return inputValue;
