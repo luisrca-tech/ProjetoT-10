@@ -1,11 +1,11 @@
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { useAtom } from "jotai";
 
 export function useGetInputValueAtIndex(
   linePrefix?: string,
   row?: string,
-  inProfileHeader?: boolean,
+  inProfileHeader?: boolean
 ) {
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);

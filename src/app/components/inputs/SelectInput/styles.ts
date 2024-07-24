@@ -1,4 +1,4 @@
-import { theme } from "@/app/styles/theme";
+import { theme } from "~/app/styles/theme";
 import { styled } from "@linaria/react";
 
 type ContainerProps = {
@@ -22,8 +22,8 @@ export const Container = styled.div<ContainerProps>`
     props.checked
       ? "calc(100% - 28px)"
       : props.isInProjectHeader
-        ? "100%"
-        : "32%"};
+      ? "100%"
+      : "32%"};
   height: 2.5rem;
   align-items: center;
   position: relative;

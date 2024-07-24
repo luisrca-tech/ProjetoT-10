@@ -1,4 +1,4 @@
-import { CustomField } from "@/app/types/clickUpApi";
+import { type CustomField } from "~/app/types/clickUpApi";
 
 import { atom } from "jotai";
 

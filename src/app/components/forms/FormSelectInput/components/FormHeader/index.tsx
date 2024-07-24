@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { Container, HeaderContent, EditDateContainer } from "./styles";
-import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 
 export function FormHeader() {
   const [checked] = useAtom(checkedAtom);

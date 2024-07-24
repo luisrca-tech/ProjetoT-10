@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { Range } from "react-date-range";
+import { type Range } from "react-date-range";
 
 export interface SelectableRangeProps extends Range {
   isSelected?: boolean;

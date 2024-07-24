@@ -7,23 +7,22 @@ import {
   CalendarDateValues,
 } from "./styles";
 import Image from "next/image";
+import CalendarIcon from "~/../public/calendaricon.svg";
+import TrashAnimation from "~/../public/trashanimation.svg";
 
-import ScrollDownContainer from "../ScrollDownContainer";
-import CalendarIcon from "../../../../../../../public/calendaricon.svg";
-import TrashAnimation from "../../../../../../../public/trashanimation.svg";
-import SelectInput from "@/app/components/inputs/SelectInput";
-
+import SelectInput from "~/app/components/inputs/SelectInput";
 import { useAtom } from "jotai";
-import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
-import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
-import { rowCountAtom } from "@/@atom/ProjectStates/rowCountAtom";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { useGetLastRowIndex } from "@/app/utils/functions/getLastRowIndex";
-import { useToggleSelectOpen } from "@/app/utils/functions/toggleSelectedOpen";
-import { useIsValueInInput } from "@/app/utils/functions/isValueInInput";
-import { useGetInputValueAtIndex } from "@/app/utils/functions/getInputValueAtIndex";
-import { useIsSelectOpen } from "@/app/utils/functions/isSelectOpen";
-import { poppins } from "@/app/fonts";
+import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { rowCountAtom } from "~/@atom/ProjectStates/rowCountAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { useGetLastRowIndex } from "~/app/utils/functions/getLastRowIndex";
+import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
+import { useIsValueInInput } from "~/app/utils/functions/isValueInInput";
+import { useGetInputValueAtIndex } from "~/app/utils/functions/getInputValueAtIndex";
+import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
+import { poppins } from "~/app/fonts";
+import ScrollDownContainer from "~/components/forms/FormSelectInput/components/ScrollDownContainer";
 
 interface RowAndScrollDownContainerProps {
   row: string;
@@ -38,12 +37,12 @@ export default function RowAndScrollDownContainer({
   const [ranges, setRanges] = useAtom(rangesAtom);
   const [rowCount, setRowCount] = useAtom(rowCountAtom);
   const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
-    rowsAndSelectedValuesAtom,
+    rowsAndSelectedValuesAtom
   );
 
   const [startX, setStartX] = useState<number | null>(null);
   const [offsetXByRow, setOffsetXByRow] = useState<{ [key: string]: number }>(
-    {},
+    {}
   );
 
   const [isNewRowAdded, setIsNewRowAdded] = useState(false);
@@ -72,18 +71,21 @@ export default function RowAndScrollDownContainer({
   const firstInputValueAtIndex = useGetInputValueAtIndex("firstTextValue", row);
   const secondInputValueAtIndex = useGetInputValueAtIndex(
     "secondTextValue",
-    row,
+    row
   );
   const thirdInputValueAtIndex = useGetInputValueAtIndex("thirdTextValue", row);
   const firstInputIdAtIndex = `firstTextValue${row}-option`;
   const secondInputIdAtIndex = `secondTextValue${row}-text`;
   const thirdInputIdAtIndex = `thirdTextValue${row}-text`;
-  const startDateRangeInCurrentRow = formatDate(ranges[row].startDate);
-  const endDateRangeInCurrentRow = formatDate(ranges[row].endDate);
+  const startDateRangeInCurrentRow = formatDate(ranges[row]?.startDate);
+  const endDateRangeInCurrentRow = formatDate(ranges[row]?.endDate);
+  console.log(ranges, `ranges`);
+  console.log(ranges?.[row], `ranges`);
+  console.log(row, `row`);
 
   const isRangeInThisRow =
     isLastRow ||
-    (ranges?.[row].startDate && ranges?.[row].endDate !== undefined);
+    (ranges?.[row]?.startDate && ranges?.[row].endDate !== undefined);
 
   const addRow = useCallback(() => {
     const newDateRange = {
@@ -139,7 +141,10 @@ export default function RowAndScrollDownContainer({
   }
 
   function handleTouchStartForRow(event: React.TouchEvent, rowIndex: string) {
-    setStartX(event.touches[0].clientX);
+    if (event.touches[0]) {
+      setStartX(event.touches[0].clientX);
+    }
+
     setOffsetXByRow((prevOffsetX) => ({
       ...prevOffsetX,
       [rowIndex]: 0,
@@ -148,12 +153,15 @@ export default function RowAndScrollDownContainer({
 
   function handleTouchMove(event: React.TouchEvent, rowIndex: string) {
     if (startX !== null) {
-      const newOffsetX = event.touches[0].clientX - startX;
-      if (newOffsetX < 0) {
-        setOffsetXByRow((prevState) => ({
-          ...prevState,
-          [rowIndex]: newOffsetX,
-        }));
+      if (event.touches[0]) {
+        const newOffsetX = event.touches[0].clientX - startX;
+
+        if (newOffsetX < 0) {
+          setOffsetXByRow((prevState) => ({
+            ...prevState,
+            [rowIndex]: newOffsetX,
+          }));
+        }
       }
     }
   }
@@ -238,7 +246,7 @@ export default function RowAndScrollDownContainer({
             </>
           ) : (
             <>
-              {ranges[row].isSelected ? (
+              {ranges[row]?.isSelected ? (
                 <CalendarDateValues
                   className={poppins.className}
                   onClick={() => inputDataMenuClick(row)}

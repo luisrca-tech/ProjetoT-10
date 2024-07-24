@@ -1,11 +1,11 @@
-import { bebasNeue } from "@/app/fonts";
+import { bebasNeue } from "~/app/fonts";
 import { Container } from "./styles";
 import { FaUnlockAlt, FaLock } from "react-icons/fa";
 
 import { z } from "zod";
-import { HTMLInputTypeAttribute, useState } from "react";
+import { type HTMLInputTypeAttribute, useState } from "react";
 
- export const InputSchema = z.object({
+export const InputSchema = z.object({
   isPassword: z.boolean().optional(),
   label: z.string(),
   value: z.string().optional(),
@@ -91,7 +91,7 @@ export default function AuthenticationInput({
 
   const maskValueByType = (
     value?: string | number | readonly string[],
-    type?: HTMLInputTypeAttribute,
+    type?: HTMLInputTypeAttribute
   ) => {
     if (!type) {
       return value;
@@ -109,7 +109,9 @@ export default function AuthenticationInput({
 
   return (
     <Container type={rest.type}>
-      <label className={bebasNeue.className}>{rest.required && !value ? "Campo obrigátorio" : ""}</label>
+      <label className={bebasNeue.className}>
+        {rest.required && !value ? "Campo obrigátorio" : ""}
+      </label>
       <div>
         <input
           {...rest}

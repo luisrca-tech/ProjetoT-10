@@ -1,13 +1,13 @@
 "use client";
 import { Container, InputContainer } from "./styles";
 import { useAtom } from "jotai";
-import SelectInput from "@/app/components/inputs/SelectInput";
-import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
+import SelectInput from "~/app/components/inputs/SelectInput";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import ScrollDownContainer from "../../../../forms/FormSelectInput/components/ScrollDownContainer";
-import { useIsValueInInput } from "@/app/utils/functions/isValueInInput";
-import { useGetInputValueAtIndex } from "@/app/utils/functions/getInputValueAtIndex";
-import { useToggleSelectOpen } from "@/app/utils/functions/toggleSelectedOpen";
-import { useIsSelectOpen } from "@/app/utils/functions/isSelectOpen";
+import { useIsValueInInput } from "~/app/utils/functions/isValueInInput";
+import { useGetInputValueAtIndex } from "~/app/utils/functions/getInputValueAtIndex";
+import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
+import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
 
 export default function HeaderRowAndScrollDownContainer() {
   const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
@@ -17,7 +17,7 @@ export default function HeaderRowAndScrollDownContainer() {
   const projectInputValueAtIndex = useGetInputValueAtIndex(
     undefined,
     row,
-    inProfileHeader,
+    inProfileHeader
   );
 
   const toggleSelectOpen = useToggleSelectOpen(row);
@@ -25,7 +25,7 @@ export default function HeaderRowAndScrollDownContainer() {
   function handleInputChange(row: string, value: string, optionId?: string) {
     setProjectSelectedValue((prevState) => ({
       ...prevState,
-      selectedValues: {
+      selectedValue: {
         ...prevState.selectedValue,
         [`${row}-text`]: value,
         [`${row}-option`]: `${optionId}`,

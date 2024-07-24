@@ -1,8 +1,8 @@
-import { theme } from "@/app/styles/theme";
+import { theme } from "~/app/styles/theme";
 
 import { styled } from "@linaria/react";
 import { darken } from "polished";
-import { HTMLInputTypeAttribute } from "react";
+import { type HTMLInputTypeAttribute } from "react";
 
 type InputProps = {
   type: HTMLInputTypeAttribute;

@@ -9,10 +9,10 @@ import { FormHeader } from "./components/FormHeader";
 import RowAndScrollDownContainer from "./components/RowAndScrollDownContainer";
 import { BudgetContainer } from "./components/FooterSumContainer";
 import { useAtom } from "jotai";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
-import { poppins } from "@/app/fonts";
-import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import { poppins } from "~/app/fonts";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 
 interface FormSelectInputProps {
   inputDataMenuClick: (row: string) => void;
@@ -40,7 +40,7 @@ export default function FormSelectInput({
 
     for (let range of rangesExcludingLastAndGlobal) {
       const value = ranges[range];
-      if (value.startDate === undefined || value.endDate === undefined) {
+      if (value?.startDate === undefined || value.endDate === undefined) {
         return false;
       }
     }

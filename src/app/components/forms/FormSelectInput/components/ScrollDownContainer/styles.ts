@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react";
-import { theme } from "@/app/styles/theme";
+import { theme } from "~/app/styles/theme";
 
 export const Container = styled.div`
   background: ${theme.COLORS.SELECT_INPUT};

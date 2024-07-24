@@ -13,21 +13,20 @@ import {
   UpdateTaskCheckButton,
 } from "./styles";
 import { IoMenu, IoAdd } from "react-icons/io5";
-import { poppins } from "@/app/fonts";
+import { poppins } from "~/app/fonts";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "../Modal";
 import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
-import { postTasks } from "@/app/services/api/tasks/postTask";
-import { toast } from "react-toastify";
+import { postTasks } from "~/app/services/api/tasks/postTask";
 import { useAtom } from "jotai";
-import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
-import { loadingAtom } from "@/@atom/LoadingState/loadingAtom";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
-import { fieldsIdsAtom } from "@/@atom/api/CustomFields/fieldsIds";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
+import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 
 export default function Header() {
   const [ranges] = useAtom(rangesAtom);
@@ -39,23 +38,23 @@ export default function Header() {
   const router = useRouter();
   const currentPath = usePathname();
 
-  async function taskPostRequest() {
-    try {
-      setLoading(true);
-      await postTasks({
-        fieldsIds,
-        rowsAndSelectedValues,
-        projectSelectedValue,
-        ranges,
-      });
+  // async function taskPostRequest() {
+  //   try {
+  //     setLoading(true);
+  //     await postTasks({
+  //       fieldsIds,
+  //       rowsAndSelectedValues,
+  //       projectSelectedValue,
+  //       ranges,
+  //     });
 
-      toast.success("Tasks criadas e vinculadas ao NOME DO PROJETO");
-    } catch (error) {
-      toast.error("Não foi possível concluir a criação das Tasks");
-    } finally {
-      setLoading(false);
-    }
-  }
+  //     toast.success("Tasks criadas e vinculadas ao NOME DO PROJETO");
+  //   } catch (error) {
+  //     toast.error("Não foi possível concluir a criação das Tasks");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   const handleMenu = () => {
     setShowModal((current) => !current);
@@ -87,11 +86,12 @@ export default function Header() {
     }
     return null;
   };
+
   let rangesCondition = true;
   const keys = Object.keys(ranges);
-  for (let i = 0; i < keys.length - 1; i++) {
-    const key = keys[i];
-    if (!ranges[key].startDate || !ranges[key].endDate) {
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i] as string;
+    if (!ranges[key]?.startDate || !ranges[key]?.endDate) {
       rangesCondition = false;
       break;
     }
@@ -99,7 +99,7 @@ export default function Header() {
 
   // Verificar se selectedValues não está vazio em rowsAndSelectedValues
   const selectedValuesNotEmpty1 = Object.values(
-    rowsAndSelectedValues.selectedValues,
+    rowsAndSelectedValues.selectedValues
   ).every((value) => value !== "");
 
   // Verificar se selectedValues não está vazio em projectSelectedValue
@@ -155,7 +155,7 @@ export default function Header() {
             <ButtonsContainer>
               {isProjectPage() ? (
                 <PostTaskCheckButton
-                  onClick={taskPostRequest}
+                  // onClick={taskPostRequest}
                   disabled={!isConditionMet}
                 >
                   <RiCheckFill size={24} />

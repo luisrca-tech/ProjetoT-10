@@ -2,15 +2,15 @@ import { useState } from "react";
 import { Container, Input, InputContainer } from "./styles";
 
 import { useAtom } from "jotai";
-import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
-import { poppins } from "@/app/fonts";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { poppins } from "~/app/fonts";
 
 interface SelectInputProps {
   id: string;
   onChange?: (value: string) => void;
   placeholder: string;
   hasValue: boolean;
-  inputValue: string;
+  inputValue?: string;
   isSelectOpen?: boolean;
   setIsSelectOpen?: (boolean: boolean) => void;
   value?: string;
@@ -38,7 +38,7 @@ export default function SelectInput({
   const [, setIsFocused] = useState<boolean>(false);
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>,
+    event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
     if (
       event.target instanceof HTMLSelectElement ||

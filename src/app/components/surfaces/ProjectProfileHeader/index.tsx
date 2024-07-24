@@ -9,17 +9,17 @@ import {
   InputContent,
   EditProjectContainer,
 } from "./styles";
-import HeaderRowAndScrollDownContainer from "./components/HeaderRowAndScrollDownContainer";
-import { poppins, roboto } from "@/app/fonts";
+import HeaderRowAndScrollDownContainer from "~/components/surfaces/ProjectProfileHeader/HeaderRowAndScrollDownContainer";
+import { poppins, roboto } from "~/app/fonts";
 import Image from "next/image";
 import CalendarIcon from "../../../../../public/calendaricon.svg";
 import { useAtom } from "jotai";
 import {
-  SelectableRangeProps,
+  type SelectableRangeProps,
   rangesAtom,
-} from "@/@atom/ProjectStates/rangesAtom";
-import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
-import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
+} from "~/@atom/ProjectStates/rangesAtom";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 
 interface ProjectProfileHeaderProps {
   inputDataMenuClick: (row: string) => void;
@@ -37,8 +37,8 @@ export function ProjectProfileHeader({
     projectSelectedValue?.selectedValue[`projectRow-text`]?.split(" ");
 
   const globalProjectDate = ranges["global-project-data"];
-  const globalProjectStartDate = ranges["global-project-data"].startDate;
-  const globalProjectEndDate = ranges["global-project-data"].endDate;
+  const globalProjectStartDate = ranges["global-project-data"]?.startDate;
+  const globalProjectEndDate = ranges["global-project-data"]?.endDate;
   const initials = words?.map((word) => word.charAt(0));
 
   const initialsString = initials?.join("");
@@ -60,13 +60,13 @@ export function ProjectProfileHeader({
 
     for (let key in ranges) {
       const range = ranges[key];
-      if (range.startDate) {
+      if (range?.startDate) {
         const startDate = range.startDate.getTime();
         if (minStartDate === undefined || startDate < minStartDate) {
           minStartDate = startDate;
         }
       }
-      if (range.endDate) {
+      if (range?.endDate) {
         const endDate = range.endDate.getTime();
         if (maxEndDate === undefined || endDate > maxEndDate) {
           maxEndDate = endDate;
@@ -81,11 +81,11 @@ export function ProjectProfileHeader({
 
   const minStartDateObj = useMemo(
     () => (minStartDate !== undefined ? new Date(minStartDate) : undefined),
-    [minStartDate],
+    [minStartDate]
   );
   const maxEndDateObj = useMemo(
     () => (maxEndDate !== undefined ? new Date(maxEndDate) : undefined),
-    [maxEndDate],
+    [maxEndDate]
   );
 
   useEffect(() => {

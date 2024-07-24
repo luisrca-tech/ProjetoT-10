@@ -1,4 +1,4 @@
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { useAtom } from "jotai";
 
 export function useGetLastRowIndex() {

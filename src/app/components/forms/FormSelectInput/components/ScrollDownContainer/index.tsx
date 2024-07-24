@@ -1,12 +1,12 @@
 "use client";
 
-import { poppins } from "@/app/fonts";
+import { poppins } from "~/app/fonts";
 import { Container, SeparatorContainer } from "./styles";
-import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectOptionsAtom";
+import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 import { useAtom } from "jotai";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
-import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
+import { chargeOptionsAtom } from "~/@atom/api/CustomFields/chargeOptionsAtom";
 import AddButton from "../../../../../../../public/add.svg";
 import Image from "next/image";
 
@@ -23,7 +23,7 @@ interface handleInputChange {
 
 export default function ScrollDownContainer({ row }: ScrollDownContainer) {
   const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
-    rowsAndSelectedValuesAtom,
+    rowsAndSelectedValuesAtom
   );
   const [projectOptions] = useAtom(projectOptionsAtom);
   const [chargeOptions] = useAtom(chargeOptionsAtom);
@@ -67,7 +67,7 @@ export default function ScrollDownContainer({ row }: ScrollDownContainer) {
     valueLabel?: string,
     valueCharge?: string,
     optionId?: string,
-    index?: number,
+    index?: number
   ) {
     handleInputChange({ valueLabel, valueCharge, optionId, index });
   }

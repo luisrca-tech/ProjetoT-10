@@ -1,10 +1,10 @@
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { useAtom } from "jotai";
 
 export function useIsValueInInput(
   row: string,
   inputName: string,
-  inProfileHeader?: boolean,
+  inProfileHeader?: boolean
 ) {
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const { selectedValues } = rowsAndSelectedValues;

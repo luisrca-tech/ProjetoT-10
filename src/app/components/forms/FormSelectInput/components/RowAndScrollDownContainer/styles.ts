@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react";
-import { theme } from "@/app/styles/theme";
+import { theme } from "~/app/styles/theme";
 
 type InputDataMenuProps = {
   isRangeInThisRow?: boolean;
@@ -27,8 +27,8 @@ export const Container = styled.div<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "-1.5rem"
-          : "0"}
+        ? "-1.5rem"
+        : "0"}
   );
 `;
 
@@ -68,8 +68,8 @@ export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "-1.5rem"
-          : "0"}
+        ? "-1.5rem"
+        : "0"}
   );
 `;
 
@@ -118,8 +118,8 @@ export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "1.5rem"
-          : "0"}
+        ? "1.5rem"
+        : "0"}
   );
 
   background: ${theme.COLORS.SECONDARY};
@@ -157,6 +157,7 @@ export const InputDataMenu = styled.button<InputDataMenuProps>`
   background: ${theme.COLORS.SELECT_INPUT};
   color: ${theme.COLORS.SECONDARY_DARK};
   font-size: 1rem;
+  border-top: 2px solid red;
   border: ${(props) =>
     props.isRangeInThisRow ? "none" : `1px solid ${theme.COLORS.ERROR}`};
   padding: 0 0.5rem;

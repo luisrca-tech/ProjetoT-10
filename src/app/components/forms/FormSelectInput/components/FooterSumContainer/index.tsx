@@ -1,9 +1,9 @@
 import { BudgetContent, Container, ProjectDuration } from "./styles";
-import { poppins } from "@/app/fonts";
-import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
+import { poppins } from "~/app/fonts";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 import { useAtom } from "jotai";
-import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 
 export function BudgetContainer() {
   const [checked] = useAtom(checkedAtom);
@@ -15,18 +15,18 @@ export function BudgetContainer() {
       const hours = parseInt(
         rowsAndSelectedValues.selectedValues[`secondTextValue${row}-text`] ||
           "0",
-        10,
+        10
       );
       const value = parseInt(
         rowsAndSelectedValues.selectedValues[`thirdTextValue${row}-text`] ||
           "0",
-        10,
+        10
       );
       acc.hours += hours;
       acc.value += hours * value;
       return acc;
     },
-    { hours: 0, value: 0 },
+    { hours: 0, value: 0 }
   );
 
   const { hours: totalHours, value: totalValue } = totalHoursSum;
