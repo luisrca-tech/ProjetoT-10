@@ -12,7 +12,7 @@ interface SelectInputProps {
   onChange: (value: string) => void;
   placeholder: string;
   hasValue: boolean;
-  inputValue: string;
+  inputValue?: string;
   isSelectOpen?: boolean;
   setIsSelectOpen?: (boolean: boolean) => void;
   value?: string;
