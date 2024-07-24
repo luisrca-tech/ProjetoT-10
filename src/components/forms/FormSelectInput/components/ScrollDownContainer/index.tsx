@@ -46,8 +46,8 @@ export default function ScrollDownContainer({ row }: ScrollDownContainer) {
     if (currentRow === "projectRow") {
       setProjectSelectedValue((prevState) => ({
         ...prevState,
-        selectedValues: {
-          ...prevState.selectedValues,
+        selectedValue: {
+          ...prevState.selectedValue,
           [`${currentRow}-text`]: valueLabel || "",
           [`${currentRow}-option`]: `${optionId}`,
         },
