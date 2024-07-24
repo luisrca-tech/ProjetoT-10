@@ -37,8 +37,8 @@ export function ProjectProfileHeader({
     projectSelectedValue?.selectedValue[`projectRow-text`]?.split(" ");
 
   const globalProjectDate = ranges["global-project-data"];
-  const globalProjectStartDate = ranges["global-project-data"].startDate;
-  const globalProjectEndDate = ranges["global-project-data"].endDate;
+  const globalProjectStartDate = ranges["global-project-data"]?.startDate;
+  const globalProjectEndDate = ranges["global-project-data"]?.endDate;
   const initials = words?.map((word) => word.charAt(0));
 
   const initialsString = initials?.join("");
@@ -60,13 +60,13 @@ export function ProjectProfileHeader({
 
     for (let key in ranges) {
       const range = ranges[key];
-      if (range.startDate) {
+      if (range?.startDate) {
         const startDate = range.startDate.getTime();
         if (minStartDate === undefined || startDate < minStartDate) {
           minStartDate = startDate;
         }
       }
-      if (range.endDate) {
+      if (range?.endDate) {
         const endDate = range.endDate.getTime();
         if (maxEndDate === undefined || endDate > maxEndDate) {
           maxEndDate = endDate;
