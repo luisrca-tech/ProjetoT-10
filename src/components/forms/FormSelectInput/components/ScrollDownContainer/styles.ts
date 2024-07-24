@@ -8,6 +8,22 @@ export const Container = styled.div`
   gap: 0.5rem;
   border-radius: 20px;
   padding: 0.75rem;
+  max-height: 220px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${theme.COLORS.PRIMARY};
+    border-radius: 20px;
+    border: 3px solid ${theme.COLORS.SELECT_INPUT};
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: ${theme.COLORS.DARK};
+  }
 
   > button {
     padding: 0.75rem;
