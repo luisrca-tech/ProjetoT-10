@@ -19,13 +19,12 @@ export default function HeaderRowAndScrollDownContainer() {
     row,
     inProfileHeader
   );
-
   const toggleSelectOpen = useToggleSelectOpen(row);
 
   function handleInputChange(row: string, value: string, optionId?: string) {
     setProjectSelectedValue((prevState) => ({
       ...prevState,
-      selectedValues: {
+      selectedValue: {
         ...prevState.selectedValue,
         [`${row}-text`]: value,
         [`${row}-option`]: `${optionId}`,
@@ -45,7 +44,6 @@ export default function HeaderRowAndScrollDownContainer() {
           hasValue={isValueInProjectInput}
           inputValue={projectInputValueAtIndex}
           setIsSelectOpen={toggleSelectOpen}
-          readOnly
         />
       </InputContainer>
       {useIsSelectOpen(row) && <ScrollDownContainer row={row} />}
