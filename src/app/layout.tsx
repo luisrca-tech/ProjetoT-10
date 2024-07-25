@@ -5,6 +5,7 @@ import { roboto } from "~/assets/fonts/fonts";
 import { css } from "@linaria/core";
 import { ClerkProvider } from "@clerk/nextjs";
 import { TRPCReactProvider } from "~/trpc/react";
+import { Toaster } from "sonner";
 
 type Props = React.PropsWithChildren;
 
@@ -61,6 +62,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <TRPCReactProvider>
           <ClerkProvider>
             <JotaiProvider>
+              <Toaster position="bottom-right" expand={true} />
               <FullScreenLoading>{children}</FullScreenLoading>
             </JotaiProvider>
           </ClerkProvider>
