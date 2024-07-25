@@ -9,5 +9,5 @@ const initialProjectSelectedValueState: ProjectSelectedValueProps = {
 };
 
 export const projectSelectedValuePropAtom = atom(
-  initialProjectSelectedValueState,
+  initialProjectSelectedValueState
 );

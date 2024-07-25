@@ -20,7 +20,6 @@ import Modal from "../Modal";
 import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
-import { postTasks } from "~/app/services/api/tasks/postTask";
 import { useAtom } from "jotai";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
