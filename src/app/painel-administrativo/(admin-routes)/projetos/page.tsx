@@ -1,10 +1,13 @@
-import { ProjectCard } from "@/app/components/surfaces/project-card";
+"use client";
+import Header from "~/components/surfaces/header";
 import { Container } from "./styles";
+import { ProjectsCards } from "~/components/surfaces/project-card";
 
 export default function Projetos() {
   return (
     <Container>
-      <ProjectCard />
+      <Header />
+      <ProjectsCards />
     </Container>
   );
 }

@@ -1,4 +1,3 @@
-import { ProjectProfileHeader } from "@/app/components/surfaces/ProjectProfileHeader";
 import { Container, MainContainer } from "./styles";
 
 export default function Pessoas() {

@@ -1,7 +1,7 @@
-import { poppins } from "@/app/fonts";
+import { poppins } from "~/app/fonts";
 import { Container } from "./styles";
 import classnames from "classnames";
-import LoadingIndicator from "@/app/components/widgets/LoadingIndicator";
+import LoadingIndicator from "~/app/components/widgets/LoadingIndicator";
 
 type ButtonRegistrationType = {
   text: string;

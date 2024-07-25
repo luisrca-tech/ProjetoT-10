@@ -1,46 +1,32 @@
 "use client";
-import { useState } from "react";
-import { Container, InputContainer, SeparatorContainer } from "./styles";
-import Image from "next/image";
-import { poppins } from "@/app/fonts";
-import AddButton from "../../../../../../../public/add.svg";
+import { Container, InputContainer } from "./styles";
 import { useAtom } from "jotai";
-import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectFieldAtom";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import SelectInput from "@/app/components/inputs/SelectInput";
-import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
+import SelectInput from "~/app/components/inputs/SelectInput";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import ScrollDownContainer from "../../../../forms/FormSelectInput/components/ScrollDownContainer";
+import { useIsValueInInput } from "~/app/utils/functions/isValueInInput";
+import { useGetInputValueAtIndex } from "~/app/utils/functions/getInputValueAtIndex";
+import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
+import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
 
 export default function HeaderRowAndScrollDownContainer() {
-  const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
-  const [projectSelectedValue, setProjectSelectedValue] = useAtom(
-    projectSelectedValuePropAtom,
-  );
-  const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
-    null,
-  );
+  const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const row = "projectRow";
+  const inProfileHeader = true;
+  const isValueInProjectInput = useIsValueInInput(row, "");
+  const projectInputValueAtIndex = useGetInputValueAtIndex(
+    undefined,
+    row,
+    inProfileHeader
+  );
 
-  function toggleSelectOpen(index: string) {
-    setSelectedItemIndex(selectedItemIndex === index ? null : index);
-  }
-
-  function isValueInInput(row: string) {
-    const { selectedValues } = rowsAndSelectedValues;
-    const textValue = selectedValues[row];
-
-    return textValue !== undefined && textValue.length > 0;
-  }
-
-  function isSelectOpen(index: string) {
-    return selectedItemIndex === index;
-  }
+  const toggleSelectOpen = useToggleSelectOpen(row);
 
   function handleInputChange(row: string, value: string, optionId?: string) {
     setProjectSelectedValue((prevState) => ({
       ...prevState,
-      selectedValues: {
-        ...prevState.selectedValues,
+      selectedValue: {
+        ...prevState.selectedValue,
         [`${row}-text`]: value,
         [`${row}-option`]: `${optionId}`,
       },
@@ -53,15 +39,16 @@ export default function HeaderRowAndScrollDownContainer() {
         <SelectInput
           isInProjectHeader
           type="text"
-          placeholder="Projeto"
+          placeholder="Selecione um projeto"
           id={row}
           onChange={(value) => handleInputChange(row, value)}
-          hasValue={isValueInInput(row)}
-          inputValue={projectSelectedValue.selectedValues[`${row}-text`]}
-          setIsSelectOpen={() => toggleSelectOpen(row)}
+          hasValue={isValueInProjectInput}
+          inputValue={projectInputValueAtIndex}
+          setIsSelectOpen={toggleSelectOpen}
+          readOnly={true}
         />
       </InputContainer>
-      {isSelectOpen(row) && <ScrollDownContainer row={row} />}
+      {useIsSelectOpen(row) && <ScrollDownContainer row={row} />}
     </Container>
   );
 }

@@ -1,4 +1,4 @@
-import { theme } from "@/app/styles/theme";
+import { theme } from "~/app/styles/theme";
 import { styled } from "@linaria/react";
 
 interface InputContentProps {

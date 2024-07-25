@@ -1,5 +1,6 @@
 import { styled } from "@linaria/react";
-import { theme } from "@/app/styles/theme";
+import { darken } from "polished";
+import { theme } from "~/app/styles/theme";
 
 type InputsRowProps = {
   checked?: boolean;
@@ -90,8 +91,8 @@ export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "-1.5rem"
-          : "0"}
+        ? "-1.5rem"
+        : "0"}
   );
 `;
 
@@ -138,8 +139,8 @@ export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "1.5rem"
-          : "0"}
+        ? "1.5rem"
+        : "0"}
   );
 
   background: ${theme.COLORS.SECONDARY};
@@ -219,5 +220,21 @@ export const Footer = styled.div`
 
   > div {
     width: 100%;
+  }
+`;
+
+export const ValidationDateError = styled.button`
+  border: none;
+  background-color: transparent;
+  align-self: flex-start;
+  cursor: pointer;
+
+  > span {
+    font-size: 14px;
+    color: ${darken(0.5, theme.COLORS.ERROR)};
+  }
+
+  &:hover {
+    transform: scale(1.02);
   }
 `;

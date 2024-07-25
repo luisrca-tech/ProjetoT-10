@@ -1,4 +1,3 @@
-"use client";
 import { useCallback, useEffect, useState } from "react";
 import {
   Container,
@@ -8,25 +7,22 @@ import {
   CalendarDateValues,
 } from "./styles";
 import Image from "next/image";
+import CalendarIcon from "~/../public/calendaricon.svg";
+import TrashAnimation from "~/../public/trashanimation.svg";
 
-import ScrollDownContainer from "../ScrollDownContainer";
-import CalendarIcon from "../../../../../../../public/calendaricon.svg";
-import TrashAnimation from "../../../../../../../public/trashanimation.svg";
-import SelectInput from "@/app/components/inputs/SelectInput";
-
+import SelectInput from "~/app/components/inputs/SelectInput";
 import { useAtom } from "jotai";
-import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
-import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
-import { rowCountAtom } from "@/@atom/ProjectStates/rowCountAtom";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
-
-let offices = {
-  office1: "Back-End PL",
-  office2: "Back-End SR",
-  office3: "Front-End PL",
-  office4: "Front-End SR",
-};
+import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { rowCountAtom } from "~/@atom/ProjectStates/rowCountAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { useGetLastRowIndex } from "~/app/utils/functions/getLastRowIndex";
+import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
+import { useIsValueInInput } from "~/app/utils/functions/isValueInInput";
+import { useGetInputValueAtIndex } from "~/app/utils/functions/getInputValueAtIndex";
+import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
+import { poppins } from "~/app/fonts";
+import ScrollDownContainer from "~/components/forms/FormSelectInput/components/ScrollDownContainer";
 
 interface RowAndScrollDownContainerProps {
   row: string;
@@ -41,22 +37,19 @@ export default function RowAndScrollDownContainer({
   const [ranges, setRanges] = useAtom(rangesAtom);
   const [rowCount, setRowCount] = useAtom(rowCountAtom);
   const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
-    rowsAndSelectedValuesAtom,
+    rowsAndSelectedValuesAtom
   );
 
-  const [selectedItemIndex, setSelectedItemIndex] = useState<string | null>(
-    null,
-  );
   const [startX, setStartX] = useState<number | null>(null);
   const [offsetXByRow, setOffsetXByRow] = useState<{ [key: string]: number }>(
-    {},
+    {}
   );
 
   const [isNewRowAdded, setIsNewRowAdded] = useState(false);
 
   const canAddRow = rowsAndSelectedValues.rows.every((index) => {
     const firstTextValue =
-      rowsAndSelectedValues.selectedValues[`firstTextValue${index}-text`];
+      rowsAndSelectedValues.selectedValues[`firstTextValue${index}-option`];
     const secondTextValue =
       rowsAndSelectedValues.selectedValues[`secondTextValue${index}-text`];
     const thirdTextValue =
@@ -65,10 +58,39 @@ export default function RowAndScrollDownContainer({
     return firstTextValue && secondTextValue && thirdTextValue;
   });
 
+  const formatDate = (date: Date | undefined) => {
+    return date ? date.toLocaleDateString("pt-BR") : "";
+  };
+
+  const lastRowIndex = useGetLastRowIndex();
+  const isLastRow = row === lastRowIndex;
+  const toggleSelectOpen = useToggleSelectOpen(row);
+  const isValueInFirstInput = useIsValueInInput(row, "firstTextValue");
+  const isValueInSecondInput = useIsValueInInput(row, "secondTextValue");
+  const isValueInThirdInput = useIsValueInInput(row, "thirdTextValue");
+  const firstInputValueAtIndex = useGetInputValueAtIndex("firstTextValue", row);
+  const secondInputValueAtIndex = useGetInputValueAtIndex(
+    "secondTextValue",
+    row
+  );
+  const thirdInputValueAtIndex = useGetInputValueAtIndex("thirdTextValue", row);
+  const firstInputIdAtIndex = `firstTextValue${row}-option`;
+  const secondInputIdAtIndex = `secondTextValue${row}-text`;
+  const thirdInputIdAtIndex = `thirdTextValue${row}-text`;
+  const startDateRangeInCurrentRow = formatDate(ranges[row]?.startDate);
+  const endDateRangeInCurrentRow = formatDate(ranges[row]?.endDate);
+  console.log(ranges, `ranges`);
+  console.log(ranges?.[row], `ranges`);
+  console.log(row, `row`);
+
+  const isRangeInThisRow =
+    isLastRow ||
+    (ranges?.[row]?.startDate && ranges?.[row].endDate !== undefined);
+
   const addRow = useCallback(() => {
     const newDateRange = {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: undefined,
+      endDate: undefined,
       key: `selection-row-${rowCount}`,
       isSelected: false,
     };
@@ -108,63 +130,45 @@ export default function RowAndScrollDownContainer({
     });
   }
 
-  const toggleSelectOpen = (index: string) => {
-    setSelectedItemIndex(selectedItemIndex === index ? null : index);
-  };
-
-  const isValueInInput = (row: string, inputName: string) => {
-    const { selectedValues } = rowsAndSelectedValues;
-    const textValue = selectedValues[`${inputName}${row}`];
-
-    return textValue !== undefined && textValue.length > 0;
-  };
-
-  const isSelectOpen = (index: string) => {
-    return selectedItemIndex === index;
-  };
-
-  function handleInputChange(id: string, value: string, index?: number) {
+  function handleInputChange(id: string, value: string) {
     setRowsAndSelectedValues((prevState) => ({
       ...prevState,
       selectedValues: {
         ...prevState.selectedValues,
         [`${id}-text`]: value,
-        [`${id}-option`]: `${index}`,
       },
     }));
   }
 
-  const handleTouchStartForRow = (
-    event: React.TouchEvent,
-    rowIndex: string,
-  ) => {
-    setStartX(event.touches[0].clientX);
+  function handleTouchStartForRow(event: React.TouchEvent, rowIndex: string) {
+    if (event.touches[0]) {
+      setStartX(event.touches[0].clientX);
+    }
+
     setOffsetXByRow((prevOffsetX) => ({
       ...prevOffsetX,
       [rowIndex]: 0,
     }));
-  };
+  }
 
-  const handleTouchMove = (event: React.TouchEvent, rowIndex: string) => {
+  function handleTouchMove(event: React.TouchEvent, rowIndex: string) {
     if (startX !== null) {
-      const newOffsetX = event.touches[0].clientX - startX;
-      if (newOffsetX < 0) {
-        setOffsetXByRow((prevState) => ({
-          ...prevState,
-          [rowIndex]: newOffsetX,
-        }));
+      if (event.touches[0]) {
+        const newOffsetX = event.touches[0].clientX - startX;
+
+        if (newOffsetX < 0) {
+          setOffsetXByRow((prevState) => ({
+            ...prevState,
+            [rowIndex]: newOffsetX,
+          }));
+        }
       }
     }
-  };
-
-  const getLastRowIndex = () => {
-    const rows = rowsAndSelectedValues.rows;
-    return rows[rows.length - 1];
-  };
+  }
 
   const handleTouchEndForRow = (rowIndex: string) => {
     if (offsetXByRow[rowIndex] && Math.abs(offsetXByRow[rowIndex]) > 100) {
-      if (rowIndex !== getLastRowIndex()) {
+      if (rowIndex !== lastRowIndex) {
         removeRow(rowIndex);
       }
     } else {
@@ -176,10 +180,6 @@ export default function RowAndScrollDownContainer({
     setStartX(null);
   };
 
-  const formatDate = (date: Date | undefined) => {
-    return date ? date.toLocaleDateString("pt-BR") : "";
-  };
-
   useEffect(() => {
     if (canAddRow && !isNewRowAdded) {
       addRow();
@@ -188,89 +188,95 @@ export default function RowAndScrollDownContainer({
   }, [addRow, canAddRow, isNewRowAdded]);
 
   return (
-    <Container
-      key={row}
-      offsetXByRow={offsetXByRow}
-      offsetX={offsetXByRow[row]}
-      onTouchStart={(e) => handleTouchStartForRow(e, row)}
-      onTouchMove={(e) => handleTouchMove(e, row)}
-      onTouchEnd={() => handleTouchEndForRow(row)}
-      isLastRow={row === getLastRowIndex()}
-    >
-      <InputsRow checked={checked}>
-        <SelectInput
-          type="text"
-          placeholder="Cargo"
-          id={`firstTextValue${row}`}
-          onChange={(value) => handleInputChange(`firstTextValue${row}`, value)}
-          hasValue={isValueInInput(row, "firstTextValue")}
-          inputValue={
-            rowsAndSelectedValues.selectedValues[`firstTextValue${row}-text`]
-          }
-          setIsSelectOpen={() => toggleSelectOpen(row)}
-        />
-        <DeleteButtonAnimationFrame
-          onClick={() => removeRow(row)}
-          offsetX={offsetXByRow[row] || 0}
-          offsetXByRow={offsetXByRow}
-          isLastRow={row === getLastRowIndex()}
-        >
-          <Image src={TrashAnimation} alt="" width={20} height={20} />
-        </DeleteButtonAnimationFrame>
-        {!checked ? (
-          <>
-            <SelectInput
-              type="number"
-              placeholder="Horas"
-              id={`secondTextValue${row}`}
-              onChange={(value) =>
-                handleInputChange(`secondTextValue${row}`, value)
-              }
-              hasValue={isValueInInput(row, "secondTextValue")}
-              inputValue={
-                rowsAndSelectedValues.selectedValues[
-                  `secondTextValue${row}-text`
-                ]
-              }
-            />
-            <SelectInput
-              type="number"
-              placeholder="Valor Hora"
-              id={`thirdTextValue${row}`}
-              onChange={(value) =>
-                handleInputChange(`thirdTextValue${row}`, value)
-              }
-              hasValue={isValueInInput(row, "thirdTextValue")}
-              inputValue={
-                rowsAndSelectedValues.selectedValues[
-                  `thirdTextValue${row}-text`
-                ]
-              }
-            />
-          </>
-        ) : (
-          <>
-            {ranges[row].isSelected ? (
-              <CalendarDateValues onClick={() => inputDataMenuClick(row)}>
-                <p>{formatDate(ranges[row].startDate)}</p>
-                <span>-</span>
-                <p>{formatDate(ranges[row].endDate)}</p>
-              </CalendarDateValues>
-            ) : (
-              <InputDataMenu onClick={() => inputDataMenuClick(row)}>
-                <span>Datas</span>
-                <Image
-                  src={CalendarIcon}
-                  width={24}
-                  height={24}
-                  alt="Icone de Calendário"
-                />
-              </InputDataMenu>
-            )}
-          </>
-        )}
-      </InputsRow>
-      {isSelectOpen(row) && <ScrollDownContainer row={row} />}
-    </Container>
+    <>
+      <Container
+        key={row}
+        offsetXByRow={offsetXByRow}
+        offsetX={offsetXByRow[row]}
+        onTouchStart={(e) => handleTouchStartForRow(e, row)}
+        onTouchMove={(e) => handleTouchMove(e, row)}
+        onTouchEnd={() => handleTouchEndForRow(row)}
+        isLastRow={isLastRow}
+      >
+        <InputsRow checked={checked}>
+          <SelectInput
+            type="text"
+            placeholder="Cargo"
+            id={firstInputIdAtIndex}
+            hasValue={isValueInFirstInput}
+            inputValue={firstInputValueAtIndex}
+            setIsSelectOpen={toggleSelectOpen}
+            isLastRow={row === lastRowIndex}
+            readOnly={true}
+          />
+          <DeleteButtonAnimationFrame
+            onClick={() => removeRow(row)}
+            offsetX={offsetXByRow[row] || 0}
+            offsetXByRow={offsetXByRow}
+            isLastRow={isLastRow}
+          >
+            <Image src={TrashAnimation} alt="" width={20} height={20} />
+          </DeleteButtonAnimationFrame>
+          {!checked ? (
+            <>
+              <SelectInput
+                type="number"
+                placeholder="Horas"
+                id={secondInputIdAtIndex}
+                onChange={(value) =>
+                  handleInputChange(`secondTextValue${row}`, value)
+                }
+                hasValue={isValueInSecondInput}
+                inputValue={secondInputValueAtIndex}
+                isLastRow={isLastRow}
+                readOnly={false}
+              />
+              <SelectInput
+                type="number"
+                placeholder="Valor Hora"
+                id={thirdInputIdAtIndex}
+                onChange={(value) =>
+                  handleInputChange(`thirdTextValue${row}`, value)
+                }
+                hasValue={isValueInThirdInput}
+                inputValue={thirdInputValueAtIndex}
+                isLastRow={isLastRow}
+                readOnly={false}
+              />
+            </>
+          ) : (
+            <>
+              {ranges[row]?.isSelected ? (
+                <CalendarDateValues
+                  className={poppins.className}
+                  onClick={() => inputDataMenuClick(row)}
+                >
+                  <p>{startDateRangeInCurrentRow}</p>
+                  <span>-</span>
+                  <p>{endDateRangeInCurrentRow}</p>
+                </CalendarDateValues>
+              ) : (
+                <InputDataMenu
+                  className={poppins.className}
+                  disabled={isLastRow}
+                  isRangeInThisRow={isRangeInThisRow}
+                  onClick={() => inputDataMenuClick(row)}
+                  isLastRow={isLastRow}
+                >
+                  <span>Datas</span>
+                  <Image
+                    src={CalendarIcon}
+                    width={24}
+                    height={24}
+                    alt="Icone de Calendário"
+                  />
+                </InputDataMenu>
+              )}
+            </>
+          )}
+        </InputsRow>
+        {useIsSelectOpen(row) && <ScrollDownContainer row={row} />}
+      </Container>
+    </>
   );
 }

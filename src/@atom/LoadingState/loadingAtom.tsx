@@ -1,3 +1,3 @@
 import { atom } from "jotai";
 
-export const loading = atom(false);
+export const loadingAtom = atom(false);

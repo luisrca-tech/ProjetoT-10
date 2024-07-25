@@ -1,4 +1,4 @@
-import { theme } from "@/app/styles/theme";
+import { theme } from "~/app/styles/theme";
 import { styled } from "@linaria/react";
 
 type ContainerProps = {
@@ -8,17 +8,22 @@ type ContainerProps = {
 
 type InputProps = {
   hasValue: Boolean;
+  showError: boolean;
 };
+
+export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const Container = styled.div<ContainerProps>`
   display: flex;
-
   width: ${(props) =>
     props.checked
       ? "calc(100% - 28px)"
       : props.isInProjectHeader
-        ? "100%"
-        : "32%"};
+      ? "100%"
+      : "32%"};
   height: 2.5rem;
   align-items: center;
   position: relative;
@@ -44,7 +49,8 @@ export const Input = styled.input<InputProps>`
   background-color: ${(props) =>
     props.hasValue ? "transparent" : `${theme.COLORS.SELECT_INPUT}`};
   border-radius: 60px;
-  border: none;
+  border: ${(props) =>
+    props.showError ? `1px solid ${theme.COLORS.ERROR}` : `none`};
   outline: none;
   z-index: 1;
   font-size: 1rem;

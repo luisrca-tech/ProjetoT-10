@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ButtonDataMenu,
   CalendarDateValues,
@@ -11,15 +9,18 @@ import {
   InputContent,
   EditProjectContainer,
 } from "./styles";
-import HeaderRowAndScrollDownContainer from "./components/HeaderRowAndScrollDownContainer";
-import { roboto } from "@/app/fonts";
+import HeaderRowAndScrollDownContainer from "~/components/surfaces/ProjectProfileHeader/HeaderRowAndScrollDownContainer";
+import { poppins, roboto } from "~/app/fonts";
 import Image from "next/image";
 import CalendarIcon from "../../../../../public/calendaricon.svg";
-import { RiPencilFill } from "react-icons/ri";
 import { useAtom } from "jotai";
-import { rangesAtom } from "@/@atom/ProjectStates/rangesAtom";
-import { checkedAtom } from "@/@atom/ProjectStates/checkedAtom";
-import { projectSelectedValuePropAtom } from "@/@atom/ProjectStates/projectSelectedValue";
+import {
+  type SelectableRangeProps,
+  rangesAtom,
+} from "~/@atom/ProjectStates/rangesAtom";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
+
 interface ProjectProfileHeaderProps {
   inputDataMenuClick: (row: string) => void;
 }
@@ -27,19 +28,76 @@ interface ProjectProfileHeaderProps {
 export function ProjectProfileHeader({
   inputDataMenuClick,
 }: ProjectProfileHeaderProps) {
-  const [ranges] = useAtom(rangesAtom);
+  const [ranges, setRanges] = useAtom(rangesAtom);
   const [checked] = useAtom(checkedAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [, setInputValue] = useState("");
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const words =
-    projectSelectedValue?.selectedValues[`projectRow-text`]?.split(" ");
+    projectSelectedValue?.selectedValue[`projectRow-text`]?.split(" ");
 
+  const globalProjectDate = ranges["global-project-data"];
+  const globalProjectStartDate = ranges["global-project-data"]?.startDate;
+  const globalProjectEndDate = ranges["global-project-data"]?.endDate;
   const initials = words?.map((word) => word.charAt(0));
 
   const initialsString = initials?.join("");
+
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+    }
+  }
+
+  function formatDate(date: Date | undefined) {
+    return date ? date.toLocaleDateString("pt-BR") : "";
+  }
+
+  function getMinMaxDates(ranges: { [key: string]: SelectableRangeProps }) {
+    let minStartDate = undefined;
+    let maxEndDate = undefined;
+
+    for (let key in ranges) {
+      const range = ranges[key];
+      if (range?.startDate) {
+        const startDate = range.startDate.getTime();
+        if (minStartDate === undefined || startDate < minStartDate) {
+          minStartDate = startDate;
+        }
+      }
+      if (range?.endDate) {
+        const endDate = range.endDate.getTime();
+        if (maxEndDate === undefined || endDate > maxEndDate) {
+          maxEndDate = endDate;
+        }
+      }
+    }
+
+    return { minStartDate, maxEndDate };
+  }
+
+  const { minStartDate, maxEndDate } = getMinMaxDates(ranges);
+
+  const minStartDateObj = useMemo(
+    () => (minStartDate !== undefined ? new Date(minStartDate) : undefined),
+    [minStartDate]
+  );
+  const maxEndDateObj = useMemo(
+    () => (maxEndDate !== undefined ? new Date(maxEndDate) : undefined),
+    [maxEndDate]
+  );
+
+  useEffect(() => {
+    setRanges((prevRanges) => ({
+      ...prevRanges,
+      "global-project-data": {
+        ...prevRanges["global-project-data"],
+        startDate: minStartDateObj,
+        endDate: maxEndDateObj,
+      },
+    }));
+  }, [minStartDateObj, maxEndDateObj, setRanges]);
 
   useEffect(() => {
     const storedValue = localStorage.getItem("ProjectProfileInputHeader");
@@ -47,23 +105,6 @@ export function ProjectProfileHeader({
       setInputValue(storedValue);
     }
   }, []);
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  };
-
-  const handlePencilClick = () => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
-  const formatDate = (date: Date | undefined) => {
-    return date ? date.toLocaleDateString("pt-BR") : "";
-  };
 
   return (
     <Container className={roboto.className}>
@@ -83,14 +124,11 @@ export function ProjectProfileHeader({
           {!checked ? (
             <EditProjectContainer>
               <HeaderRowAndScrollDownContainer />
-              <div>
-                <RiPencilFill size={24} onClick={handlePencilClick} />
-              </div>
             </EditProjectContainer>
           ) : (
             <DataContainer>
               <strong>Duração:</strong>
-              {!ranges["global-project-data"].isSelected ? (
+              {!globalProjectDate ? (
                 <ButtonDataMenu
                   onClick={() => inputDataMenuClick("global-project-data")}
                 >
@@ -103,12 +141,14 @@ export function ProjectProfileHeader({
                   />
                 </ButtonDataMenu>
               ) : (
-                <CalendarDateValues
-                  onClick={() => inputDataMenuClick("global-project-data")}
-                >
-                  <p>{formatDate(ranges["global-project-data"].startDate)}</p>
+                <CalendarDateValues>
+                  <p className={poppins.className}>
+                    {formatDate(globalProjectStartDate)}
+                  </p>
                   <span>-</span>
-                  <p>{formatDate(ranges["global-project-data"].endDate)}</p>
+                  <p className={poppins.className}>
+                    {formatDate(globalProjectEndDate)}
+                  </p>
                 </CalendarDateValues>
               )}
             </DataContainer>

@@ -1,12 +1,12 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { type ReactNode } from "react";
 import Modal from "../../surfaces/Modal";
 import { Content } from "./styles";
 
 import LoadingIndicator from "../LoadingIndicator";
 import { useAtom } from "jotai";
-import { loading } from "@/@atom/LoadingState/loadingAtom";
+import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 type FullScreenLoadingProps = {
   children: ReactNode;
 };
@@ -14,16 +14,12 @@ type FullScreenLoadingProps = {
 export default function FullScreenLoading({
   children,
 }: FullScreenLoadingProps) {
-  const [reqLoading] = useAtom(loading);
-
-  useEffect(() => {
-    document.body.style.overflow = loading ? "hidden" : "unset";
-  }, []);
+  const [loading] = useAtom(loadingAtom);
 
   return (
     <>
       {children}
-      {reqLoading && (
+      {loading && (
         <Content>
           <Modal>
             <LoadingIndicator />

@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react";
-import { theme } from "@/app/styles/theme";
+import { theme } from "~/app/styles/theme";
 
 export const Container = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ export const Container = styled.div`
 export const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   width: 100%;
 `;
 
@@ -69,3 +69,7 @@ export const OtherOptionsContainer = styled.div`
   flex-direction: column;
   gap: 1rem;
 `;
+
+export const AuthActions = styled.button`
+  all: unset;
+`

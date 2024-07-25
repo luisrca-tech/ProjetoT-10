@@ -1,10 +1,13 @@
-import { ReactNode } from "react";
-import { roboto } from "./fonts";
-import { css } from "@linaria/core";
-import FullScreenLoading from "./components/widgets/FullScreenLoading";
+import { type ReactNode } from "react";
 import { Provider } from "jotai";
+import FullScreenLoading from "~/components/widgets/FullScreenLoading";
+import { roboto } from "~/assets/fonts/fonts";
+import { css } from "@linaria/core";
+// import { ClerkProvider } from "@clerk/nextjs";
+// import { TRPCReactProvider } from "~/trpc/react";
+import { Toaster } from "sonner";
 
-interface Props extends React.PropsWithChildren {}
+type Props = React.PropsWithChildren;
 
 function JotaiProvider({ children }: Props): JSX.Element {
   return <Provider>{children}</Provider>;
@@ -56,9 +59,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-br" className={globalStyle}>
       <body className={roboto.className}>
+        {/* <TRPCReactProvider> */}
         <JotaiProvider>
+          <Toaster position="bottom-right" expand={true} />
           <FullScreenLoading>{children}</FullScreenLoading>
         </JotaiProvider>
+        {/* </TRPCReactProvider> */}
       </body>
     </html>
   );

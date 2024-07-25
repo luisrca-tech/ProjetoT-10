@@ -13,76 +13,47 @@ import {
   UpdateTaskCheckButton,
 } from "./styles";
 import { IoMenu, IoAdd } from "react-icons/io5";
-import { poppins } from "@/app/fonts";
+import { poppins } from "~/app/fonts";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "../Modal";
 import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
-import { postTasks } from "@/app/services/api/tasks/postTask";
-
-import { getCustomFields } from "@/app/services/api/customFields/getCustomFields";
 import { useAtom } from "jotai";
-import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
-import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectFieldAtom";
-
-import { loading } from "@/@atom/LoadingState/loadingAtom";
-import { rowsAndSelectedValuesAtom } from "@/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
+import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 
 export default function Header() {
-  const [, setProjectOptions] = useAtom(projectOptionsAtom);
-  const [, setChargeOptions] = useAtom(chargeOptionsAtom);
-  const [, setLoading] = useAtom(loading);
+  const [ranges] = useAtom(rangesAtom);
+  const [loading, setLoading] = useAtom(loadingAtom);
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
-
+  const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [, setGetCustomFieldsResponse] = useState([]);
-
-  const [fieldId, setFieldId] = useState<string>("");
-  const [customFiledLoading, setCustomFieldLoading] = useState<boolean>();
-
-  const listId = "901303987731";
-
+  const [fieldsIds] = useAtom(fieldsIdsAtom);
   const router = useRouter();
   const currentPath = usePathname();
 
-  useEffect(() => {
-    async function customFieldsGetRequest() {
-      setLoading(true);
+  // async function taskPostRequest() {
+  //   try {
+  //     setLoading(true);
+  //     await postTasks({
+  //       fieldsIds,
+  //       rowsAndSelectedValues,
+  //       projectSelectedValue,
+  //       ranges,
+  //     });
 
-      const getCustomFieldResp = await getCustomFields(listId);
-      setGetCustomFieldsResponse(getCustomFieldResp);
-      const chargeCustomField = getCustomFieldResp.find(
-        (field: { name: string }) => field.name === "PixelCraft_cargos",
-      );
-
-      const projectCustomField = getCustomFieldResp.find(
-        (field: { name: string }) => field.name === "PixelCraft_projeto",
-      );
-
-      const projectOptions = projectCustomField.type_config.options;
-      setProjectOptions(projectOptions);
-
-      const chargeFieldId = chargeCustomField.id;
-      setFieldId(chargeFieldId);
-
-      const chargeOptions = chargeCustomField.type_config.options;
-      setChargeOptions(chargeOptions);
-
-      setLoading(false);
-    }
-
-    customFieldsGetRequest();
-  }, [setChargeOptions, setLoading, setProjectOptions]);
-
-  async function taskPostRequest() {
-    await postTasks({
-      listId,
-      fieldId,
-      rowsAndSelectedValues,
-    });
-  }
+  //     toast.success("Tasks criadas e vinculadas ao NOME DO PROJETO");
+  //   } catch (error) {
+  //     toast.error("Não foi possível concluir a criação das Tasks");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   const handleMenu = () => {
     setShowModal((current) => !current);
@@ -114,6 +85,31 @@ export default function Header() {
     }
     return null;
   };
+
+  let rangesCondition = true;
+  const keys = Object.keys(ranges);
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i] as string;
+    if (!ranges[key]?.startDate || !ranges[key]?.endDate) {
+      rangesCondition = false;
+      break;
+    }
+  }
+
+  // Verificar se selectedValues não está vazio em rowsAndSelectedValues
+  const selectedValuesNotEmpty1 = Object.values(
+    rowsAndSelectedValues.selectedValues
+  ).every((value) => value !== "");
+
+  // Verificar se selectedValues não está vazio em projectSelectedValue
+  const selectedValuesNotEmpty2 =
+    Object.keys(projectSelectedValue.selectedValue).length > 0;
+
+  const isConditionMet =
+    rangesCondition &&
+    selectedValuesNotEmpty1 &&
+    selectedValuesNotEmpty2 &&
+    loading;
 
   const renderIconsAndSidebar = () => {
     if (!isAuthPage()) {
@@ -158,8 +154,8 @@ export default function Header() {
             <ButtonsContainer>
               {isProjectPage() ? (
                 <PostTaskCheckButton
-                  onClick={taskPostRequest}
-                  disabled={customFiledLoading}
+                  // onClick={taskPostRequest}
+                  disabled={!isConditionMet}
                 >
                   <RiCheckFill size={24} />
                 </PostTaskCheckButton>

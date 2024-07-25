@@ -1,6 +1,12 @@
 import { styled } from "@linaria/react";
-import { theme } from "@/app/styles/theme";
+import { darken } from "polished";
+import { theme } from "~/app/styles/theme";
 
+type InputDataMenuProps = {
+  isRangeInThisRow?: boolean;
+  isLastRow: boolean;
+  disabled: boolean;
+};
 type InputsRowProps = {
   checked?: boolean;
   offsetX?: number;
@@ -22,8 +28,8 @@ export const Container = styled.div<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "-1.5rem"
-          : "0"}
+        ? "-1.5rem"
+        : "0"}
   );
 `;
 
@@ -63,8 +69,8 @@ export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "-1.5rem"
-          : "0"}
+        ? "-1.5rem"
+        : "0"}
   );
 `;
 
@@ -79,7 +85,7 @@ export const InputsRow = styled.div<InputsRowProps>`
   height: 100%;
 `;
 
-export const CalendarDateValues = styled.div`
+export const CalendarDateValues = styled.button`
   display: flex;
   gap: 0.2rem;
   height: 100%;
@@ -88,6 +94,8 @@ export const CalendarDateValues = styled.div`
   font-size: 1rem;
   font-weight: Regular;
   padding: 11px 10px 0;
+  border: none;
+  background-color: transparent;
 `;
 
 export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
@@ -111,8 +119,8 @@ export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "1.5rem"
-          : "0"}
+        ? "1.5rem"
+        : "0"}
   );
 
   background: ${theme.COLORS.SECONDARY};
@@ -146,11 +154,14 @@ export const ScrollDownContainer = styled.div`
   }
 `;
 
-export const InputDataMenu = styled.button`
+export const InputDataMenu = styled.button<InputDataMenuProps>`
   background: ${theme.COLORS.SELECT_INPUT};
   color: ${theme.COLORS.SECONDARY_DARK};
   font-size: 1rem;
-  border: none;
+  border: ${(props) =>
+    props.isRangeInThisRow
+      ? "none"
+      : `1px solid ${darken(0.5, theme.COLORS.ERROR)}`};
   padding: 0 0.5rem;
   height: 2.5rem;
   border-radius: 60px;
