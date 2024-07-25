@@ -46,6 +46,19 @@ export const Container = styled.div<ContainerProps>`
 
   span {
     font-size: ${(props) => (props.status === "success" ? "20px" : "16px")};
+    width: 100%;
+    color: ${(props) => {
+      switch (props.status) {
+        case "error":
+          return darken(0.6, theme.COLORS.ERROR);
+        case "success":
+          return darken(0.6, theme.COLORS.SUCCESS);
+        case "warning":
+          return darken(0.6, theme.COLORS.WARNING);
+        default:
+          return darken(0.6, "gray");
+      }
+    }};
   }
 
   &::after {
