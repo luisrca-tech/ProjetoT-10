@@ -11,13 +11,11 @@ import { Suspense } from "react";
 
 export default function Projeto() {
   return (
-    <Suspense>
-      <Container className={roboto.className}>
-        <Header />
-        <Suspense>
-          <ProjectDetailsContent />
-        </Suspense>
-      </Container>
-    </Suspense>
+    <Container className={roboto.className}>
+      <Header />
+      <Suspense>
+        <ProjectDetailsContent />
+      </Suspense>
+    </Container>
   );
 }
