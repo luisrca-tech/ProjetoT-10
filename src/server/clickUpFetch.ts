@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-
+import { showToast } from "~/utils/functions/showToast";
 export type ClickUpFetchProps = {
   body?: unknown;
   headers?: Record<string, string>;
@@ -9,19 +9,13 @@ export type ClickUpFetchProps = {
 };
 
 export async function clickUpFetch<T = any>({
-  //   body,
   method,
   endPoint,
-  //   token, por enquanto, nao preciso lidar com token de usuario, so do clickup, que vai estar global.
-  params,
-}: //   headers = {}, headers mockado por enquanto
-ClickUpFetchProps) {
-  let fetchParams;
+}: ClickUpFetchProps) {
   const listId = "901303987731";
   const correctHeaders: Record<string, string> = {
     Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
   };
-  //   const bodyToFetch = isFormData ? body : JSON.stringify(body);
 
   if (endPoint === "field") {
     correctHeaders["Content-Type"] = "string";
@@ -38,8 +32,10 @@ ClickUpFetchProps) {
 
   if (endPoint === "field") {
     if (response.status === 401) {
-      toast.error(
-        "Nao foi possivel carregar campos personalizados, confira listId"
+      showToast(
+        "error",
+        "Erro de autorização ao acessar CustomFields!",
+        "Confira seus listId e AuthorizationToken"
       );
       return null;
     }
@@ -48,7 +44,11 @@ ClickUpFetchProps) {
 
   if (endPoint === "task") {
     if (response.status === 401) {
-      toast.error("Nao foi possivel carregar tarefas, confira listId");
+      showToast(
+        "error",
+        "Erro de autorização ao acessar Tasks!",
+        "Confira seus listId e AuthorizationToken"
+      );
       return null;
     }
     return responseBody.tasks;
