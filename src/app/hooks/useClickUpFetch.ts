@@ -1,25 +1,16 @@
-import { loadingAtom } from "@/@atom/LoadingState/loadingAtom";
 import { useAtom } from "jotai";
-import { useEffect, useState, useRef } from "react";
-
-import { toast } from "react-toastify";
-import { chargeOptionsAtom } from "@/@atom/api/CustomFields/chargeOptionsAtom";
-import { fieldsIdsAtom } from "@/@atom/api/CustomFields/fieldsIds";
-
-import { EndPointClickUpApiEnum } from "@/clickUpApi/EndPointClickUpApiEnum";
-import { clickUpFetch } from "../services/api/clickUpFetch";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 import { usePathname } from "next/navigation";
-import { projectOptionsAtom } from "@/@atom/api/CustomFields/projectOptionsAtom";
-import { hourValueAtom } from "@/@atom/api/CustomFields/hourValue";
-import { hoursPerMonthAtom } from "@/@atom/api/CustomFields/hoursPerMonth";
-
-type FieldsIdType = {
-  chargeFieldId: string;
-  projectFieldId: string;
-  valueFieldId: string;
-  hoursPerMonthCustomFieldId: string;
-};
+import { type EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
+import { hoursPerMonthAtom } from "~/@atom/api/CustomFields/hoursPerMonth";
+import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
+import { hourValueAtom } from "~/@atom/api/CustomFields/hourValue";
+import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
+import { chargeOptionsAtom } from "~/@atom/api/CustomFields/chargeOptionsAtom";
+import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
+import { clickUpFetch } from "~/server/clickUpFetch";
+import { showToast } from "~/utils/functions/showToast";
 
 export type ClickUpFetchProps = {
   body?: unknown;
@@ -33,169 +24,144 @@ export type ClickUpFetchProps = {
 export default function useClickUpFetch<T>(
   endPoint?: string,
   query?: Record<string, any>,
-  shouldUseToken?: boolean,
+  shouldUseToken?: boolean
 ) {
   const [projectCustomField, setProjectCustomField] = useState([]);
-
-  const [getCustomFieldsResponse, setGetCustomFieldsResponse] = useState([]);
+  const [getCustomFieldsResponse] = useState([]);
   const [hoursPerMonth, setHoursPerMonth] = useAtom(hoursPerMonthAtom);
   const [projectOptions, setProjectOptions] = useAtom(projectOptionsAtom);
   const [hourValue, setHourValue] = useAtom(hourValueAtom);
   const [fieldsIds, setFieldsIds] = useAtom(fieldsIdsAtom);
   const [chargeOptions, setChargeOptions] = useAtom(chargeOptionsAtom);
-
   const [data, setData] = useState<T>();
   const [, setLoading] = useAtom(loadingAtom);
   const currentPath = usePathname();
-
-  const listId = "901303987731";
-
   const requestInitiated = useRef(false);
-
   const [isFetchAllCustomFields, setIsFetchAllCustomFields] =
     useState<boolean>(false);
+  const handleFetchResponse = useCallback(
+    function handleFetchResponse(response: any[]) {
+      if (!response || response.length === 0) return;
 
-  useEffect(() => {
-    async function fetch() {
-      if (requestInitiated.current) return; // Verifica se a requisição já foi iniciada
-      requestInitiated.current = true; // Define a flag como verdadeira
-
-      setLoading(true);
-
-      let fetchParams: ClickUpFetchProps = {
-        endPoint: endPoint as EndPointClickUpApiEnum,
-        // params: queryBuilder,
+      const customFields = {
+        project: response.find(
+          (field: { name: string }) => field.name === "PixelCraft_projeto"
+        ),
+        charge: response.find(
+          (field: { name: string }) => field.name === "PixelCraft_cargos"
+        ),
+        hoursPerMonth: response.find(
+          (field: { name: string }) => field.name === "PixelCraft_Horas_Mes"
+        ),
+        value: response.find(
+          (field: { name: string }) => field.name === "PixelCraft_Valor"
+        ),
       };
 
-      const response = await clickUpFetch(fetchParams);
-      setData(response);
-
-      if (!response || response.length === 0) {
-        setLoading(false);
-        return;
-      }
-
       if (endPoint === `field`) {
-        const projectCustomField = response.find(
-          (field: { name: string }) => field.name === "PixelCraft_projeto",
-        );
-
-        if (!projectCustomField) {
-          toast.error(
-            "Não existe campo personalizado Projeto_PixelCraft nesta lista",
-          );
-          setLoading(false);
-          return;
-        }
-
-        const chargeCustomField = response.find(
-          (field: { name: string }) => field.name === "PixelCraft_cargos",
-        );
-        console.log(chargeCustomField, `chargeCustomField`);
-
-        const hoursPerMonthCustomField = response.find(
-          (field: { name: string }) => field.name === "PixelCraft_Horas_Mes",
-        );
-
-        const valueCustomField = response.find(
-          (field: { name: string }) => field.name === "PixelCraft_Valor",
-        );
-
-        const projectOptionsResp =
-          projectCustomField && projectCustomField.type_config.options;
-
-        const chargeOptions =
-          chargeCustomField && chargeCustomField.type_config.options;
-
-        const valueFieldId = valueCustomField && valueCustomField.id;
-        const hoursPerMonthCustomFieldId =
-          hoursPerMonthCustomField && hoursPerMonthCustomField.id;
-
-        const chargeFieldId = chargeCustomField && chargeCustomField?.id;
-        const projectFieldId = projectCustomField && projectCustomField.id;
-
-        //testar
-
+        const projectOptions = customFields.project?.type_config.options;
+        const chargeOptions = customFields.charge?.type_config.options;
         const fieldsIds = {
-          chargeFieldId,
-          projectFieldId,
-          valueFieldId,
-          hoursPerMonthCustomFieldId,
+          chargeFieldId: customFields.charge?.id,
+          projectFieldId: customFields.project?.id,
+          valueFieldId: customFields.value?.id,
+          hoursPerMonthCustomFieldId: customFields.hoursPerMonth?.id,
         };
-        setProjectCustomField(projectCustomField);
+
+        setProjectCustomField(customFields.project);
         setChargeOptions(chargeOptions);
-        setHoursPerMonth(hoursPerMonthCustomField);
-        setHourValue(valueCustomField);
+        setHoursPerMonth(customFields.hoursPerMonth);
+        setHourValue(customFields.value);
         setFieldsIds(fieldsIds);
-        setProjectOptions(projectOptionsResp);
+        setProjectOptions(projectOptions);
 
         const isFetchAllCustomFields =
-          chargeCustomField &&
-          hoursPerMonthCustomField &&
-          valueCustomField &&
-          projectOptionsResp &&
-          chargeOptions;
+          Object.values(customFields).every(Boolean);
 
         setIsFetchAllCustomFields(isFetchAllCustomFields);
 
         if (currentPath === "/painel-administrativo/projetos") {
-          if (!projectOptionsResp) {
-            toast.error(
-              "Nao existem tasks com projetos selecionados nesta lista!",
+          if (!customFields.project) {
+            showToast(
+              "error",
+              "Não existe Projeto_PixelCraft na lista",
+              "Confira o nome desse campo personalizado em sua lista ClickUp!"
             );
           }
-          toast.success("Projetos carregados");
+          showToast(
+            "success",
+            "Projetos carregados",
+            "Bem vindo aos seus projetos"
+          );
         }
 
         if (currentPath === "/painel-administrativo/projeto") {
-          let messageError;
+          if (!isFetchAllCustomFields) {
+            const missingFields = Object.entries(customFields)
+              .filter(([_, value]) => !value)
+              .map(([key]) => `PixelCraft_${key}`)
+              .join(", ");
 
-          if (!chargeCustomField) {
-            messageError =
-              "nao existe campo personalizado PixelCraft_cargos nesta lista!";
-            toast.error(messageError);
-          }
-          if (!hoursPerMonthCustomField) {
-            messageError =
-              "nao existe campo personalizado PixelCraft_Horas_Mes nesta lista!";
-            toast.error(messageError);
-          }
-          if (!valueCustomField) {
-            messageError =
-              "nao existe campo personalizado PixelCraft_Valor lista!";
-            toast.error(messageError);
-          }
+            showToast(
+              "error",
+              "Erro ao carregar projeto",
+              `${missingFields} não existem na lista`
+            );
+          } else {
+            const missingOptions = [
+              !projectOptions ? "projetos" : null,
+              !chargeOptions ? "cargos" : null,
+            ]
+              .filter(Boolean)
+              .join(", ");
 
-          if (!projectOptionsResp) {
-            messageError = "nao existem opcoes de projeto para selecao!";
-            toast.error(messageError);
-          }
-          if (!chargeOptions) {
-            messageError = "nao existem opcoes de cargo para selecao!";
-            toast.error(messageError);
-          }
-
-          if (isFetchAllCustomFields) {
-            toast.success("Projeto carregado com sucesso!");
+            if (missingOptions) {
+              showToast(
+                "warning",
+                "Projeto carregado",
+                `Não existem opções em ${missingOptions}`
+              );
+            } else {
+              showToast(
+                "success",
+                "Projeto carregado",
+                "Bem vindo ao seu projeto"
+              );
+            }
           }
         }
       }
+    },
+    [
+      currentPath,
+      endPoint,
+      setChargeOptions,
+      setFieldsIds,
+      setHourValue,
+      setHoursPerMonth,
+      setProjectOptions,
+    ]
+  );
 
-      setLoading(false);
-    }
+  const fetch = useCallback(async () => {
+    if (requestInitiated.current) return;
+    requestInitiated.current = true;
+    setLoading(true);
 
+    const fetchParams: ClickUpFetchProps = {
+      endPoint: endPoint as EndPointClickUpApiEnum,
+      // params: queryBuilder,
+    };
+
+    const response = await clickUpFetch(fetchParams);
+    setData(response);
+    handleFetchResponse(response);
+    setLoading(false);
+  }, [endPoint, handleFetchResponse, setLoading]);
+
+  useEffect(() => {
     fetch();
-  }, [
-    currentPath,
-    data,
-    endPoint,
-    setChargeOptions,
-    setFieldsIds,
-    setHourValue,
-    setHoursPerMonth,
-    setLoading,
-    setProjectOptions,
-  ]);
+  }, [fetch]);
 
   return {
     data,
