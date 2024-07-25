@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { showToast } from "~/utils/functions/showToast";
 export type ClickUpFetchProps = {
   body?: unknown;
