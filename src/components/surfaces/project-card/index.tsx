@@ -18,7 +18,7 @@ import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import useClickUpFetch from "~/hooks/useClickUpFetch";
 import { type Task } from "~/server/types/Clickup.type";
 import { poppins } from "~/assets/fonts/fonts";
-import { type ProjectOptionType } from "~/@atom/api/CustomFields/type";
+import { type ProjectOptionType } from "~/app/types/clickUpApi";
 
 export function ProjectsCards() {
   const [progressWidth, setProgressWidth] = useState(0);
