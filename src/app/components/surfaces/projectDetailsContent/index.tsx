@@ -156,7 +156,7 @@ export function ProjectDetailsContent() {
     }
   }, [projectId, getTaskResp, updateRowsAndSelectedValues]);
   return (
-    <div>
+    <>
       {isFetchAllCustomFields && (
         <>
           <ProjectProfileHeader inputDataMenuClick={inputDataMenuClick} />
@@ -178,6 +178,6 @@ export function ProjectDetailsContent() {
           ></CloseCalendarContainer>
         </>
       )}
-    </div>
+    </>
   );
 }
