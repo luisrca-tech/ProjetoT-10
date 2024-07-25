@@ -19,43 +19,28 @@ import Modal from "../Modal";
 import { IoCloseSharp } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import { RiCheckFill } from "react-icons/ri";
-import { toast } from "react-toastify";
+
 import { useAtom } from "jotai";
-import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import {
+  rangesAtom,
+  type SelectableRangeProps,
+} from "~/@atom/ProjectStates/rangesAtom";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
-import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
-import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
-import { postTasks } from "~/server/api/customFields/tasks/postTask";
+// import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
+// import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { poppins } from "~/assets/fonts/fonts";
 
 export default function Header() {
   const [ranges] = useAtom(rangesAtom);
-  const [loading, setLoading] = useAtom(loadingAtom);
+  // const [loading, setLoading] = useAtom(loadingAtom);
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [fieldsIds] = useAtom(fieldsIdsAtom);
+  // const [fieldsIds] = useAtom(fieldsIdsAtom);
   const router = useRouter();
   const currentPath = usePathname();
-
-  async function taskPostRequest() {
-    try {
-      setLoading(true);
-      await postTasks({
-        fieldsIds,
-        rowsAndSelectedValues,
-        projectSelectedValue,
-        ranges,
-      });
-
-      toast.success("Tasks criadas e vinculadas ao NOME DO PROJETO");
-    } catch (error) {
-      toast.error("Não foi possível concluir a criação das Tasks");
-    } finally {
-      setLoading(false);
-    }
-  }
+  let rangesCondition = checkRangesCondition(ranges);
 
   const handleMenu = () => {
     setShowModal((current) => !current);
@@ -87,14 +72,22 @@ export default function Header() {
     }
     return null;
   };
-  let rangesCondition = true;
-  const keys = Object.keys(ranges);
-  for (let i = 0; i < keys.length - 1; i++) {
-    const key = keys[i];
-    if (!ranges[key].startDate || !ranges[key].endDate) {
-      rangesCondition = false;
-      break;
+
+  function checkRangesCondition(ranges: {
+    [key: string]: SelectableRangeProps;
+  }): boolean {
+    const keys = Object.keys(ranges);
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+
+      if (key !== undefined) {
+        const range = ranges[key];
+        if (range && (!range.startDate || !range.endDate)) {
+          return false;
+        }
+      }
     }
+    return true;
   }
 
   // Verificar se selectedValues não está vazio em rowsAndSelectedValues
@@ -107,10 +100,7 @@ export default function Header() {
     Object.keys(projectSelectedValue.selectedValue).length > 0;
 
   const isConditionMet =
-    rangesCondition &&
-    selectedValuesNotEmpty1 &&
-    selectedValuesNotEmpty2 &&
-    loading;
+    rangesCondition && selectedValuesNotEmpty1 && selectedValuesNotEmpty2;
 
   const renderIconsAndSidebar = () => {
     if (!isAuthPage()) {
@@ -155,7 +145,7 @@ export default function Header() {
             <ButtonsContainer>
               {isProjectPage() ? (
                 <PostTaskCheckButton
-                  onClick={taskPostRequest}
+                  // onClick={taskPostRequest}
                   disabled={!isConditionMet}
                 >
                   <RiCheckFill size={24} />

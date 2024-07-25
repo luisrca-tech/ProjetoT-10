@@ -15,7 +15,7 @@ import { isDatePickerOpenAtom } from "~/@atom/ProjectStates/isDatePickerOpenAtom
 import { stringRowAtom } from "~/@atom/ProjectStates/stringRowAtom";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
-import useClickUpFetch from "~/hooks/useClickUpFetch";
+import useClickUpFetch from "~/app/hooks/useClickUpFetch";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { type Task } from "~/server/types/Clickup.type";
 import { roboto } from "~/assets/fonts/fonts";
