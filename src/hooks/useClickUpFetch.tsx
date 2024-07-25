@@ -1,6 +1,6 @@
 import { useAtom } from "jotai";
 import { useEffect, useState, useRef, useCallback } from "react";
-import { toast } from "sonner";
+
 import { usePathname } from "next/navigation";
 import { type EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { hoursPerMonthAtom } from "~/@atom/api/CustomFields/hoursPerMonth";
@@ -10,7 +10,7 @@ import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { chargeOptionsAtom } from "~/@atom/api/CustomFields/chargeOptionsAtom";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { clickUpFetch } from "~/server/clickUpFetch";
-import ToastAlert from "~/app/components/widgets/ToastAlert";
+import { showToast } from "~/utils/functions/showToast";
 
 export type ClickUpFetchProps = {
   body?: unknown;
@@ -39,23 +39,6 @@ export default function useClickUpFetch<T>(
   const requestInitiated = useRef(false);
   const [isFetchAllCustomFields, setIsFetchAllCustomFields] =
     useState<boolean>(false);
-
-  const showToast = useCallback(function showToast(
-    status: "error" | "success" | "warning",
-    message: string,
-    justifyMessage?: string
-  ) {
-    toast(
-      <ToastAlert
-        status={status}
-        message={message}
-        justifyMessage={justifyMessage}
-      />,
-      { duration: 4000, unstyled: true }
-    );
-  },
-  []);
-
   const handleFetchResponse = useCallback(
     function handleFetchResponse(response: any[]) {
       if (!response || response.length === 0) return;
@@ -157,7 +140,6 @@ export default function useClickUpFetch<T>(
       setHourValue,
       setHoursPerMonth,
       setProjectOptions,
-      showToast,
     ]
   );
 
