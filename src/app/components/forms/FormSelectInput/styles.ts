@@ -1,4 +1,5 @@
 import { styled } from "@linaria/react";
+import { darken } from "polished";
 import { theme } from "~/app/styles/theme";
 
 type InputsRowProps = {
@@ -90,8 +91,8 @@ export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "-1.5rem"
-          : "0"}
+        ? "-1.5rem"
+        : "0"}
   );
 `;
 
@@ -138,8 +139,8 @@ export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "1.5rem"
-          : "0"}
+        ? "1.5rem"
+        : "0"}
   );
 
   background: ${theme.COLORS.SECONDARY};
@@ -230,7 +231,7 @@ export const ValidationDateError = styled.button`
 
   > span {
     font-size: 14px;
-    color: ${theme.COLORS.ERROR};
+    color: ${darken(0.5, theme.COLORS.ERROR)};
   }
 
   &:hover {

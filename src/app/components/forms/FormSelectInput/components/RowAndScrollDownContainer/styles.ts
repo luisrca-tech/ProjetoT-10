@@ -1,4 +1,5 @@
 import { styled } from "@linaria/react";
+import { darken } from "polished";
 import { theme } from "~/app/styles/theme";
 
 type InputDataMenuProps = {
@@ -157,9 +158,10 @@ export const InputDataMenu = styled.button<InputDataMenuProps>`
   background: ${theme.COLORS.SELECT_INPUT};
   color: ${theme.COLORS.SECONDARY_DARK};
   font-size: 1rem;
-  border-top: 2px solid red;
   border: ${(props) =>
-    props.isRangeInThisRow ? "none" : `1px solid ${theme.COLORS.ERROR}`};
+    props.isRangeInThisRow
+      ? "none"
+      : `1px solid ${darken(0.5, theme.COLORS.ERROR)}`};
   padding: 0 0.5rem;
   height: 2.5rem;
   border-radius: 60px;
