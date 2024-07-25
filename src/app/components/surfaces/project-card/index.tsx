@@ -27,7 +27,7 @@ type DatesType = {
 
 type FilteredTasksByProjectType = {
   project: ProjectOptionType;
-  dates: DatesType;
+  dates?: DatesType;
 };
 
 export function ProjectsCards() {
