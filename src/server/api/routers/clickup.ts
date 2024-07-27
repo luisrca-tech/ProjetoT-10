@@ -30,7 +30,7 @@ export const clickupRouter = createTRPCRouter({
           method: "GET",
           headers: {
             "Content-Type": "string",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P", //mocado.
+            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
           },
         }
       );
@@ -38,7 +38,6 @@ export const clickupRouter = createTRPCRouter({
       if (response.status === 401) {
         console.log(`Erro :${responseBody.err}`);
         console.log(`Erro :listId sem autorizacao.`);
-        //tratamento de erro de autorizacao.
         return responseBody.err;
       }
 

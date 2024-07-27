@@ -26,6 +26,7 @@ import { ProjectProfileHeader } from "../ProjectProfileHeader";
 import ToggleSwitch from "../../widgets/ToggleSwitch";
 import FormSelectInput from "../../forms/FormSelectInput";
 import { useSearchParams } from "next/navigation";
+import { clickupRouter } from "~/server/api/routers/clickup";
 
 export function ProjectDetailsContent() {
   const [checked, setChecked] = useAtom(checkedAtom);

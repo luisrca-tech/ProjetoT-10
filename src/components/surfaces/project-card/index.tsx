@@ -19,6 +19,9 @@ import useClickUpFetch from "~/app/hooks/useClickUpFetch";
 import { type Task } from "~/server/types/Clickup.type";
 import { poppins } from "~/assets/fonts/fonts";
 import { type ProjectOptionType } from "~/app/types/clickUpApi";
+import { clickupRouter } from "~/server/api/routers/clickup";
+
+const listId = "901303987731";
 
 export function ProjectsCards() {
   const [progressWidth, setProgressWidth] = useState(0);
