@@ -3,10 +3,9 @@ import { Provider } from "jotai";
 import FullScreenLoading from "~/components/widgets/FullScreenLoading";
 import { roboto } from "~/assets/fonts/fonts";
 import { css } from "@linaria/core";
-// import { ClerkProvider } from "@clerk/nextjs";
-// import { TRPCReactProvider } from "~/trpc/react";
 import { Toaster } from "sonner";
 import { TRPCReactProvider } from "~/trpc/react";
+import { ClerkProvider } from "@clerk/nextjs";
 
 type Props = React.PropsWithChildren;
 
@@ -61,10 +60,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="pt-br" className={globalStyle}>
       <body className={roboto.className}>
         <TRPCReactProvider>
-        <JotaiProvider>
-          <Toaster position="bottom-right" expand={true} />
-          <FullScreenLoading>{children}</FullScreenLoading>
-        </JotaiProvider>
+          <JotaiProvider>
+            <ClerkProvider>
+              <Toaster position="bottom-right" expand={true} />
+              <FullScreenLoading>{children}</FullScreenLoading>
+            </ClerkProvider>
+          </JotaiProvider>
         </TRPCReactProvider>
       </body>
     </html>

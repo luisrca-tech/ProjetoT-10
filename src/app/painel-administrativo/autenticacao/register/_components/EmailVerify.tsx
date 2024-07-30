@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { FormContent } from "./style";
 import AuthenticationInput from "~/components/inputs/AuthenticationInput";
 import Button from "~/components/widgets/Button";
+import { api } from "~/trpc/react";
 
 export default function EmailVerify() {
   const router = useRouter();
@@ -13,6 +14,7 @@ export default function EmailVerify() {
   const [code, setCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingResend, setIsLoadingResend] = useState(false);
+  const userMutation = api.user.create.useMutation();
 
   const { isLoaded, setActive, signUp } = useSignUp();
 
@@ -27,7 +29,14 @@ export default function EmailVerify() {
         code,
       });
 
+      if (!completeSignUp.createdUserId) {
+        throw new Error("Id was not provided");
+      }
+
       if (completeSignUp.status === "complete") {
+        await userMutation.mutateAsync({
+          userId: completeSignUp.createdUserId,
+        });
         await setActive({ session: completeSignUp.createdSessionId });
         router.push("/");
       }

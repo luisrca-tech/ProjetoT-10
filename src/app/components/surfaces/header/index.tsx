@@ -25,35 +25,16 @@ import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelec
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
-import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
+import { UserButton } from "@clerk/nextjs";
 
 export default function Header() {
   const [ranges] = useAtom(rangesAtom);
-  const [loading, setLoading] = useAtom(loadingAtom);
+  const [loading] = useAtom(loadingAtom);
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [fieldsIds] = useAtom(fieldsIdsAtom);
   const router = useRouter();
   const currentPath = usePathname();
-
-  // async function taskPostRequest() {
-  //   try {
-  //     setLoading(true);
-  //     await postTasks({
-  //       fieldsIds,
-  //       rowsAndSelectedValues,
-  //       projectSelectedValue,
-  //       ranges,
-  //     });
-
-  //     toast.success("Tasks criadas e vinculadas ao NOME DO PROJETO");
-  //   } catch (error) {
-  //     toast.error("Não foi possível concluir a criação das Tasks");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
 
   const handleMenu = () => {
     setShowModal((current) => !current);
@@ -96,12 +77,10 @@ export default function Header() {
     }
   }
 
-  // Verificar se selectedValues não está vazio em rowsAndSelectedValues
   const selectedValuesNotEmpty1 = Object.values(
     rowsAndSelectedValues.selectedValues
   ).every((value) => value !== "");
 
-  // Verificar se selectedValues não está vazio em projectSelectedValue
   const selectedValuesNotEmpty2 =
     Object.keys(projectSelectedValue.selectedValue).length > 0;
 
@@ -116,10 +95,11 @@ export default function Header() {
       return (
         <>
           <SidebarContainer isShow={showModal}>
+            <UserButton />
             <CloseContainer>
               <button onClick={() => setShowModal(false)}>
                 <span className={poppins.className}>Fechar</span>
-                <IoCloseSharp size={24} /> {/* Adicione o ícone de fechar */}
+                <IoCloseSharp size={24} />
               </button>
             </CloseContainer>
             <OptionsContainer>
@@ -153,16 +133,11 @@ export default function Header() {
             </TitleContainer>
             <ButtonsContainer>
               {isProjectPage() ? (
-                <PostTaskCheckButton
-                  // onClick={taskPostRequest}
-                  disabled={!isConditionMet}
-                >
+                <PostTaskCheckButton disabled={!isConditionMet}>
                   <RiCheckFill size={24} />
                 </PostTaskCheckButton>
               ) : isPersonsPage() ? (
-                <UpdateTaskCheckButton
-                /* onClick ={updateTaskReq}*/
-                ></UpdateTaskCheckButton>
+                <UpdateTaskCheckButton></UpdateTaskCheckButton>
               ) : (
                 <AddProjectButton
                   onClick={() => router.push("/painel-administrativo/projeto")}
