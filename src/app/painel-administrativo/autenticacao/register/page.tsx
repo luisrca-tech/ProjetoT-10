@@ -69,21 +69,19 @@ export default function Register() {
       {!emailVerify ? (
         <Form onSubmit={handleRegister}>
           <AuthenticationInput
-            label="E-MAIL"
             id="email"
             type="email"
-            placeholder="email@exemplo.com"
+            placeholder="Cadastre um email válido..."
             autoComplete="useremail"
             onChange={(e) => setEmail(e.target.value)}
             value={email}
             required={isSubmitted}
           />
           <AuthenticationInput
-            label="Password"
             isPassword={true}
             id="password"
             type="password"
-            placeholder="senha"
+            placeholder="Cadastre uma senha..."
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value)}
             value={password}

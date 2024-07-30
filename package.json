@@ -12,7 +12,8 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "ngrok": "ngrok http http://localhost:3000"
   },
   "dependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
@@ -53,6 +54,7 @@
     "sonner": "^1.5.0",
     "styled-components": "^6.1.11",
     "superjson": "^2.2.1",
+    "svix": "^1.25.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

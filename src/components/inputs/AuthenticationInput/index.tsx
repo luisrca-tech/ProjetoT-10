@@ -7,7 +7,7 @@ import { bebasNeue } from "~/assets/fonts/fonts";
 
 export const InputSchema = z.object({
   isPassword: z.boolean().optional(),
-  label: z.string(),
+  label: z.string().optional(),
   value: z.string().optional(),
   type: z.enum([
     "password",
