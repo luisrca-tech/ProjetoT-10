@@ -8,7 +8,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
-import { toast } from "sonner";
 import EmailVerify from "./_components/EmailVerify";
 import AuthenticationInput, {
   type InputProps,
@@ -16,6 +15,7 @@ import AuthenticationInput, {
 } from "~/components/inputs/AuthenticationInput";
 import Button from "~/components/widgets/Button";
 import { roboto } from "~/assets/fonts/fonts";
+import { showToast } from "~/utils/functions/showToast";
 
 export default function Register() {
   const {
@@ -48,9 +48,13 @@ export default function Register() {
       setEmailVerify(true);
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "error",
+          "Digite um e-mail válido!",
+          "Seu e-mail não pode estar vazio e deve conter características únicas como '@'"
+        );
       }
-      toast.error("Something went wrong. Try again");
+      showToast("error", "Something went wrong, try again!");
     } finally {
       setIsLoading(false);
     }

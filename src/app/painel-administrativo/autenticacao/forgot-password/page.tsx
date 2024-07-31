@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignIn } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
-import { toast } from "sonner";
 import ResetPassword from "./_components/ResetPassword";
 import AuthenticationInput, {
   type InputProps,
@@ -13,6 +12,7 @@ import AuthenticationInput, {
 } from "~/components/inputs/AuthenticationInput";
 import Button from "~/components/widgets/Button";
 import { roboto } from "~/assets/fonts/fonts";
+import { showToast } from "~/utils/functions/showToast";
 
 export default function ForgotPassword() {
   const {
@@ -41,9 +41,13 @@ export default function ForgotPassword() {
       setVerifyCode(true);
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "error",
+          "E-mail incorreto ou inexistente!",
+          "Por favor, confirme se o e-mail fornecido esta correto e se ele existe."
+        );
       }
-      toast.error("Something went wrong. Try again");
+      showToast("error", "Something went wrong, please try again");
     } finally {
       setIsLoading(false);
     }
@@ -53,7 +57,7 @@ export default function ForgotPassword() {
     <Container>
       {!verifyCode ? (
         <Form onSubmit={handleBackupPassword}>
-          <p>Informe seu e-mail para recuperação de senha.</p>
+          <p>Informe o e-mail referente a conta para recuperar a sua senha.</p>
           <AuthenticationInput
             label="E-MAIL"
             id="email"

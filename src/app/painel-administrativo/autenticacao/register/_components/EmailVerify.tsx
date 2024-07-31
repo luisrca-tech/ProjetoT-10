@@ -2,11 +2,11 @@ import { useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
-import { toast } from "sonner";
 import { FormContent } from "./style";
 import AuthenticationInput from "~/components/inputs/AuthenticationInput";
 import Button from "~/components/widgets/Button";
 import { api } from "~/trpc/react";
+import { showToast } from "~/utils/functions/showToast";
 
 export default function EmailVerify() {
   const router = useRouter();
@@ -39,13 +39,17 @@ export default function EmailVerify() {
         });
         await setActive({ session: completeSignUp.createdSessionId });
         router.push("/");
+        showToast("success", "Úsuario cadastrado com sucesso!");
       }
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "error",
+          "Não conseguimos validar seu cadastro, tente novamente!"
+        );
       }
 
-      toast.error("Something went wrong. Try again");
+      showToast("error", "Something went wrong, try again!");
     } finally {
       setIsLoading(false);
     }
@@ -57,12 +61,16 @@ export default function EmailVerify() {
       await signUp.prepareEmailAddressVerification({
         strategy: "email_code",
       });
+      showToast("success", "Um código foi enviado para seu email!");
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "warning",
+          "Não conseguimos fazer o envio do código, por favor tente novamente!"
+        );
       }
 
-      toast.error("Something went wrong. Try again");
+      showToast("error", "Something went wrong, try again!");
     } finally {
       setIsLoadingResend(false);
     }

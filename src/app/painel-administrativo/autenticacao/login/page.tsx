@@ -19,13 +19,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignIn } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
-import { toast } from "sonner";
 import AuthenticationInput, {
   type InputProps,
   InputSchema,
 } from "~/components/inputs/AuthenticationInput";
 import Button from "~/components/widgets/Button";
 import { roboto } from "~/assets/fonts/fonts";
+import { showToast } from "~/utils/functions/showToast";
 
 export default function Login() {
   const {
@@ -65,9 +65,13 @@ export default function Login() {
       }
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "error",
+          "Credenciais incorretas!",
+          "Por favor, confirme se o úsuario realmente existe e se esta sendo digitado corretamente."
+        );
       }
-      toast.error("Something went wrong. Try again");
+      showToast("error", "Somenthing went wrong, please try again!");
     } finally {
       setIsLoading(false);
     }

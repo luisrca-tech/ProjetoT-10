@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { FormContent } from "./styles";
 import Button from "~/components/widgets/Button";
 import AuthenticationInput from "~/components/inputs/AuthenticationInput";
+import { showToast } from "~/utils/functions/showToast";
 
 export default function ResetPassword() {
   const router = useRouter();
@@ -33,12 +34,16 @@ export default function ResetPassword() {
       if (completeSignUp.status === "complete") {
         await setActive({ session: completeSignUp.createdSessionId });
         router.push("/");
+        showToast("success", "Senha alterada com sucesso!");
       }
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "error",
+          "A senha ou o código de verificação estão incorretos",
+          "Por favor, confirme se você está preenchendo todos os campos!"
+        );
       }
-
       toast.error("Something went wrong. Try again");
     } finally {
       setIsLoading(false);
@@ -52,12 +57,17 @@ export default function ResetPassword() {
         strategy: "email_code",
         code,
       });
+      showToast("success", "Úm código foi enviado para o seu e-mail!");
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "error",
+          "Um código ja foi enviado para o seu e-mail!",
+          "Por favor, confira a caixa de entrada do seu e-mail."
+        );
       }
 
-      toast.error("Something went wrong. Try again");
+      showToast("error", "Something went wrong. Please try again");
     } finally {
       setIsLoadingResend(false);
     }
