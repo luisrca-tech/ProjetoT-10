@@ -80,14 +80,11 @@ export default function RowAndScrollDownContainer({
   const thirdInputIdAtIndex = `thirdTextValue${row}-text`;
   const startDateRangeInCurrentRow = formatDate(ranges[row]?.startDate);
   const endDateRangeInCurrentRow = formatDate(ranges[row]?.endDate);
-  console.log(ranges, `ranges`);
-  console.log(ranges?.[row], `ranges.row`);
-  console.log(row, `row`);
+
   const isRangeInThisRow =
     isLastRow ||
     (ranges?.[row]?.startDate !== undefined &&
       ranges?.[row].endDate !== undefined);
-  console.log(isRangeInThisRow, `isRangeInThisRow`);
 
   const addRow = useCallback(() => {
     const newDateRange = {
