@@ -5,9 +5,9 @@ import {
   ValidationDateError,
 } from "./styles";
 
-import { FormHeader } from "./components/FormHeader";
-import RowAndScrollDownContainer from "./components/RowAndScrollDownContainer";
-import { BudgetContainer } from "./components/FooterSumContainer";
+import { FormHeader } from "./FormHeader";
+import RowAndScrollDownContainer from "./RowAndScrollDownContainer";
+import { BudgetContainer } from "./FooterSumContainer";
 import { useAtom } from "jotai";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
