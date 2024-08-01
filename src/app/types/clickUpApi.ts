@@ -15,12 +15,13 @@ export type CustomField = {
   type: string;
   type_config: {
     new_drop_down: boolean;
-    options: {
+    options: Array<{
       id: string;
       name: string;
       color: string | null;
-      orderindex: number;
-    };
+      orderindex?: number;
+      label?: string;
+    }>;
   };
   date_created: string;
   hide_from_guests: boolean;
@@ -30,8 +31,10 @@ export type CustomField = {
 
 export type ProjectOptionType = {
   id: string;
-  label: string;
-  color: null;
+  name: string;
+  color: string | null;
+  orderindex?: number;
+  label?: string;
 };
 
 export type ProjectFieldType = {
@@ -49,11 +52,10 @@ export type ProjectFieldType = {
 };
 
 export type ChargeOptionType = {
-  id?: string;
+  id: string;
   name: string;
-  color?: string | null;
+  color: string | null;
   orderindex?: number;
-  value: string;
 };
 
 export type ChargeFieldType = {
