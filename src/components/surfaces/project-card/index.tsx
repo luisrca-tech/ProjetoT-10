@@ -14,12 +14,8 @@ import GoogleImage from "/public/images/google img.svg";
 import Image, { type StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
-import useClickUpFetch from "~/app/hooks/useClickUpFetch";
-import { type Task } from "~/server/types/Clickup.type";
 import { poppins } from "~/assets/fonts/fonts";
-import { type ProjectOptionType } from "~/app/types/clickUpApi";
-import { clickupRouter } from "~/server/api/routers/clickup";
+import { useClickUp } from "~/app/hooks/useClickUp";
 
 const listId = "901303987731";
 
@@ -30,54 +26,8 @@ export function ProjectsCards() {
 
   const totalHours = 3600000;
 
-  const { projectOptions } = useClickUpFetch(EndPointClickUpApiEnum.FIELD);
-
-  const { data: getTaskResp } = useClickUpFetch<Task[]>(
-    EndPointClickUpApiEnum.TASK
-  );
-
-  const projectsWithTasks = projectOptions?.filter(
-    (project: ProjectOptionType) =>
-      getTaskResp?.some((task) =>
-        task.custom_fields.some(
-          (field) =>
-            Array.isArray(field.value) && field.value.includes(project.id)
-        )
-      )
-  );
-
-  const filteredTasksByProject = projectsWithTasks?.map((project) => {
-    const tasksForProject = getTaskResp?.filter((task) =>
-      task.custom_fields.some((field) => {
-        if (Array.isArray(field.value)) {
-          return field.value.includes(project.id);
-        }
-        return false;
-      })
-    );
-
-    const dates = tasksForProject?.reduce(
-      (acc, task) => {
-        const startDate = task.start_date ? parseInt(task.start_date) : null;
-        const endDate = task.due_date ? parseInt(task.due_date) : null;
-
-        if (startDate && (!acc.minStartDate || startDate < acc.minStartDate)) {
-          acc.minStartDate = startDate;
-        }
-        if (endDate && (!acc.maxEndDate || endDate > acc.maxEndDate)) {
-          acc.maxEndDate = endDate;
-        }
-
-        return acc;
-      },
-      {
-        minStartDate: null as number | null,
-        maxEndDate: null as number | null,
-      }
-    );
-
-    return { project, tasks: tasksForProject, dates };
-  });
+  const { filteredTasksByProject } = useClickUp();
+  console.log(filteredTasksByProject, `filteredTasks`);
 
   function formatDate(timestamp: number | null): string {
     if (!timestamp) return "";
