@@ -1,6 +1,6 @@
+import { theme } from "~/app/styles/theme";
 import { styled } from "@linaria/react";
 import "@radix-ui/colors/black-alpha.css";
-import { theme } from "~/app/styles/theme";
 
 export const Container = styled.div`
   width: 52px;
@@ -52,5 +52,17 @@ export const Container = styled.div`
     color: white;
     font-size: 15px;
     line-height: 1;
+  }
+`;
+
+export const SwitchContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  span {
+    font-size: 14px;
+    font-weight: 600;
   }
 `;
