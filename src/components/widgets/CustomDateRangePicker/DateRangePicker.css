@@ -12,6 +12,8 @@
 
 .rdrDateRangePickerWrapper {
   width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 div > .rdrDateDisplayWrapper {
@@ -45,7 +47,6 @@ button.rdrNextPrevButton:hover {
 .rdrNextButton {
   width: 30px;
 }
-
 
 .rdrMonthsVertical {
   height: 100%;
