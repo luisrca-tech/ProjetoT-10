@@ -4,7 +4,6 @@ import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { type CustomField } from "~/app/types/clickUpApi";
 import { showToast } from "~/utils/functions/showToast";
 import { type Task } from "~/app/types/clickUpApi";
-
 const listId = "901303987731";
 
 export const clickupRouter = createTRPCRouter({
@@ -56,5 +55,155 @@ export const clickupRouter = createTRPCRouter({
         return null;
       }
       return responseBody.tasks;
+    }),
+
+  postTask: publicProcedure
+    .input(
+      z.object({
+        row: z.string().optional(),
+        Dates: z.object({
+          startDate: z.date().optional(),
+          endDate: z.date().optional(),
+        }),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { row, Dates } = input;
+      console.log(row, `row`);
+      console.log(Dates, `Dates`);
+      const query = new URLSearchParams({
+        custom_task_ids: "true",
+        team_id: "123",
+      }).toString();
+
+      const numberRow = row?.replace("row-", "");
+
+      const postTaskResp = await fetch(
+        `https://api.clickup.com/api/v2/list/${listId}/task?${query}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+          },
+          body: JSON.stringify({
+            name: `Pessoa-${numberRow}`,
+            start_date: Dates.startDate?.getTime(),
+            due_date: Dates.endDate?.getTime(),
+          }),
+        }
+      );
+      const postTaskData = await postTaskResp.json();
+      const taskId = postTaskData.id;
+      return { taskId, postTaskData };
+    }),
+
+  postChargeCustomField: publicProcedure
+    .input(
+      z.object({
+        postTaskId: z.string(),
+        chargeFieldId: z.string().optional(),
+        chargeFieldSelectedValue: z.number().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { postTaskId, chargeFieldId, chargeFieldSelectedValue } = input;
+      const postChargeCustomFieldResp = await fetch(
+        `https://api.clickup.com/api/v2/task/${postTaskId}/field/${chargeFieldId}?`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+          },
+          body: JSON.stringify({ value: chargeFieldSelectedValue }),
+        }
+      );
+      const postChargeCustomFieldData = await postChargeCustomFieldResp.json();
+      return postChargeCustomFieldData;
+    }),
+
+  postProjectCustomField: publicProcedure
+    .input(
+      z.object({
+        postTaskId: z.string(),
+
+        projectFieldId: z.string().optional(),
+
+        projectFieldSelectedValue: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { postTaskId, projectFieldId, projectFieldSelectedValue } = input;
+      console.log(projectFieldSelectedValue, `projectFieldSelectedValue`);
+      const postProjectCustomFieldResp = await fetch(
+        `https://api.clickup.com/api/v2/task/${postTaskId}/field/${projectFieldId}?`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+          },
+          body: JSON.stringify({ value: [projectFieldSelectedValue] }),
+        }
+      );
+      const postProjectCustomFieldData =
+        await postProjectCustomFieldResp.json();
+      return postProjectCustomFieldData;
+    }),
+
+  postValueCustomField: publicProcedure
+    .input(
+      z.object({
+        postTaskId: z.string(),
+        valueFieldId: z.string().optional(),
+        valueFieldSelectedValue: z.number().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { postTaskId, valueFieldId, valueFieldSelectedValue } = input;
+      const postValueCustomFieldResp = await fetch(
+        `https://api.clickup.com/api/v2/task/${postTaskId}/field/${valueFieldId}?`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+          },
+          body: JSON.stringify({ value: valueFieldSelectedValue }),
+        }
+      );
+      const postValueCustomFieldData = await postValueCustomFieldResp.json();
+      return postValueCustomFieldData;
+    }),
+
+  postHourPMonthCustomField: publicProcedure
+    .input(
+      z.object({
+        postTaskId: z.string(),
+        hoursPerMonthCustomFieldId: z.string().optional(),
+        hoursPMonthFieldSelectedValue: z.number().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const {
+        postTaskId,
+        hoursPerMonthCustomFieldId,
+        hoursPMonthFieldSelectedValue,
+      } = input;
+      const postHourPMonthCustomFieldResp = await fetch(
+        `https://api.clickup.com/api/v2/task/${postTaskId}/field/${hoursPerMonthCustomFieldId}?`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+          },
+          body: JSON.stringify({ value: hoursPMonthFieldSelectedValue }),
+        }
+      );
+      const postHourPMonthCustomFieldData =
+        await postHourPMonthCustomFieldResp.json();
+      return postHourPMonthCustomFieldData;
     }),
 });
