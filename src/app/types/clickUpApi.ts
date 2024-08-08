@@ -29,7 +29,7 @@ export type CustomField = {
   value: string[];
 };
 
-export type ProjectOptionType = {
+export type OptionType = {
   id: string;
   name: string;
   color: string | null;
@@ -43,7 +43,7 @@ export type ProjectFieldType = {
   type?: string;
   type_config?: {
     new_drop_down: boolean;
-    options: ProjectOptionType;
+    options: OptionType;
   };
   date_created?: string;
   hide_from_guests?: boolean;
