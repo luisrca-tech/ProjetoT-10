@@ -4,9 +4,9 @@ import { Container } from "./styles";
 
 import { roboto } from "~/app/fonts";
 
-import Header from "~/app/components/surfaces/header";
+import Header from "~/components/surfaces/header";
 
-import { ProjectDetailsContent } from "~/app/components/surfaces/projectDetailsContent";
+import { ProjectDetailsContent } from "~/components/surfaces/projectDetailsContent";
 import { Suspense } from "react";
 
 export default function Projeto() {

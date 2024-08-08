@@ -1,5 +1,5 @@
 import { toast } from "sonner";
-import ToastAlert from "~/app/components/widgets/ToastAlert";
+import ToastAlert from "~/components/widgets/ToastAlert";
 
 export function showToast(
   status: "error" | "success" | "warning",

@@ -1,7 +1,7 @@
 "use client";
 import { Container, Form, OthersRegisterContainer } from "./styles";
-import GoogleImage from "../../../../../public/google img.svg";
-import LinkedinImage from "../../../../../public/linkedin img.svg";
+import GoogleImage from "public/google img.svg";
+import LinkedinImage from "public/linkedin img.svg";
 import Image from "next/image";
 import { type FormEvent, useState } from "react";
 import { useForm } from "react-hook-form";
