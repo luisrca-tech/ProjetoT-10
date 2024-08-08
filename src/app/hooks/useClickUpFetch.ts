@@ -21,11 +21,7 @@ export type ClickUpFetchProps = {
   params?: Record<string, any>;
 };
 
-export default function useClickUpFetch<T>(
-  endPoint?: string,
-  query?: Record<string, any>,
-  shouldUseToken?: boolean
-) {
+export default function useClickUpFetch<T>(endPoint?: string) {
   const [projectCustomField, setProjectCustomField] = useState([]);
   const [getCustomFieldsResponse] = useState([]);
   const [hoursPerMonth, setHoursPerMonth] = useAtom(hoursPerMonthAtom);
@@ -150,7 +146,6 @@ export default function useClickUpFetch<T>(
 
     const fetchParams: ClickUpFetchProps = {
       endPoint: endPoint as EndPointClickUpApiEnum,
-      // params: queryBuilder,
     };
 
     const response = await clickUpFetch(fetchParams);
