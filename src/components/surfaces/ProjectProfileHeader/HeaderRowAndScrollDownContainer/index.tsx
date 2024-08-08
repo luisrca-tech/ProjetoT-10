@@ -1,13 +1,13 @@
 "use client";
-import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
-import { Container, InputContainer } from "./styles";
+import { Container } from "./styles";
 import { useAtom } from "jotai";
 import SelectInput from "~/components/inputs/SelectInput";
-import ScrollDownContainer from "~/components/forms/FormSelectInput/components/ScrollDownContainer";
-import { useIsSelectOpen } from "~/utils/functions/isSelectOpen";
-import { useToggleSelectOpen } from "~/utils/functions/toggleSelectedOpen";
-import { useGetInputValueAtIndex } from "~/utils/functions/getInputValueAtIndex";
-import { useIsValueInInput } from "~/utils/functions/isValueInInput";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
+import ScrollDownContainer from "../../../forms/FormSelectInput/ScrollDownContainer";
+import { useIsValueInInput } from "~/app/utils/functions/isValueInInput";
+import { useGetInputValueAtIndex } from "~/app/utils/functions/getInputValueAtIndex";
+import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
+import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
 
 export default function HeaderRowAndScrollDownContainer() {
   const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
@@ -19,6 +19,7 @@ export default function HeaderRowAndScrollDownContainer() {
     row,
     inProfileHeader
   );
+
   const toggleSelectOpen = useToggleSelectOpen(row);
 
   function handleInputChange(row: string, value: string, optionId?: string) {
@@ -34,18 +35,18 @@ export default function HeaderRowAndScrollDownContainer() {
 
   return (
     <Container key={row}>
-      <InputContainer>
-        <SelectInput
-          isInProjectHeader
-          type="text"
-          placeholder="Selecione um projeto"
-          id={row}
-          onChange={(value) => handleInputChange(row, value)}
-          hasValue={isValueInProjectInput}
-          inputValue={projectInputValueAtIndex}
-          setIsSelectOpen={toggleSelectOpen}
-        />
-      </InputContainer>
+      <SelectInput
+        isInProjectHeader
+        type="text"
+        placeholder="Selecione um projeto"
+        id={row}
+        onChange={(value) => handleInputChange(row, value)}
+        hasValue={isValueInProjectInput}
+        inputValue={projectInputValueAtIndex}
+        setIsSelectOpen={toggleSelectOpen}
+        readOnly={true}
+      />
+
       {useIsSelectOpen(row) && <ScrollDownContainer row={row} />}
     </Container>
   );

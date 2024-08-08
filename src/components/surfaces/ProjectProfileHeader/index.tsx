@@ -1,60 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
-import {
-  ButtonDataMenu,
-  CalendarDateValues,
-  Container,
-  ContentContainer,
-  DataContainer,
-  HeaderBoxProfileImage,
-  InputContent,
-  EditProjectContainer,
-} from "./styles";
-import Image from "next/image";
-import CalendarIcon from "/public/images/calendaricon.svg";
+import { Container, ContentContainer } from "./styles";
+import HeaderBoxProfileImage from "./HeaderBoxProfileImage";
+import InputContent from "./InputContent";
+
 import { useAtom } from "jotai";
 import {
+  type SelectableRangePropsType,
   rangesAtom,
-  type SelectableRangeProps,
 } from "~/@atom/ProjectStates/rangesAtom";
-import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
-import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
-import { poppins, roboto } from "~/assets/fonts/fonts";
-import HeaderRowAndScrollDownContainer from "./HeaderRowAndScrollDownContainer";
+import { roboto } from "~/app/fonts";
 
-interface ProjectProfileHeaderProps {
-  inputDataMenuClick: (row: string) => void;
-}
-
-export function ProjectProfileHeader({
-  inputDataMenuClick,
-}: ProjectProfileHeaderProps) {
+export function ProjectProfileHeader({}) {
   const [ranges, setRanges] = useAtom(rangesAtom);
-  const [checked] = useAtom(checkedAtom);
-  const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [, setInputValue] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const words =
-    projectSelectedValue?.selectedValue[`projectRow-text`]?.split(" ");
 
-  const globalProjectDate = ranges["global-project-data"];
-  const globalProjectStartDate = ranges["global-project-data"]?.startDate;
-  const globalProjectEndDate = ranges["global-project-data"]?.endDate;
-  const initials = words?.map((word) => word.charAt(0));
-
-  const initialsString = initials?.join("");
-
-  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(file);
-    }
-  }
-
-  function formatDate(date: Date | undefined) {
-    return date ? date.toLocaleDateString("pt-BR") : "";
-  }
-
-  function getMinMaxDates(ranges: { [key: string]: SelectableRangeProps }) {
+  function getMinMaxDates(ranges: { [key: string]: SelectableRangePropsType }) {
     let minStartDate = undefined;
     let maxEndDate = undefined;
 
@@ -109,51 +69,8 @@ export function ProjectProfileHeader({
   return (
     <Container className={roboto.className}>
       <ContentContainer>
-        <HeaderBoxProfileImage>
-          {selectedFile ? (
-            <Image
-              src={URL.createObjectURL(selectedFile)}
-              alt="Imagem selecionada"
-            />
-          ) : (
-            <span>{initialsString?.toUpperCase()}</span>
-          )}
-          <input type="file" onChange={handleFileChange} accept="image/*" />
-        </HeaderBoxProfileImage>
-        <InputContent checked={checked}>
-          {!checked ? (
-            <EditProjectContainer>
-              <HeaderRowAndScrollDownContainer />
-            </EditProjectContainer>
-          ) : (
-            <DataContainer>
-              <strong>Duração:</strong>
-              {!globalProjectDate ? (
-                <ButtonDataMenu
-                  onClick={() => inputDataMenuClick("global-project-data")}
-                >
-                  <span>Datas</span>
-                  <Image
-                    src={CalendarIcon}
-                    alt="Icone de calendário"
-                    width={24}
-                    height={24}
-                  />
-                </ButtonDataMenu>
-              ) : (
-                <CalendarDateValues>
-                  <p className={poppins.className}>
-                    {formatDate(globalProjectStartDate)}
-                  </p>
-                  <span>-</span>
-                  <p className={poppins.className}>
-                    {formatDate(globalProjectEndDate)}
-                  </p>
-                </CalendarDateValues>
-              )}
-            </DataContainer>
-          )}
-        </InputContent>
+        <HeaderBoxProfileImage />
+        <InputContent />
       </ContentContainer>
     </Container>
   );
