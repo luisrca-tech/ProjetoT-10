@@ -1,4 +1,5 @@
 import { styled } from "@linaria/react";
+import { darken } from "polished";
 import { theme } from "~/app/styles/theme";
 
 type InputsRowProps = {
@@ -14,11 +15,16 @@ type HeaderProps = {
   checked: boolean;
 };
 
-export const Container = styled.div`
+export const Container = styled.form`
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 export const Header = styled.div<HeaderProps>`
@@ -36,14 +42,6 @@ export const EditDateContainer = styled.div`
     width: 100%;
     font-size: 0.875rem;
     font-weight: bold;
-    text-align: end;
-  }
-
-  span:nth-of-type(1) {
-    text-align: start;
-  }
-
-  span:nth-of-type(2) {
     text-align: end;
   }
 `;
@@ -90,8 +88,8 @@ export const RowAndScrollDownContainer = styled.div<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "-1.5rem"
-          : "0"}
+        ? "-1.5rem"
+        : "0"}
   );
 `;
 
@@ -138,8 +136,8 @@ export const DeleteButtonAnimationFrame = styled.button<InputsRowProps>`
           ? "0"
           : "0"
         : props.offsetXByRow && props.offsetX
-          ? "1.5rem"
-          : "0"}
+        ? "1.5rem"
+        : "0"}
   );
 
   background: ${theme.COLORS.SECONDARY};
@@ -211,13 +209,45 @@ export const SeparatorContainer = styled.div`
   }
 `;
 
-export const Footer = styled.div`
+export const BudgetContainer = styled.div`
   display: flex;
   width: 100%;
   padding: 0 0.5rem;
+  justify-content: space-between;
   gap: 5rem;
+`;
 
-  > div {
-    width: 100%;
+export const ValidationDateError = styled.button`
+  border: none;
+  background-color: transparent;
+  align-self: flex-start;
+  cursor: pointer;
+  position: fixed;
+  bottom: 150px;
+
+  > span {
+    font-size: 14px;
+    color: ${darken(0.5, theme.COLORS.ERROR)};
   }
+
+  &:hover {
+    transform: scale(1.02);
+  }
+`;
+
+export const SubmitButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+export const Footer = styled.footer`
+  padding: 0 5%;
+  position: fixed;
+  width: 100%;
+  bottom: 2rem;
+  gap: 1rem;
+  left: 0;
+  display: flex;
+  flex-direction: column;
 `;
