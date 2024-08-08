@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { Container, Input } from "./styles";
-import ArrowRight from "/public/images/arrowright.svg";
-import ArrowDown from "/public/images/arrowdown.svg";
-import Image, { type StaticImageData } from "next/image";
+
 import { useAtom } from "jotai";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
-import { poppins } from "~/assets/fonts/fonts";
+import { poppins } from "~/app/fonts";
 
 interface SelectInputProps {
   id: string;
-  onChange: (value: string) => void;
+  onChange?: (value: string) => void;
   placeholder: string;
   hasValue: boolean;
   inputValue?: string;
@@ -18,6 +16,8 @@ interface SelectInputProps {
   value?: string;
   type: string;
   isInProjectHeader?: boolean;
+  isLastRow?: boolean;
+  readOnly?: boolean;
 }
 
 export default function SelectInput({
@@ -26,11 +26,16 @@ export default function SelectInput({
   placeholder,
   hasValue,
   inputValue,
+
   setIsSelectOpen,
+
+  isLastRow,
+  readOnly,
   ...rest
 }: SelectInputProps) {
   const [checked] = useAtom(checkedAtom);
-  const [isFocused, setIsFocused] = useState<boolean>(false);
+  const showError = !isLastRow && hasValue === false ? true : false;
+  const [, setIsFocused] = useState<boolean>(false);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
@@ -40,8 +45,9 @@ export default function SelectInput({
       event.target instanceof HTMLInputElement
     ) {
       const newValue = event.target.value;
-
-      onChange(newValue);
+      if (onChange) {
+        onChange(newValue);
+      }
     }
   };
 
@@ -54,6 +60,7 @@ export default function SelectInput({
 
   const handleInputBlur = () => {
     setIsFocused(false);
+
     if (setIsSelectOpen) {
       setIsSelectOpen(false);
     }
@@ -73,17 +80,9 @@ export default function SelectInput({
         onChange={handleChange}
         onFocus={handleInputFocus}
         className={poppins.className}
+        showError={showError}
+        readOnly={readOnly}
       />
-
-      {!hasValue ? (
-        !isFocused ? (
-          <Image src={ArrowRight as StaticImageData} alt="" />
-        ) : (
-          <Image src={ArrowDown as StaticImageData} alt="" />
-        )
-      ) : (
-        ""
-      )}
     </Container>
   );
 }
