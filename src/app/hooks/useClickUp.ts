@@ -1,6 +1,5 @@
 import { useAtom } from "jotai";
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
@@ -48,7 +47,6 @@ export function useClickUp() {
   });
 
   const customFieldData = getCustomField.data;
-  console.log(getCustomField.isLoading, `isLoading getCustomField`);
 
   const customFields = {
     project: getCustomField?.data?.find(

@@ -9,10 +9,6 @@ type ContainerType = {
   isAutentication: boolean;
 };
 
-type PostTaskCheckButtonType = {
-  disabled?: boolean;
-};
-
 export const Container = styled.header<ContainerType>`
   width: 100%;
   display: flex;
@@ -134,24 +130,6 @@ export const ButtonContainer = styled.div`
     font-size: 1rem;
     font-weight: 600;
     border: none;
-  }
-`;
-
-export const PostTaskCheckButton = styled.button<PostTaskCheckButtonType>`
-  width: 1.5rem;
-  height: 1.5rem;
-  border: none;
-  background-color: transparent;
-  color: ${(props) =>
-    props.disabled ? `${theme.COLORS.GRAY}` : `${theme.COLORS.PRIMARY}`};
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.3);
   }
 `;
 

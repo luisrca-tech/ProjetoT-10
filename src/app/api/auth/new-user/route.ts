@@ -53,7 +53,6 @@ export async function POST(req: Request) {
     if (!evt.data.id) return new Response("No id provided");
     switch (evt.type) {
       case "user.deleted":
-        console.log("entrei no deleted");
         await db.user.delete({
           where: {
             id: evt.data.id,

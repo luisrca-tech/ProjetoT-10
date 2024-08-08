@@ -17,8 +17,6 @@ import { useRouter } from "next/navigation";
 import { poppins } from "~/assets/fonts/fonts";
 import { useClickUp } from "~/app/hooks/useClickUp";
 
-const listId = "901303987731";
-
 export function ProjectsCards() {
   const [progressWidth, setProgressWidth] = useState(0);
   const router = useRouter();

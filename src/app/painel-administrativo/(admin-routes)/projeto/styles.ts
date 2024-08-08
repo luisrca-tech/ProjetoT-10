@@ -13,7 +13,6 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1rem 0;
 `;
 
 export const MainContainer = styled.div`
@@ -27,10 +26,6 @@ export const MainContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding-bottom: 2rem;
-
-  @media (min-width: 1000px) {
-    max-width: 65vw;
-  }
 `;
 
 export const FormContainer = styled.div<FormContainer>`
