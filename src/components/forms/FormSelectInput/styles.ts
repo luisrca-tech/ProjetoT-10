@@ -111,7 +111,6 @@ export const CalendarDateValues = styled.div`
   align-items: center;
   font-family: "Roboto";
   font-size: 1rem;
-  font-weight: Regular;
   padding: 11px 10px 0;
 `;
 

@@ -38,13 +38,6 @@ export const FormContainer = styled.div<FormContainer>`
   gap: 1rem;
 `;
 
-export const InputsDataContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-`;
-
 export const InputsData = styled.div`
   width: 100%;
   display: flex;
