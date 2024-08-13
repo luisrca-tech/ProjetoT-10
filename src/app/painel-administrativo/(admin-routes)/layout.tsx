@@ -1,6 +1,5 @@
 import { type ReactNode } from "react";
 import { styled } from "@linaria/react";
-import { Toaster } from "sonner";
 import { auth } from "@clerk/nextjs/server";
 
 const Container = styled.div`

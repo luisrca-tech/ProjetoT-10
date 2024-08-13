@@ -6,7 +6,6 @@ import { type OptionType } from "~/app/types/clickUpApi";
 import Image from "next/image";
 import AddButton from "public/add.svg";
 import { poppins } from "~/app/fonts";
-import { useToggleSelectOpen } from "~/utils/functions/toggleSelectedOpen";
 
 type ScrollDownOptionButtonType = {
   row: string;
