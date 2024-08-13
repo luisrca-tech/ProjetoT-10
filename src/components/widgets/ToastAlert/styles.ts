@@ -9,7 +9,8 @@ type ContainerProps = {
 export const Container = styled.div<ContainerProps>`
   display: flex;
   min-width: 100%;
-  height: 150px;
+  max-width: 100%;
+  height: 100px;
 
   gap: 18px;
   border: ${(props) => {
@@ -42,7 +43,6 @@ export const Container = styled.div<ContainerProps>`
         return `${theme.COLORS.WARNING}`;
     }
   }};
-  position: relative;
 
   span {
     font-size: ${(props) => (props.status === "success" ? "20px" : "16px")};
