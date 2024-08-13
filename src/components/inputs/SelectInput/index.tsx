@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { Container, Input } from "./styles";
-import ArrowRight from "/public/images/arrowright.svg";
-import ArrowDown from "/public/images/arrowdown.svg";
-import Image, { type StaticImageData } from "next/image";
 import { useAtom } from "jotai";
+import Image, { type StaticImageData } from "next/image";
+import { useState } from "react";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 import { poppins } from "~/assets/fonts/fonts";
+import { Container, Input } from "./styles";
+import ArrowDown from "/public/images/arrowdown.svg";
+import ArrowRight from "/public/images/arrowright.svg";
 
 interface SelectInputProps {
   id: string;

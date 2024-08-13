@@ -15,7 +15,7 @@ import Image, { type StaticImageData } from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
-import useClickUpFetch from "~/app/hooks/useClickUpFetch";
+import useClickUpFetch from "~/hooks/useClickUpFetch";
 import { type Task } from "~/server/types/Clickup.type";
 import { poppins } from "~/assets/fonts/fonts";
 import { type ProjectOptionType } from "~/app/types/clickUpApi";

@@ -1,34 +1,33 @@
 "use client";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { IoAdd, IoCloseSharp, IoMenu } from "react-icons/io5";
+import { RiCheckFill } from "react-icons/ri";
+import Modal from "../Modal";
 import {
-  Container,
-  ButtonsContainer,
-  MenuButton,
-  CloseContainer,
-  OptionsContainer,
+  AddProjectButton,
   ButtonContainer,
+  ButtonsContainer,
+  CloseContainer,
+  Container,
+  MenuButton,
+  OptionsContainer,
+  PostTaskCheckButton,
   SidebarContainer,
   TitleContainer,
-  AddProjectButton,
-  PostTaskCheckButton,
   UpdateTaskCheckButton,
 } from "./styles";
-import { IoMenu, IoAdd } from "react-icons/io5";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Modal from "../Modal";
-import { IoCloseSharp } from "react-icons/io5";
-import { usePathname } from "next/navigation";
-import { RiCheckFill } from "react-icons/ri";
 
 import { useAtom } from "jotai";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import {
   rangesAtom,
   type SelectableRangeProps,
 } from "~/@atom/ProjectStates/rangesAtom";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 // import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 // import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
+import { UserButton } from "@clerk/nextjs";
 import { poppins } from "~/assets/fonts/fonts";
 
 export default function Header() {
@@ -107,6 +106,8 @@ export default function Header() {
       return (
         <>
           <SidebarContainer isShow={showModal}>
+            <UserButton />
+
             <CloseContainer>
               <button onClick={() => setShowModal(false)}>
                 <span className={poppins.className}>Fechar</span>

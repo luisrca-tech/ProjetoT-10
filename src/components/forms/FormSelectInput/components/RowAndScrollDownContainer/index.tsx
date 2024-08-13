@@ -1,29 +1,29 @@
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import {
-  Container,
-  InputsRow,
-  InputDataMenu,
-  DeleteButtonAnimationFrame,
   CalendarDateValues,
+  Container,
+  DeleteButtonAnimationFrame,
+  InputDataMenu,
+  InputsRow,
 } from "./styles";
-import Image from "next/image";
 
-import ScrollDownContainer from "../ScrollDownContainer";
 import CalendarIcon from "~/../public/calendaricon.svg";
 import TrashAnimation from "~/../public/trashanimation.svg";
-import SelectInput from "~/app/components/inputs/SelectInput";
+import ScrollDownContainer from "../ScrollDownContainer";
 
 import { useAtom } from "jotai";
-import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
 import { rowCountAtom } from "~/@atom/ProjectStates/rowCountAtom";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { useGetLastRowIndex } from "~/app/utils/functions/getLastRowIndex";
-import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
-import { useIsValueInInput } from "~/app/utils/functions/isValueInInput";
-import { useGetInputValueAtIndex } from "~/app/utils/functions/getInputValueAtIndex";
-import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
 import { poppins } from "~/app/fonts";
+import { useGetInputValueAtIndex } from "~/app/utils/functions/getInputValueAtIndex";
+import { useGetLastRowIndex } from "~/app/utils/functions/getLastRowIndex";
+import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
+import { useIsValueInInput } from "~/app/utils/functions/isValueInInput";
+import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
+import SelectInput from "~/components/inputs/SelectInput";
 
 interface RowAndScrollDownContainerProps {
   row: string;
@@ -200,14 +200,15 @@ export default function RowAndScrollDownContainer({
       >
         <InputsRow checked={checked}>
           <SelectInput
+            onChange={(value) =>
+              handleInputChange(`firstTextValue${row}`, value)
+            }
             type="text"
             placeholder="Cargo"
             id={firstInputIdAtIndex}
             hasValue={isValueInFirstInput}
             inputValue={firstInputValueAtIndex}
             setIsSelectOpen={toggleSelectOpen}
-            isLastRow={row === lastRowIndex}
-            readOnly={true}
           />
           <DeleteButtonAnimationFrame
             onClick={() => removeRow(row)}
@@ -228,8 +229,6 @@ export default function RowAndScrollDownContainer({
                 }
                 hasValue={isValueInSecondInput}
                 inputValue={secondInputValueAtIndex}
-                isLastRow={isLastRow}
-                readOnly={false}
               />
               <SelectInput
                 type="number"
@@ -240,8 +239,6 @@ export default function RowAndScrollDownContainer({
                 }
                 hasValue={isValueInThirdInput}
                 inputValue={thirdInputValueAtIndex}
-                isLastRow={isLastRow}
-                readOnly={false}
               />
             </>
           ) : (
