@@ -1,5 +1,5 @@
 import { useAtom } from "jotai";
-import { Container } from "../styles";
+import { Container } from "./styles";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import RowAndScrollDownContainer from "../RowAndScrollDownContainer";
 import ValidationDateError from "./ValidationDateError";
