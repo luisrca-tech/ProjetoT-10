@@ -98,6 +98,47 @@ export const clickupRouter = createTRPCRouter({
       return { taskId, postTaskData };
     }),
 
+  updateTask: publicProcedure
+    .input(
+      z.object({
+        row: z.string().optional(),
+        Dates: z.object({
+          startDate: z.date().optional(),
+          endDate: z.date().optional(),
+        }),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { row, Dates } = input;
+      console.log(row, `row`);
+      console.log(Dates, `Dates`);
+      const query = new URLSearchParams({
+        custom_task_ids: "true",
+        team_id: "123",
+      }).toString();
+
+      const numberRow = row?.replace("row-", "");
+
+      const updateTaskResp = await fetch(
+        `https://api.clickup.com/api/v2/list/${listId}/task?${query}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+          },
+          body: JSON.stringify({
+            name: `Pessoa-${numberRow}`,
+            start_date: Dates.startDate?.getTime(),
+            due_date: Dates.endDate?.getTime(),
+          }),
+        }
+      );
+      const updateTaskData = await updateTaskResp.json();
+      const taskId = updateTaskData.id;
+      return { taskId, updateTaskData };
+    }),
+
   postChargeCustomField: publicProcedure
     .input(
       z.object({
