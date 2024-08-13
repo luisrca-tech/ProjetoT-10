@@ -1,6 +1,4 @@
-import { useState } from "react";
 import { Container, Input } from "./styles";
-
 import { useAtom } from "jotai";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 import { poppins } from "~/app/fonts";
@@ -26,16 +24,13 @@ export default function SelectInput({
   placeholder,
   hasValue,
   inputValue,
-
   setIsSelectOpen,
-
   isLastRow,
   readOnly,
   ...rest
 }: SelectInputProps) {
   const [checked] = useAtom(checkedAtom);
   const showError = !isLastRow && hasValue === false ? true : false;
-  const [, setIsFocused] = useState<boolean>(false);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
@@ -52,15 +47,12 @@ export default function SelectInput({
   };
 
   const handleInputFocus = () => {
-    setIsFocused(true);
     if (setIsSelectOpen) {
       setIsSelectOpen(true);
     }
   };
 
   const handleInputBlur = () => {
-    setIsFocused(false);
-
     if (setIsSelectOpen) {
       setIsSelectOpen(false);
     }
@@ -78,7 +70,7 @@ export default function SelectInput({
         id={id}
         value={inputValue || ""}
         onChange={handleChange}
-        onFocus={handleInputFocus}
+        onClick={handleInputFocus}
         className={poppins.className}
         showError={showError}
         readOnly={readOnly}
