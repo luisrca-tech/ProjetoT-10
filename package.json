@@ -21,6 +21,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",
     "@babel/plugin-transform-class-properties": "^7.24.7",
     "@clerk/nextjs": "^5.2.4",
+    "@formkit/auto-animate": "^0.8.2",
     "@hookform/resolvers": "^3.9.0",
     "@linaria/babel-preset": "^5.0.4",
     "@linaria/core": "^6.2.0",
