@@ -22,11 +22,10 @@ import { useProcessRows } from "~/app/hooks/useProcessRows";
 
 export default function FormSelectInput() {
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
-  const rows = rowsAndSelectedValues.rows;
   const [loading, setLoading] = useAtom(loadingAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [ranges] = useAtom(rangesAtom);
-  const { processRows } = useProcessRows({ rows });
+  const { processRows } = useProcessRows();
   const rangesCondition = validateRanges(ranges);
 
   const selectedValuesNotEmpty2 =

@@ -69,8 +69,7 @@ export const clickupRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const { row, Dates } = input;
-      console.log(row, `row`);
-      console.log(Dates, `Dates`);
+
       const query = new URLSearchParams({
         custom_task_ids: "true",
         team_id: "123",
@@ -110,8 +109,7 @@ export const clickupRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const { row, Dates } = input;
-      console.log(row, `row`);
-      console.log(Dates, `Dates`);
+
       const query = new URLSearchParams({
         custom_task_ids: "true",
         team_id: "123",
@@ -176,7 +174,7 @@ export const clickupRouter = createTRPCRouter({
     )
     .mutation(async ({ input }) => {
       const { postTaskId, projectFieldId, projectFieldSelectedValue } = input;
-      console.log(projectFieldSelectedValue, `projectFieldSelectedValue`);
+
       const postProjectCustomFieldResp = await fetch(
         `https://api.clickup.com/api/v2/task/${postTaskId}/field/${projectFieldId}?`,
         {
