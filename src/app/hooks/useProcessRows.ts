@@ -8,19 +8,16 @@ import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { api } from "~/trpc/react";
 
-interface UseProcessRowsProps {
-  rows: string[];
-}
-
 export interface ChargeFieldSelectedValue {
   chargeValueNumber: number;
   hoursPerMonthValueNumber: number;
   hourPerValueNumber: number;
 }
 
-export function useProcessRows({ rows }: UseProcessRowsProps) {
+export function useProcessRows() {
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [ranges] = useAtom(rangesAtom);
+  const rows = rowsAndSelectedValues.rows;
   const [fieldsIds] = useAtom(fieldsIdsAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const projectFieldSelectedValue =
