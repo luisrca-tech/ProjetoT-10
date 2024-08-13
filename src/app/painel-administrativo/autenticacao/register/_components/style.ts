@@ -11,3 +11,9 @@ export const FormContent = styled.div`
     gap: 0.5rem;
   }
 `;
+
+export const ResendInputContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  
+`

@@ -2,9 +2,12 @@ import { useAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
+import {
+  type CustomField,
+  type ProjectOptionType,
+  type Task,
+} from "~/server/types/Clickup.type";
 import { api } from "~/trpc/react";
-import { type CustomField, type Task } from "../types/clickUpApi";
-import { type ProjectOptionType } from "~/server/types/Clickup.type";
 
 type FetchResponseType = {
   customFieldData?: CustomField[];

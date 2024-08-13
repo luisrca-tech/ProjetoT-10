@@ -1,7 +1,7 @@
-import { Container, Input } from "./styles";
 import { useAtom } from "jotai";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
-import { poppins } from "~/app/fonts";
+import { poppins } from "~/assets/fonts/fonts";
+import { Container, Input } from "./styles";
 
 interface SelectInputProps {
   id: string;

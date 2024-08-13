@@ -1,17 +1,17 @@
 "use client";
 
-import { Container, MainContainer, FormContainer } from "./styles";
 import { useAtom } from "jotai";
-import { isDatePickerOpenAtom } from "~/@atom/ProjectStates/isDatePickerOpenAtom";
-import { CustomDateRangePicker } from "../../widgets/CustomDateRangePicker";
-import { ProjectProfileHeader } from "../ProjectProfileHeader";
-import ToggleSwitch from "../../widgets/ToggleSwitch";
-import FormSelectInput from "../../forms/FormSelectInput";
-import { CloseCalendarContainer } from "./CloseCalendarContainer";
-import { useTasksOfProject } from "~/app/hooks/useTasksOfProject";
-import { useEffect } from "react";
-import { showToast } from "~/utils/functions/showToast";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { isDatePickerOpenAtom } from "~/@atom/ProjectStates/isDatePickerOpenAtom";
+import { useTasksOfProject } from "~/hooks/useTasksOfProject";
+import { showToast } from "~/utils/functions/showToast";
+import FormSelectInput from "../../forms/FormSelectInput";
+import { CustomDateRangePicker } from "../../widgets/CustomDateRangePicker";
+import ToggleSwitch from "../../widgets/ToggleSwitch";
+import { ProjectProfileHeader } from "../ProjectProfileHeader";
+import { CloseCalendarContainer } from "./CloseCalendarContainer";
+import { Container, FormContainer, MainContainer } from "./styles";
 
 export function ProjectDetailsContent() {
   const router = useRouter();

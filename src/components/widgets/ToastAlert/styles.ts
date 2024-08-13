@@ -1,6 +1,6 @@
-import { theme } from "~/app/styles/theme";
 import { styled } from "@linaria/react";
 import { darken } from "polished";
+import { theme } from "~/app/styles/theme";
 
 type ContainerProps = {
   status: string;
@@ -9,8 +9,7 @@ type ContainerProps = {
 export const Container = styled.div<ContainerProps>`
   display: flex;
   min-width: 100%;
-  max-width: 100%;
-  height: 100px;
+  height: ${(props) => (props.status === "error" ? "150px" : "100px")};
 
   gap: 18px;
   border: ${(props) => {

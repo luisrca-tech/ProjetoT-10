@@ -1,13 +1,12 @@
 "use client";
 
-import { Container } from "./styles";
-
 import { roboto } from "~/app/fonts";
 
-import Header from "~/components/surfaces/header";
+import { Container } from "./styles";
 
-import { ProjectDetailsContent } from "~/components/surfaces/projectDetailsContent";
 import { Suspense } from "react";
+import { ProjectDetailsContent } from "~/components/surfaces/projectDetailsContent";
+import Header from "~/components/surfaces/header";
 
 export default function Projeto() {
   return (

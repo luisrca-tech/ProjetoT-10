@@ -5,9 +5,9 @@ import { chargeOptionsAtom } from "~/@atom/api/CustomFields/chargeOptionsAtom";
 import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
+import { type CustomField, type Task } from "~/app/types/clickUpApi";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { api } from "~/trpc/react";
-import { type CustomField, type Task } from "../types/clickUpApi";
 
 type FetchResponseType = {
   customFieldData?: CustomField[];

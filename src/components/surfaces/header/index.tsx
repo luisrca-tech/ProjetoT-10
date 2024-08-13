@@ -1,22 +1,23 @@
 "use client";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { IoAdd, IoCloseSharp, IoMenu } from "react-icons/io5";
+import Modal from "../Modal";
 import {
-  Container,
-  ButtonsContainer,
-  MenuButton,
-  CloseContainer,
-  OptionsContainer,
+  AddProjectButton,
   ButtonContainer,
+  ButtonsContainer,
+  CloseContainer,
+  Container,
+  MenuButton,
+  OptionsContainer,
   SidebarContainer,
   TitleContainer,
-  AddProjectButton,
 } from "./styles";
-import { IoMenu, IoAdd } from "react-icons/io5";
-import { poppins } from "~/app/fonts";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Modal from "../Modal";
-import { IoCloseSharp } from "react-icons/io5";
-import { usePathname } from "next/navigation";
+
+// import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
+// import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
+import { poppins } from "~/assets/fonts/fonts";
 import { UserButton } from "@clerk/nextjs";
 
 export default function Header() {

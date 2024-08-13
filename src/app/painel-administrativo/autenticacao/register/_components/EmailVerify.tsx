@@ -3,10 +3,11 @@ import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import { useRouter } from "next/navigation";
 import { type FormEvent, useState } from "react";
 import { toast } from "sonner";
-import { FormContent } from "./style";
-import AuthenticationInput from "~/components/inputs/AuthenticationInput";
+import Input from "~/components/inputs/Input";
 import Button from "~/components/widgets/Button";
 import { api } from "~/trpc/react";
+import { showToast } from "~/utils/functions/showToast";
+import { FormContent } from "./style";
 
 export default function EmailVerify() {
   const router = useRouter();
@@ -34,15 +35,22 @@ export default function EmailVerify() {
       }
 
       if (completeSignUp.status === "complete") {
+        const email = completeSignUp.emailAddress;
+
+        if (!email) {
+          throw new Error("Email or name was not provided");
+        }
+
         await userMutation.mutateAsync({
           userId: completeSignUp.createdUserId,
+          email: email,
         });
         await setActive({ session: completeSignUp.createdSessionId });
         router.push("/");
       }
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast("error", `${error.errors[0]?.message}`);
       }
 
       toast.error("Something went wrong. Try again");
@@ -71,7 +79,7 @@ export default function EmailVerify() {
   return (
     <form onSubmit={handleSubmit}>
       <FormContent>
-        <AuthenticationInput
+        <Input
           label="Um código de confirmação foi enviado para seu e-mail."
           type="text"
           placeholder="Informe seu código"
