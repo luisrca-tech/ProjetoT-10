@@ -9,10 +9,6 @@ type ContainerType = {
   isAutentication: boolean;
 };
 
-type PostTaskCheckButtonType = {
-  disabled?: boolean;
-};
-
 export const Container = styled.header<ContainerType>`
   width: 100%;
   display: flex;
@@ -109,19 +105,6 @@ export const AddProjectButton = styled.button`
   justify-content: center;
 `;
 
-export const CheckProjectButton = styled.button`
-  width: 1.5rem;
-  height: 1.5rem;
-  border: none;
-  background-color: transparent;
-  color: ${theme.COLORS.PRIMARY};
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-`;
-
 export const ButtonContainer = styled.div`
   width: 100%;
   padding: 1.5rem 0;
@@ -135,35 +118,4 @@ export const ButtonContainer = styled.div`
     font-weight: 600;
     border: none;
   }
-`;
-
-export const PostTaskCheckButton = styled.button<PostTaskCheckButtonType>`
-  width: 1.5rem;
-  height: 1.5rem;
-  border: none;
-  background-color: transparent;
-  color: ${(props) =>
-    props.disabled ? `${theme.COLORS.GRAY}` : `${theme.COLORS.PRIMARY}`};
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-
-  &:hover {
-    transform: scale(1.3);
-  }
-`;
-
-export const UpdateTaskCheckButton = styled.button`
-  width: 1.5rem;
-  height: 1.5rem;
-  border: none;
-  background-color: transparent;
-  color: ${theme.COLORS.PRIMARY};
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
 `;

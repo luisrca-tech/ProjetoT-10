@@ -1,9 +1,9 @@
+import { bebasNeue } from "~/app/fonts";
 import { Container } from "./styles";
 import { FaUnlockAlt, FaLock } from "react-icons/fa";
 
 import { z } from "zod";
 import { type HTMLInputTypeAttribute, useState } from "react";
-import { bebasNeue } from "~/assets/fonts/fonts";
 
 export const InputSchema = z.object({
   isPassword: z.boolean().optional(),

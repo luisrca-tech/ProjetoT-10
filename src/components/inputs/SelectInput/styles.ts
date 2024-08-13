@@ -1,5 +1,5 @@
-import { styled } from "@linaria/react";
 import { theme } from "~/app/styles/theme";
+import { styled } from "@linaria/react";
 
 type ContainerProps = {
   checked: boolean;
@@ -7,12 +7,13 @@ type ContainerProps = {
 };
 
 type InputProps = {
-  hasValue: boolean;
+  hasValue: Boolean;
+  showError: boolean;
 };
 
 export const Container = styled.div<ContainerProps>`
   display: flex;
-
+  flex-direction: column;
   width: ${(props) =>
     props.checked
       ? "calc(100% - 28px)"
@@ -44,7 +45,8 @@ export const Input = styled.input<InputProps>`
   background-color: ${(props) =>
     props.hasValue ? "transparent" : `${theme.COLORS.SELECT_INPUT}`};
   border-radius: 60px;
-  border: none;
+  border: ${(props) =>
+    props.showError ? `1px solid ${theme.COLORS.ERROR}` : `none`};
   outline: none;
   z-index: 1;
   font-size: 1rem;

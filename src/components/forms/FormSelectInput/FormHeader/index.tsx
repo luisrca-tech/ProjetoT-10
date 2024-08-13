@@ -1,5 +1,10 @@
 import { useAtom } from "jotai";
-import { Container, HeaderContent, EditDateContainer } from "./styles";
+import {
+  Container,
+  HeaderContent,
+  EditDateContainer,
+  ColumnTitleContainer,
+} from "./styles";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 
 export function FormHeader() {
@@ -10,16 +15,21 @@ export function FormHeader() {
       {!checked ? (
         <>
           <HeaderContent>
-            <span className="FirstRole">Cargo</span>
+            <ColumnTitleContainer>
+              <span>Cargo</span>
+            </ColumnTitleContainer>
 
-            <span>Horas/mês</span>
-
-            <span>Valor Hora</span>
+            <ColumnTitleContainer>
+              <span>Horas/mês</span>
+            </ColumnTitleContainer>
+            <ColumnTitleContainer>
+              <span>Valor Hora</span>
+            </ColumnTitleContainer>
           </HeaderContent>
         </>
       ) : (
         <EditDateContainer>
-          <span className="FirstRole">Cargo</span>
+          <span>Cargo</span>
 
           <span>Data de trabalho</span>
         </EditDateContainer>

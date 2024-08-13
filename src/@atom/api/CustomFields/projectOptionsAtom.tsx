@@ -1,4 +1,4 @@
-import { type ProjectOptionType } from "~/app/types/clickUpApi";
+import { type OptionType } from "~/app/types/clickUpApi";
 import { atom } from "jotai";
 
-export const projectOptionsAtom = atom<ProjectOptionType[]>([]);
+export const projectOptionsAtom = atom<OptionType[] | undefined>([]);

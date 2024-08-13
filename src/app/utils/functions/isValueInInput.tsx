@@ -1,11 +1,7 @@
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { useAtom } from "jotai";
 
-export function useIsValueInInput(
-  row: string,
-  inputName: string,
-  inProfileHeader?: boolean
-) {
+export function useIsValueInInput(row: string, inputName: string) {
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const { selectedValues } = rowsAndSelectedValues;
   const textValue = selectedValues[`${inputName}${row}-text`];

@@ -9,23 +9,68 @@ interface Assignee {
   profilePicture: string | null;
 }
 
+export type CustomFieldOption = {
+  id: string;
+  name: string;
+  color: string | null;
+  orderindex?: number;
+  label?: string;
+};
+
 export type CustomField = {
   id: string;
   name: string;
   type: string;
   type_config: {
     new_drop_down: boolean;
-    options: {
-      id: string;
-      name: string;
-      color: string | null;
-      orderindex: number;
-    };
+    options: CustomFieldOption[];
   };
   date_created: string;
   hide_from_guests: boolean;
   required: boolean;
   value: string[];
+};
+
+export type ProjectOptionType = {
+  id: string;
+  name: string;
+  color: string | null;
+  orderindex?: number;
+  label?: string;
+};
+
+export type ProjectFieldType = {
+  id: string;
+  name?: string;
+  type?: string;
+  type_config?: {
+    new_drop_down: boolean;
+    options: ProjectOptionType;
+  };
+  date_created?: string;
+  hide_from_guests?: boolean;
+  required?: boolean;
+  value: [string];
+};
+
+export type ChargeOptionType = {
+  id: string;
+  name: string;
+  color: string | null;
+  orderindex?: number;
+};
+
+export type ChargeFieldType = {
+  id?: string;
+  name?: string;
+  type?: string;
+  type_config: {
+    new_drop_down: boolean;
+    options: ChargeOptionType;
+  };
+  date_created?: string;
+  hide_from_guests?: boolean;
+  required?: boolean;
 };
 
 interface Folder {

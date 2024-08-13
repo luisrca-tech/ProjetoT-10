@@ -1,9 +1,9 @@
 import { atom } from "jotai";
-type FieldsIdType = {
-  chargeFieldId: string;
-  projectFieldId: string;
-  valueFieldId: string;
-  hoursPerMonthCustomFieldId: string;
+export type FieldsIdType = {
+  chargeFieldId: string | undefined;
+  projectFieldId: string | undefined;
+  valueFieldId: string | undefined;
+  hoursPerMonthCustomFieldId: string | undefined;
 };
 
 export const fieldsIdsAtom = atom<FieldsIdType>({

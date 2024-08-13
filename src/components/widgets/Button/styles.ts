@@ -1,13 +1,19 @@
+import { theme } from "~/app/styles/theme";
 import { styled } from "@linaria/react";
 import { darken } from "polished";
-import { theme } from "~/app/styles/theme";
 
-export const Container = styled.div`
+type ContainerType = {
+  disabled?: boolean;
+};
+
+export const Container = styled.div<ContainerType>`
   width: 100%;
   margin-left: auto;
   margin-right: auto;
 
   > button {
+    opacity: ${(props) => (props.disabled ? "0.5" : "1")};
+    pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
     cursor: pointer;
     display: flex;
     justify-content: center;
