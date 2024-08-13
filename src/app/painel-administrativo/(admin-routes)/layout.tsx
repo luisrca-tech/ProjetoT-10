@@ -20,7 +20,6 @@ export default function PrivateLayout({ children }: AuthHeaderProps) {
 
   return (
     <>
-      <Toaster richColors />
       <Container>{children}</Container>
     </>
   );
