@@ -37,6 +37,7 @@ export const ButtonText = styled.button`
 export const OthersRegisterContainer = styled.div`
   width: 100%;
   justify-content: center;
+  margin-top: 1rem;
 
   > div {
     width: 100%;

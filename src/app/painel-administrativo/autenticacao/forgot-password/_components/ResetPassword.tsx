@@ -1,28 +1,38 @@
 import { useSignIn } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { type FormEvent, useState } from "react";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { FormContent } from "./styles";
+import Input from "~/components/inputs/Input";
 import Button from "~/components/widgets/Button";
-import AuthenticationInput from "~/components/inputs/AuthenticationInput";
+import ErrorMessage from "~/components/widgets/ErrorMessage";
+import { backupPasswordSchema } from "~/schemas/forgot-password.schema";
+import { type backupPassword } from "~/types/forgot-password.type";
+import { showToast } from "~/utils/functions/showToast";
+import { FormContent } from "./styles";
 
 export default function ResetPassword() {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<backupPassword>({
+    resolver: zodResolver(backupPasswordSchema),
+  });
+
   const router = useRouter();
 
   const [code, setCode] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [isLoadingResend, setIsLoadingResend] = useState(false);
 
   const { isLoaded, setActive, signIn } = useSignIn();
 
   if (!isLoaded) return null;
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    setIsLoading(true);
+  const handleBackupPassword = async ({ password }: backupPassword) => {
     try {
       const completeSignUp = await signIn.attemptFirstFactor({
         strategy: "reset_password_email_code",
@@ -36,12 +46,15 @@ export default function ResetPassword() {
       }
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "error",
+          "Código inválido",
+          "Por favor, verifique se o código digitado está correto."
+        );
       }
-
       toast.error("Something went wrong. Try again");
     } finally {
-      setIsLoading(false);
+      reset();
     }
   };
 
@@ -54,7 +67,11 @@ export default function ResetPassword() {
       });
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "error",
+          "Código ja foi enviado",
+          "Dê uma olhada no seu e-mail para pegar o código de confirmação"
+        );
       }
 
       toast.error("Something went wrong. Try again");
@@ -64,22 +81,24 @@ export default function ResetPassword() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(handleBackupPassword)}>
       <FormContent>
-        <AuthenticationInput
+        <Input
           label="Um código de confirmação foi enviado para seu e-mail."
           type="text"
           value={code}
           placeholder="Informe seu código"
           onChange={(e) => setCode(e.target.value)}
         />
-        <AuthenticationInput
+        <Input
           label="Informe sua nova senha"
           placeholder="********"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          {...register("password")}
         />
+        <ErrorMessage>
+          {errors.password?.message && errors.password?.message}
+        </ErrorMessage>
         <div>
           <Button
             onClick={resendCode}
@@ -90,7 +109,7 @@ export default function ResetPassword() {
           <Button
             type="submit"
             text="Confirmar nova senha"
-            loading={isLoading}
+            loading={isSubmitting}
           />
         </div>
       </FormContent>

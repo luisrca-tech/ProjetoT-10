@@ -1,118 +1,81 @@
 "use client";
 import { Container, Form, OthersRegisterContainer } from "./styles";
-import GoogleImage from "../../../../../public/google img.svg";
-import LinkedinImage from "../../../../../public/linkedin img.svg";
-import Image from "next/image";
-import { type FormEvent, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { useSignUp } from "@clerk/nextjs";
-import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
-import { toast } from "sonner";
-import EmailVerify from "./_components/EmailVerify";
-import AuthenticationInput, {
-  type InputProps,
-  InputSchema,
-} from "~/components/inputs/AuthenticationInput";
-import Button from "~/components/widgets/Button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { roboto } from "~/assets/fonts/fonts";
+import Input from "~/components/inputs/Input";
+import Button from "~/components/widgets/Button";
+import ErrorMessage from "~/components/widgets/ErrorMessage";
+import { useAuth } from "~/hooks/useAuth";
+import { authSchema } from "~/schemas/auth.schema";
+import { type authType } from "~/types/auth.type";
+import { AuthActions } from "../login/styles";
+import EmailVerify from "./_components/EmailVerify";
 
 export default function Register() {
   const {
-    formState: { isSubmitted },
-  } = useForm<InputProps>({
-    resolver: zodResolver(InputSchema),
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<authType>({
+    resolver: zodResolver(authSchema),
   });
+  const { Register, emailVerify, signUpWith } = useAuth();
 
-  const [email, setEmail] = useState<string>("");
-  const [emailVerify, setEmailVerify] = useState(false);
-  const [password, setPassword] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { isLoaded, signUp } = useSignUp();
+  const { isLoaded } = useSignUp();
 
   if (!isLoaded) return null;
 
-  async function handleRegister(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    setIsLoading(true);
-    try {
-      await signUp?.create({
-        emailAddress: email,
-        password,
-      });
-      await signUp?.prepareEmailAddressVerification({
-        strategy: "email_code",
-      });
-      setEmailVerify(true);
-    } catch (error) {
-      if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
-      }
-      toast.error("Something went wrong. Try again");
-    } finally {
-      setIsLoading(false);
-    }
+  async function handleRegister({ email, password }: authType) {
+    await Register({ email, password });
   }
-
-  const signUpWith = () => {
-    return signUp.authenticateWithRedirect({
-      strategy: "oauth_google",
-      redirectUrl: "/painel-administrativo/projetos",
-      redirectUrlComplete: "/",
-    });
-  };
 
   return (
     <Container>
-      {!emailVerify ? (
-        <Form onSubmit={handleRegister}>
-          <AuthenticationInput
-            id="email"
-            type="email"
-            placeholder="Cadastre um email válido..."
-            autoComplete="useremail"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            required={isSubmitted}
-          />
-          <AuthenticationInput
-            isPassword={true}
-            id="password"
-            type="password"
-            placeholder="Cadastre uma senha..."
-            autoComplete="current-password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            required={isSubmitted}
-          />
+      <Form onSubmit={handleSubmit(handleRegister)}>
+        <Input
+          id="email"
+          type="email"
+          placeholder="Insira seu e-mail..."
+          autoComplete="useremail"
+          {...register("email")}
+        />
+        <ErrorMessage>
+          {errors.email?.message && errors.email?.message}
+        </ErrorMessage>
+        <Input
+          isPassword={true}
+          id="password"
+          type="password"
+          placeholder="Cadastre sua senha..."
+          autoComplete="current-password"
+          {...register("password")}
+        />
+        <ErrorMessage>
+          {errors.password?.message && errors.password?.message}
+        </ErrorMessage>
+        {!emailVerify && (
           <Button
             className={roboto.className}
             type="submit"
             text="Confirmar"
-            loading={isLoading}
+            loading={isSubmitting}
           />
-
-          <OthersRegisterContainer>
-            <div>
-              <span className={roboto.className}>Entre com sua conta</span>
-            </div>
-
-            <div>
-              <Image
-                onClick={() => signUpWith()}
-                src={GoogleImage}
-                alt=""
-                width={50}
-                height={50}
-              />
-              <Image src={LinkedinImage} alt="" width={50} height={50} />
-            </div>
-          </OthersRegisterContainer>
-        </Form>
-      ) : (
+        )}
+      </Form>
+      {emailVerify ? (
         <EmailVerify />
+      ) : (
+        <OthersRegisterContainer>
+          <div>
+            <span className={roboto.className}>
+              Cadastre-se com o{" "}
+              <AuthActions onClick={() => signUpWith()}>google</AuthActions>
+            </span>
+          </div>
+        </OthersRegisterContainer>
       )}
     </Container>
   );

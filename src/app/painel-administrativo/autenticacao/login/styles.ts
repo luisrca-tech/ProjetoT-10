@@ -23,6 +23,8 @@ export const ButtonsTextContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  margin-top: 1rem;
+  gap: 1rem;
   align-items: center;
 `;
 
@@ -71,5 +73,12 @@ export const OtherOptionsContainer = styled.div`
 `;
 
 export const AuthActions = styled.button`
+  cursor: pointer;
   all: unset;
-`
+  color: ${theme.COLORS.PRIMARY};
+  font-size: 1rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;

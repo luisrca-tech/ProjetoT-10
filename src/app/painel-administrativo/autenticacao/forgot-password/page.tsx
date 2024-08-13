@@ -1,37 +1,36 @@
 "use client";
-import { Container, Form } from "./styles";
-import { type FormEvent, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useSignIn } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import ResetPassword from "./_components/ResetPassword";
-import AuthenticationInput, {
-  type InputProps,
-  InputSchema,
-} from "~/components/inputs/AuthenticationInput";
-import Button from "~/components/widgets/Button";
 import { roboto } from "~/assets/fonts/fonts";
+import Input from "~/components/inputs/Input";
+import Button from "~/components/widgets/Button";
+import ErrorMessage from "~/components/widgets/ErrorMessage";
+import { confirmEmailSchema } from "~/schemas/forgot-password.schema";
+import { type confirmEmail } from "~/types/forgot-password.type";
+import { showToast } from "~/utils/functions/showToast";
+import ResetPassword from "./_components/ResetPassword";
+import { Container, Form } from "./styles";
 
 export default function ForgotPassword() {
   const {
-    formState: { isSubmitted },
-  } = useForm<InputProps>({
-    resolver: zodResolver(InputSchema),
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<confirmEmail>({
+    resolver: zodResolver(confirmEmailSchema),
   });
-  const [email, setEmail] = useState<string>("");
   const [verifyCode, setVerifyCode] = useState(false);
-  const [isloading, setIsLoading] = useState(false);
 
   const { isLoaded, signIn } = useSignIn();
 
   if (!isLoaded) return null;
 
-  async function handleBackupPassword(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    setIsLoading(true);
+  async function handleEmailSubmit({ email }: confirmEmail) {
     try {
       await signIn?.create({
         identifier: email,
@@ -41,34 +40,39 @@ export default function ForgotPassword() {
       setVerifyCode(true);
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
-        return toast.error(error.errors[0]?.message);
+        return showToast(
+          "error",
+          "úsuario não encontrado",
+          "Por favor, verifique se o e-mail digitado realmente esta cadastrado em nosso sistema."
+        );
       }
       toast.error("Something went wrong. Try again");
     } finally {
-      setIsLoading(false);
+      reset();
     }
   }
 
   return (
     <Container>
       {!verifyCode ? (
-        <Form onSubmit={handleBackupPassword}>
+        <Form onSubmit={handleSubmit(handleEmailSubmit)}>
           <p>Informe seu e-mail para recuperação de senha.</p>
-          <AuthenticationInput
+          <Input
             label="E-MAIL"
             id="email"
             type="email"
             placeholder="email@exemplo.com"
             autoComplete="useremail"
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            required={isSubmitted}
+            {...register("email")}
           />
+          <ErrorMessage>
+            {errors.email?.message && errors.email?.message}
+          </ErrorMessage>
           <Button
             className={roboto.className}
             type="submit"
             text="Confirmar"
-            loading={isloading}
+            loading={isSubmitting}
           />
         </Form>
       ) : (

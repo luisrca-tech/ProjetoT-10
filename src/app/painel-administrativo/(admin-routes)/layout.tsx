@@ -1,7 +1,7 @@
-import { type ReactNode } from "react";
-import { styled } from "@linaria/react";
-import { Toaster } from "sonner";
 import { auth } from "@clerk/nextjs/server";
+import { styled } from "@linaria/react";
+import { type ReactNode } from "react";
+import { Toaster } from "sonner";
 
 const Container = styled.div`
   width: 100%;

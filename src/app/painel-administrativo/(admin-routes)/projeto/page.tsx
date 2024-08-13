@@ -1,12 +1,12 @@
 "use client";
 
-import { Container } from "./styles";
-
 import { roboto } from "~/app/fonts";
 
-import Header from "~/app/components/surfaces/header";
+import { Container } from "./styles";
 
-import { ProjectDetailsContent } from "~/app/components/surfaces/projectDetailsContent";
+import Header from "~/components/surfaces/header";
+import { ProjectDetailsContent } from "../../autenticacao/forgot-password/_components/ProjectDetailsContent";
+
 import { Suspense } from "react";
 
 export default function Projeto() {
