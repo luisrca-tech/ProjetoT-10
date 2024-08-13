@@ -1,7 +1,8 @@
+import { theme } from "~/app/styles/theme";
+
 import { styled } from "@linaria/react";
 import { darken } from "polished";
 import { type HTMLInputTypeAttribute } from "react";
-import { theme } from "~/app/styles/theme";
 
 type InputProps = {
   type: HTMLInputTypeAttribute;
@@ -71,7 +72,7 @@ export const Container = styled.div<InputProps>`
       border-bottom: 2px solid ${() => darken(0.1, theme.COLORS.ERROR)};
 
       svg {
-        fill: ${() => darken(0.1, theme.COLORS.ERROR)};
+        fill: ${() => darken(0.5, theme.COLORS.ERROR)};
       }
     }
 

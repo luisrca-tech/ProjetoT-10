@@ -1,6 +1,4 @@
 "use client";
-import { Container, Form, OthersRegisterContainer } from "./styles";
-
 import { useSignUp } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -13,6 +11,7 @@ import { authSchema } from "~/schemas/auth.schema";
 import { type authType } from "~/types/auth.type";
 import { AuthActions } from "../login/styles";
 import EmailVerify from "./_components/EmailVerify";
+import { Container, Form, OthersRegisterContainer } from "./styles";
 
 export default function Register() {
   const {

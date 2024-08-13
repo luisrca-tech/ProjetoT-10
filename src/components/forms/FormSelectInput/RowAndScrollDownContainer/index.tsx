@@ -200,15 +200,14 @@ export default function RowAndScrollDownContainer({
       >
         <InputsRow checked={checked}>
           <SelectInput
-            onChange={(value) =>
-              handleInputChange(`firstTextValue${row}`, value)
-            }
             type="text"
             placeholder="Cargo"
             id={firstInputIdAtIndex}
             hasValue={isValueInFirstInput}
             inputValue={firstInputValueAtIndex}
             setIsSelectOpen={toggleSelectOpen}
+            isLastRow={row === lastRowIndex}
+            readOnly={true}
           />
           <DeleteButtonAnimationFrame
             onClick={() => removeRow(row)}
@@ -229,6 +228,8 @@ export default function RowAndScrollDownContainer({
                 }
                 hasValue={isValueInSecondInput}
                 inputValue={secondInputValueAtIndex}
+                isLastRow={isLastRow}
+                readOnly={false}
               />
               <SelectInput
                 type="number"
@@ -239,6 +240,8 @@ export default function RowAndScrollDownContainer({
                 }
                 hasValue={isValueInThirdInput}
                 inputValue={thirdInputValueAtIndex}
+                isLastRow={isLastRow}
+                readOnly={false}
               />
             </>
           ) : (

@@ -7,10 +7,7 @@ export type ClickUpFetchProps = {
   params?: Record<string, any>;
 };
 
-export async function clickUpFetch<T = any>({
-  method,
-  endPoint,
-}: ClickUpFetchProps) {
+export async function clickUpFetch({ method, endPoint }: ClickUpFetchProps) {
   const listId = "901303987731";
   const correctHeaders: Record<string, string> = {
     Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",

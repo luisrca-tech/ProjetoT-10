@@ -42,7 +42,6 @@ export const Container = styled.div<ContainerProps>`
         return `${theme.COLORS.WARNING}`;
     }
   }};
-  position: relative;
 
   span {
     font-size: ${(props) => (props.status === "success" ? "20px" : "16px")};

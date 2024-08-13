@@ -62,7 +62,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <TRPCReactProvider>
           <JotaiProvider>
             <ClerkProvider>
-              <Toaster position="bottom-right" expand={true} />
+              <Toaster
+                position="bottom-right"
+                expand={true}
+                richColors
+                closeButton
+              />
               <FullScreenLoading>{children}</FullScreenLoading>
             </ClerkProvider>
           </JotaiProvider>

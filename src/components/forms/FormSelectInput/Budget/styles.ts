@@ -4,16 +4,14 @@ export const Container = styled.div`
   display: flex;
   width: 100%;
   padding: 0 0.5rem;
+  justify-content: space-between;
   gap: 5rem;
-
-  > div {
-    width: 100%;
-  }
 `;
 
 export const ProjectDuration = styled.div`
   display: flex;
   justify-content: space-between;
+  width: 100%;
 
   span {
     font-size: 0.875rem;

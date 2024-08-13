@@ -1,14 +1,14 @@
 import { useAtom } from "jotai";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { usePathname } from "next/navigation";
-import { type EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
-import { hoursPerMonthAtom } from "~/@atom/api/CustomFields/hoursPerMonth";
-import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
-import { hourValueAtom } from "~/@atom/api/CustomFields/hourValue";
-import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { chargeOptionsAtom } from "~/@atom/api/CustomFields/chargeOptionsAtom";
+import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
+import { hoursPerMonthAtom } from "~/@atom/api/CustomFields/hoursPerMonth";
+import { hourValueAtom } from "~/@atom/api/CustomFields/hourValue";
+import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
+import { type EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { clickUpFetch } from "~/server/clickUpFetch";
 import { showToast } from "~/utils/functions/showToast";
 

@@ -34,6 +34,10 @@ export const HeaderContent = styled.div`
   }
 `;
 
+export const ColumnTitleContainer = styled.div`
+  width: auto;
+`;
+
 export const EditDateContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -42,12 +46,7 @@ export const EditDateContainer = styled.div`
   span {
     width: 100%;
     font-size: 0.875rem;
-    font-weight: bold;
-    text-align: end;
-  }
-
-  span:nth-of-type(1) {
-    text-align: start;
+    font-weight: 700;
   }
 
   span:nth-of-type(2) {

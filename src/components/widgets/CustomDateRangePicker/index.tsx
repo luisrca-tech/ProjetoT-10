@@ -2,18 +2,18 @@ import React from "react";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRangePicker, type RangeKeyDict } from "react-date-range";
+import { ptBR } from "date-fns/locale";
 import { Container } from "./styles";
 import "./DateRangePicker.css";
 import { useAtom } from "jotai";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
 import { stringRowAtom } from "~/@atom/ProjectStates/stringRowAtom";
-import ptBR from "date-fns/locale/pt-BR";
 
 export function CustomDateRangePicker({}) {
   const [ranges, setRanges] = useAtom(rangesAtom);
   const [stringRow] = useAtom(stringRowAtom);
 
-  const currentRange = ranges[stringRow] ?? {
+  const currentRange = ranges[stringRow] || {
     startDate: new Date(),
     endDate: new Date(),
     key: `selection-${stringRow}`,

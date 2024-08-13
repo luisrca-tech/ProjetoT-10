@@ -82,7 +82,6 @@ export const InputsRow = styled.div<InputsRowProps>`
   background: ${theme.COLORS.LIGHT};
   width: 100%;
   position: relative;
-  height: 100%;
 `;
 
 export const CalendarDateValues = styled.button`
@@ -158,7 +157,6 @@ export const InputDataMenu = styled.button<InputDataMenuProps>`
   background: ${theme.COLORS.SELECT_INPUT};
   color: ${theme.COLORS.SECONDARY_DARK};
   font-size: 1rem;
-  border-top: 2px solid red;
   border: ${(props) =>
     props.isRangeInThisRow
       ? "none"

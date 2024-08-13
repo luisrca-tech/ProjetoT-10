@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
+import alertError from "public/alertError.svg";
+import alertSuccess from "public/alertSuccess.svg";
+import alertWarning from "public/alertWarning.svg";
 import { poppins } from "~/app/fonts";
 import { Container, MessagesContainer } from "./styles";
-import alertError from "/public/alertError.svg";
-import alertSuccess from "/public/alertSuccess.svg";
-import alertWarning from "/public/alertWarning.svg";
 
 type ToastAlert = {
   status: "error" | "success" | "warning";

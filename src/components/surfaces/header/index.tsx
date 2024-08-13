@@ -2,7 +2,6 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { IoAdd, IoCloseSharp, IoMenu } from "react-icons/io5";
-import { RiCheckFill } from "react-icons/ri";
 import Modal from "../Modal";
 import {
   AddProjectButton,
@@ -12,34 +11,19 @@ import {
   Container,
   MenuButton,
   OptionsContainer,
-  PostTaskCheckButton,
   SidebarContainer,
   TitleContainer,
-  UpdateTaskCheckButton,
 } from "./styles";
 
-import { useAtom } from "jotai";
-import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
-import {
-  rangesAtom,
-  type SelectableRangeProps,
-} from "~/@atom/ProjectStates/rangesAtom";
-import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 // import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 // import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
-import { UserButton } from "@clerk/nextjs";
 import { poppins } from "~/assets/fonts/fonts";
+import { UserButton } from "@clerk/nextjs";
 
 export default function Header() {
-  const [ranges] = useAtom(rangesAtom);
-  // const [loading, setLoading] = useAtom(loadingAtom);
-  const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
-  const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [showModal, setShowModal] = useState<boolean>(false);
-  // const [fieldsIds] = useAtom(fieldsIdsAtom);
   const router = useRouter();
   const currentPath = usePathname();
-  let rangesCondition = checkRangesCondition(ranges);
 
   const handleMenu = () => {
     setShowModal((current) => !current);
@@ -49,13 +33,11 @@ export default function Header() {
     return currentPath.startsWith("/painel-administrativo/autenticacao");
   };
 
-  const isProjectPage = () => {
-    return currentPath.startsWith("/painel-administrativo/projeto");
-  };
-
-  const isPersonsPage = () => {
-    return currentPath.startsWith("/painel-administrativo/pessoas");
-  };
+  const isProjectsPage = currentPath.startsWith(
+    "/painel-administrativo/projetos"
+  )
+    ? true
+    : false;
 
   const noRenderIconsAndSidebar = () => {
     if (isAuthPage()) {
@@ -72,46 +54,16 @@ export default function Header() {
     return null;
   };
 
-  function checkRangesCondition(ranges: {
-    [key: string]: SelectableRangeProps;
-  }): boolean {
-    const keys = Object.keys(ranges);
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i];
-
-      if (key !== undefined) {
-        const range = ranges[key];
-        if (range && (!range.startDate || !range.endDate)) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  // Verificar se selectedValues não está vazio em rowsAndSelectedValues
-  const selectedValuesNotEmpty1 = Object.values(
-    rowsAndSelectedValues.selectedValues
-  ).every((value) => value !== "");
-
-  // Verificar se selectedValues não está vazio em projectSelectedValue
-  const selectedValuesNotEmpty2 =
-    Object.keys(projectSelectedValue.selectedValue).length > 0;
-
-  const isConditionMet =
-    rangesCondition && selectedValuesNotEmpty1 && selectedValuesNotEmpty2;
-
   const renderIconsAndSidebar = () => {
     if (!isAuthPage()) {
       return (
         <>
           <SidebarContainer isShow={showModal}>
             <UserButton />
-
             <CloseContainer>
               <button onClick={() => setShowModal(false)}>
                 <span className={poppins.className}>Fechar</span>
-                <IoCloseSharp size={24} /> {/* Adicione o ícone de fechar */}
+                <IoCloseSharp size={24} />
               </button>
             </CloseContainer>
             <OptionsContainer>
@@ -144,18 +96,7 @@ export default function Header() {
               <h1>Projetos</h1>
             </TitleContainer>
             <ButtonsContainer>
-              {isProjectPage() ? (
-                <PostTaskCheckButton
-                  // onClick={taskPostRequest}
-                  disabled={!isConditionMet}
-                >
-                  <RiCheckFill size={24} />
-                </PostTaskCheckButton>
-              ) : isPersonsPage() ? (
-                <UpdateTaskCheckButton
-                /* onClick ={updateTaskReq}*/
-                ></UpdateTaskCheckButton>
-              ) : (
+              {!!isProjectsPage && (
                 <AddProjectButton
                   onClick={() => router.push("/painel-administrativo/projeto")}
                 >

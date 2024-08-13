@@ -1,10 +1,8 @@
-"use client";
-
 import { Container, CustomFormSelect, Option } from "./styles";
 import React, { type ChangeEvent, useState } from "react";
-import ArrowRight from "/public/images/arrowright.svg";
-import ArrowDown from "/public/images/arrowdown.svg";
-import Image, { type StaticImageData } from "next/image";
+import ArrowRight from "public/arrowright.svg";
+import ArrowDown from "public/arrowdown.svg";
+import Image from "next/image";
 
 interface SelectComponentProps {
   id: string;
@@ -39,15 +37,9 @@ export function SelectComponent({
       </CustomFormSelect>
       <div style={{ display: !isSelectOpen && hasValue ? "none" : "block" }}>
         {isSelectOpen ? (
-          <Image
-            src={ArrowDown as StaticImageData}
-            alt="Seta para baixo (aberto)"
-          />
+          <Image src={ArrowDown} alt="Seta para baixo (aberto)" />
         ) : (
-          <Image
-            src={ArrowRight as StaticImageData}
-            alt="Seta para direita (fechado)"
-          />
+          <Image src={ArrowRight} alt="Seta para direita (fechado)" />
         )}
       </div>
     </Container>
