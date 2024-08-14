@@ -59,7 +59,7 @@ export default function Header() {
       return (
         <>
           <SidebarContainer isShow={showModal}>
-            <UserButton />
+            <UserButton userProfileMode="navigation" userProfileUrl="" />
             <CloseContainer>
               <button onClick={() => setShowModal(false)}>
                 <span className={poppins.className}>Fechar</span>
