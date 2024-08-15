@@ -17,8 +17,8 @@ import {
 
 // import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 // import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
-import { poppins } from "~/assets/fonts/fonts";
 import { UserButton } from "@clerk/nextjs";
+import { poppins } from "~/assets/fonts/fonts";
 
 export default function Header() {
   const [showModal, setShowModal] = useState<boolean>(false);
