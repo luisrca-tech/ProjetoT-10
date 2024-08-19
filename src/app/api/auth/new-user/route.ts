@@ -54,6 +54,13 @@ export async function POST(req: Request) {
         });
         break;
       case "user.created":
+        const externalAccounts = evt.data.external_accounts;
+        const isGoogleOauth = externalAccounts.some(
+          (account) => account.provider === "oauth_google"
+        );
+        if (!isGoogleOauth) {
+          console.error("User creation skipped: Not a Google OAuth user");
+        }
         await db.user.create({
           data: {
             id: evt.data.id,
