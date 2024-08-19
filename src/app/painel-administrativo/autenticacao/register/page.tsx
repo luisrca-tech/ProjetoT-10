@@ -9,9 +9,8 @@ import ErrorMessage from "~/components/widgets/ErrorMessage";
 import { useAuth } from "~/hooks/useAuth";
 import { authSchema } from "~/schemas/auth.schema";
 import { type authType } from "~/types/auth.type";
-import { AuthActions } from "../login/styles";
 import EmailVerify from "./_components/EmailVerify";
-import { Container, Form, OthersRegisterContainer } from "./styles";
+import { Container, Form } from "./styles";
 
 export default function Register() {
   const {
@@ -21,14 +20,14 @@ export default function Register() {
   } = useForm<authType>({
     resolver: zodResolver(authSchema),
   });
-  const { Register, emailVerify, signUpWith } = useAuth();
+  const { Register, emailVerify } = useAuth();
 
   const { isLoaded } = useSignUp();
 
   if (!isLoaded) return null;
 
   async function handleRegister({ email, password }: authType) {
-    await Register({ email, password });
+    await Register({ email, password, confirmPassword: password });
   }
 
   return (
@@ -55,6 +54,17 @@ export default function Register() {
         <ErrorMessage>
           {errors.password?.message && errors.password?.message}
         </ErrorMessage>
+        <Input
+          isPassword={true}
+          id="confirmPassword"
+          type="password"
+          placeholder="Confirme sua senha..."
+          autoComplete="current-password"
+          {...register("confirmPassword")}
+        />
+        <ErrorMessage>
+          {errors.confirmPassword?.message && errors.confirmPassword?.message}
+        </ErrorMessage>
         {!emailVerify && (
           <Button
             className={roboto.className}
@@ -64,18 +74,7 @@ export default function Register() {
           />
         )}
       </Form>
-      {emailVerify ? (
-        <EmailVerify />
-      ) : (
-        <OthersRegisterContainer>
-          <div>
-            <span className={roboto.className}>
-              Cadastre-se com o{" "}
-              <AuthActions onClick={() => signUpWith()}>google</AuthActions>
-            </span>
-          </div>
-        </OthersRegisterContainer>
-      )}
+      {emailVerify && <EmailVerify />}
     </Container>
   );
 }
