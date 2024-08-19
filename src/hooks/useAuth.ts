@@ -5,7 +5,8 @@ import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import router from "next/router";
 import { useState } from "react";
 import { toast } from "sonner";
-import { type authType } from "~/types/auth.type";
+import { type loginType } from "~/types/login.type";
+import { type registerType } from "~/types/register.type";
 import { showToast } from "~/utils/functions/showToast";
 
 export function useAuth() {
@@ -21,7 +22,7 @@ export function useAuth() {
       redirectUrlComplete: "/painel-administrativo/projetos",
     });
 
-  async function Login({ email, password }: authType) {
+  async function Login({ email, password }: loginType) {
     try {
       const result = await signIn?.create({
         identifier: email,
@@ -48,7 +49,7 @@ export function useAuth() {
     }
   }
 
-  async function Register({ email, password }: authType) {
+  async function Register({ email, password }: registerType) {
     try {
       await signUp?.create({
         emailAddress: email,

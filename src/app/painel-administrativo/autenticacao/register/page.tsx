@@ -7,8 +7,8 @@ import Input from "~/components/inputs/Input";
 import Button from "~/components/widgets/Button";
 import ErrorMessage from "~/components/widgets/ErrorMessage";
 import { useAuth } from "~/hooks/useAuth";
-import { authSchema } from "~/schemas/auth.schema";
-import { type authType } from "~/types/auth.type";
+import { registerSchema } from "~/schemas/register.schema";
+import type { registerType } from "~/types/register.type";
 import EmailVerify from "./_components/EmailVerify";
 import { Container, Form } from "./styles";
 
@@ -17,8 +17,8 @@ export default function Register() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<authType>({
-    resolver: zodResolver(authSchema),
+  } = useForm<registerType>({
+    resolver: zodResolver(registerSchema),
   });
   const { Register, emailVerify } = useAuth();
 
@@ -26,7 +26,7 @@ export default function Register() {
 
   if (!isLoaded) return null;
 
-  async function handleRegister({ email, password }: authType) {
+  async function handleRegister({ email, password }: registerType) {
     await Register({ email, password, confirmPassword: password });
   }
 
