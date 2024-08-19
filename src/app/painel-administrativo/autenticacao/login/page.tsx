@@ -1,6 +1,7 @@
 "use client";
 
 import { useSignIn } from "@clerk/nextjs";
+import { OAuthStrategy } from "@clerk/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
@@ -30,7 +31,7 @@ export default function Login() {
   } = useForm<authType>({
     resolver: zodResolver(authSchema),
   });
-  const { Login, signInWith } = useAuth();
+  const { Login, signInWithGoogle } = useAuth();
   const { isLoaded } = useSignIn();
 
   if (!isLoaded) return null;
@@ -91,7 +92,9 @@ export default function Login() {
         <div>
           <span className={roboto.className}>
             Entre com o{" "}
-            <AuthActions onClick={() => signInWith()}>google</AuthActions>
+            <AuthActions onClick={signInWithGoogle}>
+              google
+            </AuthActions>
           </span>
         </div>
       </AlternativesLoginsContainer>
