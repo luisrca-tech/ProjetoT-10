@@ -7,28 +7,27 @@ import Input from "~/components/inputs/Input";
 import Button from "~/components/widgets/Button";
 import ErrorMessage from "~/components/widgets/ErrorMessage";
 import { useAuth } from "~/hooks/useAuth";
-import { authSchema } from "~/schemas/auth.schema";
-import { type authType } from "~/types/auth.type";
-import { AuthActions } from "../login/styles";
+import { registerSchema } from "~/schemas/register.schema";
+import type { registerType } from "~/types/register.type";
 import EmailVerify from "./_components/EmailVerify";
-import { Container, Form, OthersRegisterContainer } from "./styles";
+import { Container, Form } from "./styles";
 
 export default function Register() {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<authType>({
-    resolver: zodResolver(authSchema),
+  } = useForm<registerType>({
+    resolver: zodResolver(registerSchema),
   });
-  const { Register, emailVerify, signUpWith } = useAuth();
+  const { Register, emailVerify } = useAuth();
 
   const { isLoaded } = useSignUp();
 
   if (!isLoaded) return null;
 
-  async function handleRegister({ email, password }: authType) {
-    await Register({ email, password });
+  async function handleRegister({ email, password }: registerType) {
+    await Register({ email, password, confirmPassword: password });
   }
 
   return (
@@ -55,6 +54,17 @@ export default function Register() {
         <ErrorMessage>
           {errors.password?.message && errors.password?.message}
         </ErrorMessage>
+        <Input
+          isPassword={true}
+          id="confirmPassword"
+          type="password"
+          placeholder="Confirme sua senha..."
+          autoComplete="current-password"
+          {...register("confirmPassword")}
+        />
+        <ErrorMessage>
+          {errors.confirmPassword?.message && errors.confirmPassword?.message}
+        </ErrorMessage>
         {!emailVerify && (
           <Button
             className={roboto.className}
@@ -64,18 +74,7 @@ export default function Register() {
           />
         )}
       </Form>
-      {emailVerify ? (
-        <EmailVerify />
-      ) : (
-        <OthersRegisterContainer>
-          <div>
-            <span className={roboto.className}>
-              Cadastre-se com o{" "}
-              <AuthActions onClick={() => signUpWith()}>google</AuthActions>
-            </span>
-          </div>
-        </OthersRegisterContainer>
-      )}
+      {emailVerify && <EmailVerify />}
     </Container>
   );
 }

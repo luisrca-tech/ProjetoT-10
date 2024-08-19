@@ -9,8 +9,8 @@ import Input from "~/components/inputs/Input";
 import Button from "~/components/widgets/Button";
 import ErrorMessage from "~/components/widgets/ErrorMessage";
 import { useAuth } from "~/hooks/useAuth";
-import { authSchema } from "~/schemas/auth.schema";
-import { type authType } from "~/types/auth.type";
+import { loginSchema } from "~/schemas/login.schema";
+import { type loginType } from "~/types/login.type";
 import {
   AlternativesLoginsContainer,
   AuthActions,
@@ -27,15 +27,15 @@ export default function Login() {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<authType>({
-    resolver: zodResolver(authSchema),
+  } = useForm<loginType>({
+    resolver: zodResolver(loginSchema),
   });
-  const { Login, signInWith } = useAuth();
+  const { Login, signInWithGoogle } = useAuth();
   const { isLoaded } = useSignIn();
 
   if (!isLoaded) return null;
 
-  async function handleLogin({ email, password }: authType) {
+  async function handleLogin({ email, password }: loginType) {
     await Login({ email, password });
     reset();
   }
@@ -91,7 +91,7 @@ export default function Login() {
         <div>
           <span className={roboto.className}>
             Entre com o{" "}
-            <AuthActions onClick={() => signInWith()}>google</AuthActions>
+            <AuthActions onClick={signInWithGoogle}>google</AuthActions>
           </span>
         </div>
       </AlternativesLoginsContainer>

@@ -1,25 +1,28 @@
 "use client";
 
-import { useSession, useSignIn, useSignUp } from "@clerk/nextjs";
+import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
 import router from "next/router";
 import { useState } from "react";
 import { toast } from "sonner";
-import { api } from "~/trpc/react";
-import { type authType } from "~/types/auth.type";
+import { type loginType } from "~/types/login.type";
+import { type registerType } from "~/types/register.type";
 import { showToast } from "~/utils/functions/showToast";
 
 export function useAuth() {
   const [emailVerify, setEmailVerify] = useState(false);
-  const { session } = useSession();
-
-  const checkUserMutation = api.user.checkUser.useMutation();
-  const userMutation = api.user.create.useMutation();
 
   const { signIn, setActive } = useSignIn();
   const { signUp } = useSignUp();
 
-  async function Login({ email, password }: authType) {
+  const signInWithGoogle = () =>
+    signIn?.authenticateWithRedirect({
+      strategy: "oauth_google",
+      redirectUrl: "/sso-callback",
+      redirectUrlComplete: "/painel-administrativo/projetos",
+    });
+
+  async function Login({ email, password }: loginType) {
     try {
       const result = await signIn?.create({
         identifier: email,
@@ -46,15 +49,7 @@ export function useAuth() {
     }
   }
 
-  const signInWith = () => {
-    return signIn?.authenticateWithRedirect({
-      strategy: "oauth_google",
-      redirectUrl: "/painel-administrativo/projetos",
-      redirectUrlComplete: "/",
-    });
-  };
-
-  async function Register({ email, password }: authType) {
+  async function Register({ email, password }: registerType) {
     try {
       await signUp?.create({
         emailAddress: email,
@@ -76,51 +71,10 @@ export function useAuth() {
     }
   }
 
-  const createOauthGoogleUser = async () => {
-    const user = session?.user;
-
-    const userId = user?.id;
-
-    const email = user?.emailAddresses[0]?.emailAddress;
-
-    if (!email || !userId) {
-      showToast("error", "Usuário não encontrado no nosso banco de dados.");
-      return;
-    }
-
-    try {
-      const checkUserResponse = await checkUserMutation.mutateAsync({
-        userId: userId,
-      });
-
-      if (!checkUserResponse.exists) {
-        await userMutation.mutate({
-          userId: userId,
-          email: email,
-        });
-      }
-    } catch (error) {
-      if (isClerkAPIResponseError(error)) {
-        return showToast("error", `${error.errors[0]?.message}`);
-      }
-      showToast(`error`, "Something went wrong. Try again");
-    } 
-  };
-
-  const signUpWith = async () => {
-    return signUp?.authenticateWithRedirect({
-      strategy: "oauth_google",
-      redirectUrl: "/painel-administrativo/projetos",
-      redirectUrlComplete: "/",
-    });
-  };
-
   return {
     Login,
-    signInWith,
+    signInWithGoogle,
     Register,
-    signUpWith,
     emailVerify,
-    createOauthGoogleUser,
   };
 }
