@@ -1,6 +1,6 @@
-import { Webhook } from "svix";
-import { headers } from "next/headers";
 import { type WebhookEvent } from "@clerk/nextjs/server";
+import { headers } from "next/headers";
+import { Webhook } from "svix";
 import { db } from "~/server/db";
 
 export async function POST(req: Request) {
@@ -53,6 +53,24 @@ export async function POST(req: Request) {
           },
         });
         break;
+      case "user.created":
+        await db.user.create({
+          data: {
+            id: evt.data.id,
+            name: `${evt.data.first_name} ${evt.data.last_name}`,
+            email: evt.data.email_addresses[0]?.email_address,
+          },
+        });
+        break;
+      case "user.updated":
+        await db.user.update({
+          where: {
+            id: evt.data.id,
+          },
+          data: {
+            email: evt.data.email_addresses[0]?.email_address,
+          },
+        });
       default:
     }
   } catch (error) {
