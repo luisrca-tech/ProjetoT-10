@@ -19,7 +19,6 @@ export default function ForgotPassword() {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
   } = useForm<confirmEmail>({
     resolver: zodResolver(confirmEmailSchema),
@@ -47,37 +46,34 @@ export default function ForgotPassword() {
         );
       }
       toast.error("Something went wrong. Try again");
-    } finally {
-      reset();
     }
   }
 
   return (
     <Container>
-      {!verifyCode ? (
-        <Form onSubmit={handleSubmit(handleEmailSubmit)}>
-          <p>Informe seu e-mail para recuperação de senha.</p>
-          <Input
-            label="E-MAIL"
-            id="email"
-            type="email"
-            placeholder="email@exemplo.com"
-            autoComplete="useremail"
-            {...register("email")}
-          />
-          <ErrorMessage>
-            {errors.email?.message && errors.email?.message}
-          </ErrorMessage>
+      <Form onSubmit={handleSubmit(handleEmailSubmit)}>
+        <p>Informe seu e-mail para recuperação de senha.</p>
+        <Input
+          label="E-MAIL"
+          id="email"
+          type="email"
+          placeholder="Email@exemplo.com"
+          autoComplete="useremail"
+          {...register("email")}
+        />
+        <ErrorMessage>
+          {errors.email?.message && errors.email?.message}
+        </ErrorMessage>
+        {!verifyCode && (
           <Button
             className={roboto.className}
             type="submit"
             text="Confirmar"
             loading={isSubmitting}
           />
-        </Form>
-      ) : (
-        <ResetPassword />
-      )}
+        )}
+      </Form>
+      {verifyCode && <ResetPassword />}
     </Container>
   );
 }

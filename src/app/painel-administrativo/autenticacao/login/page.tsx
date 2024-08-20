@@ -46,7 +46,7 @@ export default function Login() {
         <Input
           id="email"
           type="email"
-          placeholder="email@exemplo.com"
+          placeholder="Email@example.com"
           autoComplete="useremail"
           {...register("email")}
         />
@@ -57,7 +57,7 @@ export default function Login() {
           isPassword={true}
           id="password"
           type="password"
-          placeholder="senha"
+          placeholder="Senha"
           autoComplete="current-password"
           {...register("password")}
         />
