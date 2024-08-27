@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Container,
   InputsRow,
@@ -9,12 +9,11 @@ import {
 import Image from "next/image";
 import CalendarIcon from "public/calendaricon.svg";
 import TrashAnimation from "public/trashanimation.svg";
-
+import { v4 as uuidv4 } from "uuid";
 import SelectInput from "~/components/inputs/SelectInput";
 import { useAtom } from "jotai";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
-import { rowCountAtom } from "~/@atom/ProjectStates/rowCountAtom";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { useGetLastRowIndex } from "~/app/utils/functions/getLastRowIndex";
 import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
@@ -32,9 +31,10 @@ interface RowAndScrollDownContainerProps {
 export default function RowAndScrollDownContainer({
   row,
 }: RowAndScrollDownContainerProps) {
+  const isNewRowAddedRef = useRef(false); // Ref para rastrear se a linha já foi adicionada
   const [checked] = useAtom(checkedAtom);
   const [ranges, setRanges] = useAtom(rangesAtom);
-  const [rowCount, setRowCount] = useAtom(rowCountAtom);
+
   const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
     rowsAndSelectedValuesAtom
   );
@@ -43,17 +43,19 @@ export default function RowAndScrollDownContainer({
   const [offsetXByRow, setOffsetXByRow] = useState<{ [key: string]: number }>(
     {}
   );
-  const [isNewRowAdded, setIsNewRowAdded] = useState(false);
-  const canAddRow = rowsAndSelectedValues.rows.every((index) => {
-    const firstTextValue =
-      rowsAndSelectedValues.selectedValues[`firstTextValue${index}-option`];
-    const secondTextValue =
-      rowsAndSelectedValues.selectedValues[`secondTextValue${index}-text`];
-    const thirdTextValue =
-      rowsAndSelectedValues.selectedValues[`thirdTextValue${index}-text`];
+  const [isRowAdded, setIsRowAdded] = useState<boolean | null>(false);
 
+  const canAddRow = useCallback(() => {
+    const lastIndex =
+      rowsAndSelectedValues.rows[rowsAndSelectedValues.rows.length - 1];
+    const firstTextValue =
+      rowsAndSelectedValues.selectedValues[`firstTextValue${lastIndex}-option`];
+    const secondTextValue =
+      rowsAndSelectedValues.selectedValues[`secondTextValue${lastIndex}-text`];
+    const thirdTextValue =
+      rowsAndSelectedValues.selectedValues[`thirdTextValue${lastIndex}-text`];
     return firstTextValue && secondTextValue && thirdTextValue;
-  });
+  }, [rowsAndSelectedValues.rows, rowsAndSelectedValues.selectedValues]);
 
   const lastRowIndex = useGetLastRowIndex();
   const isLastRow = row === lastRowIndex;
@@ -78,25 +80,24 @@ export default function RowAndScrollDownContainer({
     (ranges?.[row]?.startDate && ranges?.[row].endDate !== undefined);
 
   const addRow = useCallback(() => {
+    const rowKey = uuidv4();
     const newDateRange = {
       startDate: undefined,
       endDate: undefined,
-      key: `selection-row-${rowCount}`,
+      key: `selection-row-${rowKey}`,
       isSelected: false,
     };
 
     setRowsAndSelectedValues((prevState) => ({
       ...prevState,
-      rows: [...prevState.rows, `row-${rowCount}`],
+      rows: [...prevState.rows, `row-${rowKey}`],
     }));
 
     setRanges((prevState) => ({
       ...prevState,
-      [`row-${rowCount}`]: newDateRange,
+      [`row-${rowKey}`]: newDateRange,
     }));
-
-    setRowCount((prevCount) => prevCount + 1);
-  }, [rowCount, setRanges, setRowCount, setRowsAndSelectedValues]);
+  }, [setRanges, setRowsAndSelectedValues]);
 
   function formatDate(date: Date | undefined) {
     return date ? date.toLocaleDateString("pt-BR") : "";
@@ -175,11 +176,11 @@ export default function RowAndScrollDownContainer({
   }
 
   useEffect(() => {
-    if (canAddRow && !isNewRowAdded) {
+    if (canAddRow() && !isNewRowAddedRef.current) {
       addRow();
-      setIsNewRowAdded(true);
+      isNewRowAddedRef.current = true;
     }
-  }, [addRow, canAddRow, isNewRowAdded]);
+  }, [canAddRow, addRow]);
 
   return (
     <>
