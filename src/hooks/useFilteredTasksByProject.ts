@@ -49,12 +49,10 @@ export function useFilteredTasksByProject() {
     }: FetchResponseType) {
       setLoading(true);
       const isNoDatas =
-        !customFieldData ||
-        customFieldData.length === 0 ||
-        !tasksData ||
-        tasksData.length === 0;
+        !customFieldData || customFieldData.length === 0 || !tasksData;
 
       if (isNoDatas) {
+        setLoading(false);
         return {
           filteredTasksByProject: [],
         };
@@ -82,7 +80,7 @@ export function useFilteredTasksByProject() {
       );
 
       const filteredTasksByProject = projectsWithTasks?.map((project) => {
-        const tasksForProject = tasksData?.filter((task) =>
+        const tasksOfProject = tasksData?.filter((task) =>
           task.custom_fields.some((field) => {
             if (Array.isArray(field.value)) {
               return field.value.includes(project.id);
@@ -91,7 +89,7 @@ export function useFilteredTasksByProject() {
           })
         );
 
-        const dates = tasksForProject?.reduce(
+        const dates = tasksOfProject?.reduce(
           (acc, task) => {
             const startDate = task.start_date
               ? parseInt(task.start_date)
@@ -116,7 +114,7 @@ export function useFilteredTasksByProject() {
           }
         );
 
-        return { project, tasks: tasksForProject, dates };
+        return { project, tasks: tasksOfProject, dates };
       });
 
       setFilteredTasksByProject(filteredTasksByProject);

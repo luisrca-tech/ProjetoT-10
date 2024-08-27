@@ -43,12 +43,10 @@ export function useTasksOfProject() {
     }: FetchResponseType) {
       setLoading(true);
       const isNoDatas =
-        !customFieldData ||
-        customFieldData.length === 0 ||
-        !tasksData ||
-        tasksData.length === 0;
+        !customFieldData || customFieldData.length === 0 || !tasksData;
 
       if (isNoDatas) {
+        setLoading(false);
         return {
           isFetchAllCustomFields: false,
           tasksOfProject: [],
