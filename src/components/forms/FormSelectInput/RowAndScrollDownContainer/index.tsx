@@ -43,7 +43,6 @@ export default function RowAndScrollDownContainer({
   const [offsetXByRow, setOffsetXByRow] = useState<{ [key: string]: number }>(
     {}
   );
-  const [isRowAdded, setIsRowAdded] = useState<boolean | null>(false);
 
   const canAddRow = useCallback(() => {
     const lastIndex =
