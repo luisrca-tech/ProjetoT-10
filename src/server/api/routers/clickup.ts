@@ -4,7 +4,8 @@ import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { type CustomField } from "~/app/types/clickUpApi";
 import { showToast } from "~/utils/functions/showToast";
 import { type Task } from "~/app/types/clickUpApi";
-const listId = "901303987731";
+const listId = "901305118368";
+const authorizationToken = process.env.CLICKUP_API_TOKEN;
 
 export const clickupRouter = createTRPCRouter({
   getCustomFields: publicProcedure
@@ -16,7 +17,7 @@ export const clickupRouter = createTRPCRouter({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: authorizationToken ? authorizationToken : "",
           },
         }
       );
@@ -41,7 +42,7 @@ export const clickupRouter = createTRPCRouter({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: authorizationToken ? authorizationToken : "",
           },
         }
       );
@@ -83,7 +84,7 @@ export const clickupRouter = createTRPCRouter({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: authorizationToken ? authorizationToken : "",
           },
           body: JSON.stringify({
             name: `Pessoa-${numberRow}`,
@@ -123,7 +124,7 @@ export const clickupRouter = createTRPCRouter({
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: authorizationToken ? authorizationToken : "",
           },
           body: JSON.stringify({
             name: `Pessoa-${numberRow}`,
