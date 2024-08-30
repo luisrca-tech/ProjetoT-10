@@ -11,11 +11,12 @@ import { CustomDateRangePicker } from "../../widgets/CustomDateRangePicker";
 import ToggleSwitch from "../../widgets/ToggleSwitch";
 import { ProjectProfileHeader } from "../ProjectProfileHeader";
 import { CloseCalendarContainer } from "./CloseCalendarContainer";
-import { Container,MainContainer,FormContainer } from "./styles"
+import { Container, MainContainer, FormContainer } from "./styles";
 import { type Task } from "~/app/types/clickUpApi";
 import { v4 as uuidv4 } from "uuid";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 
 export function ProjectDetailsContent() {
   const searchParams = useSearchParams();
@@ -27,6 +28,10 @@ export function ProjectDetailsContent() {
   const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
     rowsAndSelectedValuesAtom
   );
+  const [, setChecked] = useAtom(checkedAtom);
+  const [rowsUpdated, setRowsUpdated] = useState(() => {
+    return !projectId ? true : false;
+  });
   const [, setRanges] = useAtom(rangesAtom);
   const [isInitialized, setIsInitialized] = useState(false);
   const canInitializeRowsAndRanges =
@@ -68,10 +73,10 @@ export function ProjectDetailsContent() {
       const newSelectedValues: Record<string, any> = {};
       const newRanges: Record<string, any> = {};
       let chargeName = "";
-      const rowKey = uuidv4();
-      const newRow = `row-${rowKey}`;
 
       tasksOfProject.forEach((task) => {
+        const rowKey = uuidv4();
+        const newRow = `row-${rowKey}`;
         const chargeField = task.custom_fields.find(
           (field) => field.name === "PixelCraft_cargos"
         );
@@ -92,11 +97,8 @@ export function ProjectDetailsContent() {
         const chargeOptions = chargeField?.type_config?.options;
         const chargeValue = chargeField?.value;
 
-        if (chargeOptions && chargeValue) {
-          const option = chargeOptions.find((opt) =>
-            chargeValue.includes(opt.id)
-          );
-          chargeName = option ? option.name : "";
+        if (chargeOptions && typeof chargeValue === "number") {
+          chargeName = chargeOptions[chargeValue]?.name ?? "";
         }
 
         const cargoValue = chargeField ? `${chargeField.value}` : "";
@@ -135,6 +137,61 @@ export function ProjectDetailsContent() {
     [setRowsAndSelectedValues, setRanges]
   );
 
+  const canAddRow = useCallback(() => {
+    if (rowsUpdated) {
+      const lastIndex =
+        rowsAndSelectedValues.rows[rowsAndSelectedValues.rows.length - 1];
+      const firstTextValue =
+        rowsAndSelectedValues.selectedValues[
+          `firstTextValue${lastIndex}-option`
+        ];
+      const secondTextValue =
+        rowsAndSelectedValues.selectedValues[
+          `secondTextValue${lastIndex}-text`
+        ];
+      const thirdTextValue =
+        rowsAndSelectedValues.selectedValues[`thirdTextValue${lastIndex}-text`];
+
+      return !!firstTextValue && !!secondTextValue && !!thirdTextValue;
+    }
+  }, [
+    rowsAndSelectedValues.rows,
+    rowsAndSelectedValues.selectedValues,
+    rowsUpdated,
+  ]);
+
+  const addRow = useCallback(() => {
+    const rowKey = uuidv4();
+    const newDateRange = {
+      startDate: undefined,
+      endDate: undefined,
+      key: `selection-row-${rowKey}`,
+      isSelected: false,
+    };
+
+    setRowsAndSelectedValues((prevState) => ({
+      ...prevState,
+      rows: [...prevState.rows, `row-${rowKey}`],
+    }));
+
+    setRanges((prevState) => ({
+      ...prevState,
+      [`row-${rowKey}`]: newDateRange,
+    }));
+  }, [setRanges, setRowsAndSelectedValues]);
+
+  const resetStates = useCallback(() => {
+    setRowsAndSelectedValues({
+      rows: [],
+      selectedValues: {},
+    });
+
+    setRanges({});
+    setRowsUpdated(false);
+    setIsInitialized(false);
+    setChecked(false);
+  }, [setRowsAndSelectedValues, setRanges, setChecked]);
+
   useEffect(() => {
     if (missingFields) {
       showToast(
@@ -155,9 +212,28 @@ export function ProjectDetailsContent() {
 
   useEffect(() => {
     if (projectId && tasksOfProject) {
+      resetStates();
       updateRowsAndSelectedValues(tasksOfProject);
+      setRowsUpdated(true);
+
+      return () => {
+        resetStates();
+      };
     }
-  }, [projectId, tasksOfProject, updateRowsAndSelectedValues]);
+  }, [
+    projectId,
+    resetStates,
+    setRanges,
+    setRowsAndSelectedValues,
+    tasksOfProject,
+    updateRowsAndSelectedValues,
+  ]);
+
+  useEffect(() => {
+    if (!!canAddRow() && rowsUpdated) {
+      addRow();
+    }
+  }, [canAddRow, addRow, rowsAndSelectedValues.rows, rowsUpdated]);
 
   return (
     <Container>
