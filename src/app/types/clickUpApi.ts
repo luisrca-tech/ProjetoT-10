@@ -26,7 +26,7 @@ export type CustomField = {
   date_created: string;
   hide_from_guests: boolean;
   required: boolean;
-  value: string[];
+  value?: string[] | number;
 };
 
 export type OptionType = {
