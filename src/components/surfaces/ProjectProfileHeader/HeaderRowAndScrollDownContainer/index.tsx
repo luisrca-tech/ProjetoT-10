@@ -8,6 +8,7 @@ import { useIsValueInInput } from "~/app/utils/functions/isValueInInput";
 import { useGetInputValueAtIndex } from "~/app/utils/functions/getInputValueAtIndex";
 import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
 import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
+import { useSearchParams } from "next/navigation";
 
 export default function HeaderRowAndScrollDownContainer() {
   const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
@@ -19,7 +20,8 @@ export default function HeaderRowAndScrollDownContainer() {
     row,
     inProfileHeader
   );
-
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("projectId");
   const toggleSelectOpen = useToggleSelectOpen(row);
 
   function handleInputChange(row: string, value: string, optionId?: string) {
@@ -47,7 +49,7 @@ export default function HeaderRowAndScrollDownContainer() {
         readOnly={true}
       />
 
-      {useIsSelectOpen(row) && <ScrollDownContainer row={row} />}
+      {useIsSelectOpen(row) && !projectId && <ScrollDownContainer row={row} />}
     </Container>
   );
 }
