@@ -1,17 +1,20 @@
 import { useAtom } from "jotai";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { chargeOptionsAtom } from "~/@atom/api/CustomFields/chargeOptionsAtom";
 import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { type CustomField, type Task } from "~/app/types/clickUpApi";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
+import { ProjectOptionType } from "~/server/types/Clickup.type";
 import { api } from "~/trpc/react";
+import { showToast } from "~/utils/functions/showToast";
 
 type FetchResponseType = {
-  customFieldData?: CustomField[];
-  tasksData?: Task[];
+  customFieldData: CustomField[];
+  tasksData: Task[];
 };
 
 export function useTasksOfProject() {
@@ -25,7 +28,9 @@ export function useTasksOfProject() {
   const [, setFieldsIds] = useAtom(fieldsIdsAtom);
   const [, setChargeOptions] = useAtom(chargeOptionsAtom);
   const [, setLoading] = useAtom(loadingAtom);
-
+  const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
+  const currentRow = "projectRow";
+  const router = useRouter();
   const getTasks = api.clickup.getTasks.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.task,
   });
@@ -33,95 +38,113 @@ export function useTasksOfProject() {
   const getCustomField = api.clickup.getCustomFields.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.field,
   });
-  const customFieldData = getCustomField.data;
-  const tasksData = getTasks.data;
 
   const handleFetchResponse = useCallback(
-    function handleFetchResponse({
-      customFieldData,
-      tasksData,
-    }: FetchResponseType) {
-      setLoading(true);
-      const isNoDatas =
-        !customFieldData || customFieldData.length === 0 || !tasksData;
-
-      if (isNoDatas) {
-        setLoading(false);
-        return {
-          isFetchAllCustomFields: false,
-          tasksOfProject: [],
+    ({ customFieldData, tasksData }: FetchResponseType) => {
+      if (customFieldData != undefined && tasksData != undefined) {
+        const customFields = {
+          project: customFieldData.find(
+            (field: CustomField) => field.name === "PixelCraft_projeto"
+          ),
+          charge: customFieldData.find(
+            (field: CustomField) => field.name === "PixelCraft_cargos"
+          ),
+          hoursPerMonth: customFieldData.find(
+            (field: CustomField) => field.name === "PixelCraft_Horas_Mes"
+          ),
+          workValue: customFieldData.find(
+            (field: CustomField) => field.name === "PixelCraft_Valor"
+          ),
         };
-      }
 
-      const customFields = {
-        project: customFieldData?.find(
-          (field: CustomField) => field.name === "PixelCraft_projeto"
-        ),
-        charge: customFieldData?.find(
-          (field: CustomField) => field.name === "PixelCraft_cargos"
-        ),
-        hoursPerMonth: customFieldData?.find(
-          (field: CustomField) => field.name === "PixelCraft_Horas_Mes"
-        ),
-        workValue: customFieldData?.find(
-          (field: CustomField) => field.name === "PixelCraft_Valor"
-        ),
-      };
+        const projectOptions = customFields.project?.type_config.options;
 
-      const projectOptions = customFields.project?.type_config.options;
-      const chargeOptions = customFields.charge?.type_config.options;
-      const fieldsIds = {
-        chargeFieldId: customFields.charge?.id,
-        projectFieldId: customFields.project?.id,
-        valueFieldId: customFields.workValue?.id,
-        hoursPerMonthCustomFieldId: customFields.hoursPerMonth?.id,
-      };
+        const foundActualProject = projectOptions?.find(
+          (project) => project.id === projectId
+        );
 
-      setChargeOptions(chargeOptions);
-      setFieldsIds(fieldsIds);
-      setProjectOptions(projectOptions);
+        setProjectSelectedValue((prevState) => ({
+          ...prevState,
+          selectedValue: {
+            ...prevState.selectedValue,
+            [`${currentRow}-text`]: foundActualProject?.label || "",
+            [`${currentRow}-option`]: foundActualProject?.id || "",
+          },
+        }));
 
-      const isFetchAllCustomFields = Object.values(customFields).every(Boolean);
-      setIsFetchAllCustomFields(isFetchAllCustomFields);
-
-      if (!isFetchAllCustomFields) {
-        const missingFields = Object.entries(customFields)
-          .filter(([_, value]) => !value)
-          .map(([key]) => `PixelCraft_${key}`)
-          .join(", ");
-
-        setMissingFields(missingFields);
-        setLoading(false);
-
-        return {
-          isFetchAllCustomFields: [],
-          tasksOfProject: [],
-          missingFields: missingFields,
+        const chargeOptions = customFields.charge?.type_config.options;
+        const fieldsIds = {
+          chargeFieldId: customFields.charge?.id,
+          projectFieldId: customFields.project?.id,
+          valueFieldId: customFields.workValue?.id,
+          hoursPerMonthCustomFieldId: customFields.hoursPerMonth?.id,
         };
+
+        setChargeOptions(chargeOptions);
+        setFieldsIds(fieldsIds);
+        setProjectOptions(projectOptions);
+
+        const isFetchAllCustomFields =
+          Object.values(customFields).every(Boolean);
+        setIsFetchAllCustomFields(isFetchAllCustomFields);
+
+        if (!isFetchAllCustomFields) {
+          const missingFields = Object.entries(customFields)
+            .filter(([_, value]) => !value)
+            .map(([key]) => `PixelCraft_${key}`)
+            .join(", ");
+
+          setMissingFields(missingFields);
+
+          return {
+            isFetchAllCustomFields: false,
+            tasksOfProject: [],
+            missingFields: missingFields,
+          };
+        }
+
+        const tasksOfProject = tasksData.filter((task) =>
+          task.custom_fields.some((field) => {
+            if (Array.isArray(field.value) && projectId) {
+              return field.value.includes(projectId);
+            }
+            return false;
+          })
+        );
+        setTasksOfProject(tasksOfProject);
+        setLoading(false);
       }
-
-      const tasksOfProject = tasksData?.filter((task) =>
-        task.custom_fields.some((field) => {
-          if (Array.isArray(field.value) && projectId) {
-            return field.value.includes(projectId);
-          }
-          return false;
-        })
-      );
-
-      setTasksOfProject(tasksOfProject);
-      setLoading(false);
     },
     [projectId, setChargeOptions, setFieldsIds, setLoading, setProjectOptions]
   );
 
-  const fetch = useCallback(async () => {
-    handleFetchResponse({ customFieldData, tasksData });
-  }, [customFieldData, handleFetchResponse, tasksData]);
-
   useEffect(() => {
-    fetch();
-  }, [fetch]);
+    setLoading(true);
+    const customFieldData = getCustomField.data ?? [];
+    const tasksData = getTasks.data ?? [];
+
+    if (getCustomField.isFetched) {
+      if (Array.isArray(customFieldData)) {
+        handleFetchResponse({ customFieldData, tasksData });
+      } else {
+        showToast(
+          "error",
+          "Erro de autorização ao acessar CustomFields!",
+          "Confira seus listId e AuthorizationToken"
+        );
+
+        router.push("/painel-administrativo/projetos");
+      }
+    }
+  }, [
+    getCustomField.data,
+    getCustomField.isFetched,
+    getTasks.data,
+    getTasks.isFetched,
+    handleFetchResponse,
+    router,
+    setLoading,
+  ]);
 
   return {
     isFetchAllCustomFields,

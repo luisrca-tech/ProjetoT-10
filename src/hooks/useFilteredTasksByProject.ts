@@ -8,6 +8,7 @@ import {
   type Task,
 } from "~/server/types/Clickup.type";
 import { api } from "~/trpc/react";
+import { showToast } from "~/utils/functions/showToast";
 
 type FetchResponseType = {
   customFieldData?: CustomField[];
@@ -39,97 +40,100 @@ export function useFilteredTasksByProject() {
   const getCustomField = api.clickup.getCustomFields.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.field,
   });
-  const customFieldData = getCustomField.data;
-  const tasksData = getTasks.data;
 
   const handleFetchResponse = useCallback(
-    function handleFetchResponse({
-      customFieldData,
-      tasksData,
-    }: FetchResponseType) {
-      setLoading(true);
-      const isNoDatas =
-        !customFieldData || customFieldData.length === 0 || !tasksData;
+    ({ customFieldData, tasksData }: FetchResponseType) => {
+      if (customFieldData != undefined && tasksData != undefined) {
+        const projectCustomField = customFieldData?.find(
+          (field: CustomField) => field.name === "PixelCraft_projeto"
+        );
 
-      if (isNoDatas) {
-        setLoading(false);
-        return {
-          filteredTasksByProject: [],
-        };
-      }
-      const projectCustomField = customFieldData?.find(
-        (field: CustomField) => field.name === "PixelCraft_projeto"
-      );
+        if (!projectCustomField) {
+          setIsNocustomFieldProject(true);
+          return { filteredTasksByProject: [] };
+        }
 
-      if (!projectCustomField) {
-        setIsNocustomFieldProject(true);
-        setLoading(false);
-        return { filteredTasksByProject: [] };
-      }
+        const projectOptionsResp =
+          projectCustomField?.type_config.options || [];
 
-      const projectOptionsResp = projectCustomField?.type_config.options || [];
-
-      const projectsWithTasks = projectOptionsResp?.filter(
-        (project: ProjectOptionType) =>
-          tasksData?.some((task) =>
-            task.custom_fields.some(
-              (field) =>
-                Array.isArray(field.value) && field.value.includes(project.id)
+        const projectsWithTasks = projectOptionsResp?.filter(
+          (project: ProjectOptionType) =>
+            tasksData?.some((task) =>
+              task.custom_fields.some(
+                (field) =>
+                  Array.isArray(field.value) && field.value.includes(project.id)
+              )
             )
-          )
-      );
-
-      const filteredTasksByProject = projectsWithTasks?.map((project) => {
-        const tasksOfProject = tasksData?.filter((task) =>
-          task.custom_fields.some((field) => {
-            if (Array.isArray(field.value)) {
-              return field.value.includes(project.id);
-            }
-            return false;
-          })
         );
 
-        const dates = tasksOfProject?.reduce(
-          (acc, task) => {
-            const startDate = task.start_date
-              ? parseInt(task.start_date)
-              : null;
-            const endDate = task.due_date ? parseInt(task.due_date) : null;
+        const filteredTasksByProject = projectsWithTasks?.map((project) => {
+          const tasksOfProject = tasksData?.filter((task) =>
+            task.custom_fields.some((field) => {
+              if (Array.isArray(field.value)) {
+                return field.value.includes(project.id);
+              }
+              return false;
+            })
+          );
 
-            if (
-              startDate &&
-              (!acc.minStartDate || startDate < acc.minStartDate)
-            ) {
-              acc.minStartDate = startDate;
+          const dates = tasksOfProject?.reduce(
+            (acc, task) => {
+              const startDate = task.start_date
+                ? parseInt(task.start_date)
+                : null;
+              const endDate = task.due_date ? parseInt(task.due_date) : null;
+
+              if (
+                startDate &&
+                (!acc.minStartDate || startDate < acc.minStartDate)
+              ) {
+                acc.minStartDate = startDate;
+              }
+              if (endDate && (!acc.maxEndDate || endDate > acc.maxEndDate)) {
+                acc.maxEndDate = endDate;
+              }
+
+              return acc;
+            },
+            {
+              minStartDate: null as number | null,
+              maxEndDate: null as number | null,
             }
-            if (endDate && (!acc.maxEndDate || endDate > acc.maxEndDate)) {
-              acc.maxEndDate = endDate;
-            }
+          );
 
-            return acc;
-          },
-          {
-            minStartDate: null as number | null,
-            maxEndDate: null as number | null,
-          }
-        );
+          return { project, tasks: tasksOfProject, dates };
+        });
 
-        return { project, tasks: tasksOfProject, dates };
-      });
-
-      setFilteredTasksByProject(filteredTasksByProject);
-      setLoading(false);
+        setFilteredTasksByProject(filteredTasksByProject);
+        setLoading(false);
+      }
     },
     [setLoading]
   );
 
-  const fetch = useCallback(async () => {
-    handleFetchResponse({ customFieldData, tasksData });
-  }, [customFieldData, handleFetchResponse, tasksData]);
-
   useEffect(() => {
-    fetch();
-  }, [fetch]);
+    setLoading(true);
+    const customFieldData = getCustomField.data ?? [];
+    const tasksData = getTasks.data ?? [];
+    if (getCustomField.isFetched) {
+      if (Array.isArray(customFieldData)) {
+        handleFetchResponse({ customFieldData, tasksData });
+      } else {
+        showToast(
+          "error",
+          "Erro de autorização ao acessar CustomFields!",
+          "Confira seus listId e AuthorizationToken"
+        );
+      }
+      setLoading(false);
+    }
+  }, [
+    getCustomField.data,
+    getCustomField.isFetched,
+    getTasks.data,
+    handleFetchResponse,
+    setLoading,
+  ]);
 
   return {
     filteredTasksByProject,
