@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import {
   Container,
   InputsRow,
@@ -9,7 +9,6 @@ import {
 import Image from "next/image";
 import CalendarIcon from "public/calendaricon.svg";
 import TrashAnimation from "public/trashanimation.svg";
-import { v4 as uuidv4 } from "uuid";
 import SelectInput from "~/components/inputs/SelectInput";
 import { useAtom } from "jotai";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
@@ -31,30 +30,15 @@ interface RowAndScrollDownContainerProps {
 export default function RowAndScrollDownContainer({
   row,
 }: RowAndScrollDownContainerProps) {
-  const isNewRowAddedRef = useRef(false); // Ref para rastrear se a linha já foi adicionada
   const [checked] = useAtom(checkedAtom);
-  const [ranges, setRanges] = useAtom(rangesAtom);
+  const [ranges] = useAtom(rangesAtom);
 
-  const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
-    rowsAndSelectedValuesAtom
-  );
+  const [, setRowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const { handleInputDataMenuClick } = useInputDataMenuClick();
   const [startX, setStartX] = useState<number | null>(null);
   const [offsetXByRow, setOffsetXByRow] = useState<{ [key: string]: number }>(
     {}
   );
-
-  const canAddRow = useCallback(() => {
-    const lastIndex =
-      rowsAndSelectedValues.rows[rowsAndSelectedValues.rows.length - 1];
-    const firstTextValue =
-      rowsAndSelectedValues.selectedValues[`firstTextValue${lastIndex}-option`];
-    const secondTextValue =
-      rowsAndSelectedValues.selectedValues[`secondTextValue${lastIndex}-text`];
-    const thirdTextValue =
-      rowsAndSelectedValues.selectedValues[`thirdTextValue${lastIndex}-text`];
-    return firstTextValue && secondTextValue && thirdTextValue;
-  }, [rowsAndSelectedValues.rows, rowsAndSelectedValues.selectedValues]);
 
   const lastRowIndex = useGetLastRowIndex();
   const isLastRow = row === lastRowIndex;
@@ -77,26 +61,6 @@ export default function RowAndScrollDownContainer({
   const isRangeInThisRow =
     isLastRow ||
     (ranges?.[row]?.startDate && ranges?.[row].endDate !== undefined);
-
-  const addRow = useCallback(() => {
-    const rowKey = uuidv4();
-    const newDateRange = {
-      startDate: undefined,
-      endDate: undefined,
-      key: `selection-row-${rowKey}`,
-      isSelected: false,
-    };
-
-    setRowsAndSelectedValues((prevState) => ({
-      ...prevState,
-      rows: [...prevState.rows, `row-${rowKey}`],
-    }));
-
-    setRanges((prevState) => ({
-      ...prevState,
-      [`row-${rowKey}`]: newDateRange,
-    }));
-  }, [setRanges, setRowsAndSelectedValues]);
 
   function formatDate(date: Date | undefined) {
     return date ? date.toLocaleDateString("pt-BR") : "";
@@ -173,13 +137,6 @@ export default function RowAndScrollDownContainer({
     }
     setStartX(null);
   }
-
-  useEffect(() => {
-    if (canAddRow() && !isNewRowAddedRef.current) {
-      addRow();
-      isNewRowAddedRef.current = true;
-    }
-  }, [canAddRow, addRow]);
 
   return (
     <>
