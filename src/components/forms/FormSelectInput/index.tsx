@@ -58,11 +58,7 @@ export default function FormSelectInput() {
     try {
       setLoading(true);
       await processRows();
-      showToast(
-        "success",
-        "Tasks criadas e vinculadas ao NOME DO PROJETO",
-        "Alterações no clickup já podem ser visualizadas"
-      );
+      showToast("success", "Tasks criadas no Projeto");
     } catch (error) {
       showToast(
         "error",
