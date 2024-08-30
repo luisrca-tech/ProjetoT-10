@@ -3,6 +3,8 @@ import { Container, EditProjectContainer, DataContainer } from "./styles";
 import HeaderRowAndScrollDownContainer from "../HeaderRowAndScrollDownContainer";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 import CalendarDateValues from "../CalendarDateValues";
+import { poppins } from "~/app/fonts";
+import { Suspense } from "react";
 
 export default function InputContent() {
   const [checked] = useAtom(checkedAtom);
@@ -11,11 +13,13 @@ export default function InputContent() {
     <Container>
       {!checked ? (
         <EditProjectContainer>
-          <HeaderRowAndScrollDownContainer />
+          <Suspense>
+            <HeaderRowAndScrollDownContainer />
+          </Suspense>
         </EditProjectContainer>
       ) : (
         <DataContainer>
-          <strong>Duração:</strong>
+          <strong className={poppins.className}>Duração:</strong>
           <CalendarDateValues />
         </DataContainer>
       )}
