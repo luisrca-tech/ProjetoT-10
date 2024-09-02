@@ -111,7 +111,8 @@ export function ProjectDetailsContent() {
         newSelectedValues[`firstTextValue${newRow}-option`] = cargoValue;
         newSelectedValues[`secondTextValue${newRow}-text`] = horasValue;
         newSelectedValues[`thirdTextValue${newRow}-text`] = valorValue;
-
+        newSelectedValues[`reqMethod${newRow}`] = "PUT";
+        newSelectedValues[`taskId${newRow}`] = task.id;
         newRanges[newRow] = {
           endDate: taskDueDate,
           isSelected: true,
@@ -172,6 +173,11 @@ export function ProjectDetailsContent() {
     setRowsAndSelectedValues((prevState) => ({
       ...prevState,
       rows: [...prevState.rows, `row-${rowKey}`],
+      selectedValues: {
+        ...prevState.selectedValues,
+
+        [`reqMethodrow-${rowKey}`]: "POST",
+      },
     }));
 
     setRanges((prevState) => ({
