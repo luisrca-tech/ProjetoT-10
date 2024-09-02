@@ -1,4 +1,5 @@
 import { useAtom } from "jotai";
+import { useState } from "react";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import {
   rangesAtom,
@@ -12,6 +13,8 @@ export interface ChargeFieldSelectedValue {
   chargeValueNumber: number;
   hoursPerMonthValueNumber: number;
   hourPerValueNumber: number;
+  reqMethod: string | undefined;
+  taskId: string | undefined;
 }
 
 export function useProcessRows() {
@@ -23,7 +26,9 @@ export function useProcessRows() {
   const projectFieldSelectedValue =
     projectSelectedValue.selectedValue["projectRow-option"];
 
-  const mutationTask = api.clickup.postTask.useMutation();
+  const [reqMethodState, setReqMethodState] = useState<string | undefined>();
+  const mutationUpdateTask = api.clickup.updateTask.useMutation();
+  const mutationPostTask = api.clickup.postTask.useMutation();
   const mutationChargeCustomField =
     api.clickup.postChargeCustomField.useMutation();
   const mutationProjectCustomField =
@@ -40,6 +45,8 @@ export function useProcessRows() {
     const firstValue = `firstTextValue${row}-option`;
     const secondValue = `secondTextValue${row}-text`;
     const thirdValue = `thirdTextValue${row}-text`;
+    const reqMethod = selectedValues[`reqMethod${row}`];
+    const taskId = selectedValues[`taskId${row}`];
 
     const chargeValueNumber = Number(selectedValues[firstValue]);
     const hoursPerMonthValueNumber = Number(selectedValues[secondValue]);
@@ -49,6 +56,8 @@ export function useProcessRows() {
       chargeValueNumber,
       hoursPerMonthValueNumber,
       hourPerValueNumber,
+      reqMethod,
+      taskId,
     };
   }
 
@@ -74,16 +83,32 @@ export function useProcessRows() {
       const valueFieldSelectedValue = FieldSelectedValue.hourPerValueNumber;
       const hoursPMonthFieldSelectedValue =
         FieldSelectedValue.hoursPerMonthValueNumber;
+      const reqMethod = FieldSelectedValue.reqMethod;
+
+      // Atualizando o estado aqui
       const FieldDateSelectedValue = getOptionDateForRow({ row, ranges });
       const startDate = FieldDateSelectedValue?.startDate;
       const endDate = FieldDateSelectedValue?.endDate;
 
       if (FieldDateSelectedValue) {
-        const postTaskResp = await mutationTask.mutateAsync({
-          row: row,
-          Dates: { startDate, endDate },
-        });
-        const { taskId } = postTaskResp;
+        let taskId;
+
+        if (reqMethod === "PUT") {
+          taskId = FieldSelectedValue.taskId;
+          await mutationUpdateTask.mutateAsync({
+            row: row,
+            Dates: { startDate, endDate },
+            taskId: taskId,
+          });
+          setReqMethodState("PUT");
+        } else {
+          const postTaskResp = await mutationPostTask.mutateAsync({
+            row: row,
+            Dates: { startDate, endDate },
+          });
+          setReqMethodState("POST");
+          taskId = postTaskResp.taskId;
+        }
 
         if (taskId && fieldsIds) {
           await mutationChargeCustomField.mutateAsync({
@@ -116,5 +141,6 @@ export function useProcessRows() {
 
   return {
     processRows,
+    reqMethod: reqMethodState,
   };
 }
