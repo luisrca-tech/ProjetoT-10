@@ -106,10 +106,11 @@ export const clickupRouter = createTRPCRouter({
           startDate: z.date().optional(),
           endDate: z.date().optional(),
         }),
+        taskId: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
-      const { row, Dates } = input;
+      const { row, Dates, taskId } = input;
 
       const query = new URLSearchParams({
         custom_task_ids: "true",
@@ -117,11 +118,10 @@ export const clickupRouter = createTRPCRouter({
       }).toString();
 
       const numberRow = row?.replace("row-", "");
-
       const updateTaskResp = await fetch(
-        `https://api.clickup.com/api/v2/list/${listId}/task?${query}`,
+        `https://api.clickup.com/api/v2/task/${taskId}?${query}`,
         {
-          method: "PATCH",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
             Authorization: authorizationToken ? authorizationToken : "",
@@ -134,7 +134,6 @@ export const clickupRouter = createTRPCRouter({
         }
       );
       const updateTaskData = await updateTaskResp.json();
-      const taskId = updateTaskData.id;
       return { taskId, updateTaskData };
     }),
 
