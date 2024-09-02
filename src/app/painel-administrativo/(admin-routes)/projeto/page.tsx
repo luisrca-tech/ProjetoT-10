@@ -11,8 +11,8 @@ import Header from "~/components/surfaces/header";
 export default function Projeto() {
   return (
     <Container className={roboto.className}>
-      <Header />
       <Suspense>
+        <Header />
         <ProjectDetailsContent />
       </Suspense>
     </Container>
