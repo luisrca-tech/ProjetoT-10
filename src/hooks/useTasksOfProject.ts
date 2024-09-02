@@ -8,7 +8,6 @@ import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { type CustomField, type Task } from "~/app/types/clickUpApi";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
-import { ProjectOptionType } from "~/server/types/Clickup.type";
 import { api } from "~/trpc/react";
 import { showToast } from "~/utils/functions/showToast";
 
@@ -31,6 +30,7 @@ export function useTasksOfProject() {
   const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const currentRow = "projectRow";
   const router = useRouter();
+
   const getTasks = api.clickup.getTasks.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.task,
   });
@@ -115,7 +115,14 @@ export function useTasksOfProject() {
         setLoading(false);
       }
     },
-    [projectId, setChargeOptions, setFieldsIds, setLoading, setProjectOptions]
+    [
+      projectId,
+      setChargeOptions,
+      setFieldsIds,
+      setLoading,
+      setProjectOptions,
+      setProjectSelectedValue,
+    ]
   );
 
   useEffect(() => {
