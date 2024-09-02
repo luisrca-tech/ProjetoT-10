@@ -1,8 +1,6 @@
 import InputsDataContainer from "./InputsDataContainer";
 import { Container } from "./styles";
-
 import { FormHeader } from "./FormHeader";
-
 import { useAtom } from "jotai";
 import {
   rangesAtom,
@@ -25,9 +23,11 @@ export default function FormSelectInput() {
   const [loading, setLoading] = useAtom(loadingAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [ranges] = useAtom(rangesAtom);
-  const { processRows } = useProcessRows();
-  const rangesCondition = validateRanges(ranges);
+  const { processRows, reqMethod } = useProcessRows();
 
+  const rangesCondition = validateRanges(ranges);
+  const toastSucessMessage =
+    reqMethod === "PUT" ? "Projeto atualizado" : "Projeto criado";
   const selectedValuesNotEmpty2 =
     Object.keys(projectSelectedValue.selectedValue).length > 0;
 
@@ -58,7 +58,7 @@ export default function FormSelectInput() {
     try {
       setLoading(true);
       await processRows();
-      showToast("success", "Tasks criadas no Projeto");
+      showToast("success", `${toastSucessMessage}`);
     } catch (error) {
       showToast(
         "error",
