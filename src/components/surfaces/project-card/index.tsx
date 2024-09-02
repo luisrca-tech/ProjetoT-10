@@ -8,8 +8,6 @@ import { CardContent } from "./CardContent";
 import { ProgressBar } from "./ProgressBar";
 import { Container, ProjectContainer } from "./styles";
 
-const listId = "901303987731";
-
 export function ProjectsCards() {
   const router = useRouter();
   const { filteredTasksByProject, isNocustomFieldProject } =
