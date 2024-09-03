@@ -7,7 +7,7 @@ import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom"
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import {
-  OptionType,
+  type OptionType,
   type CustomField,
   type Task,
 } from "~/server/types/Clickup.type";
