@@ -8,26 +8,30 @@ import {
 } from "~/@atom/ProjectStates/rangesAtom";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { Budget } from "./Budget";
-
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import Button from "../../widgets/Button";
 import { FormFooter } from "./FormFooter";
-
 import { type FormEvent } from "react";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { useProcessRows } from "~/hooks/useProcessRows";
 import { showToast } from "~/utils/functions/showToast";
+import { useSearchParams } from "next/navigation";
 
-export default function FormSelectInput() {
+type FormSelectInputProps = {
+  onReset: () => void;
+};
+
+export default function FormSelectInput({ onReset }: FormSelectInputProps) {
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [loading, setLoading] = useAtom(loadingAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [ranges] = useAtom(rangesAtom);
-  const { processRows, reqMethod } = useProcessRows();
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("projectId");
+  const { processRows } = useProcessRows();
 
   const rangesCondition = validateRanges(ranges);
-  const toastSucessMessage =
-    reqMethod === "PUT" ? "Projeto atualizado" : "Projeto criado";
+
   const selectedValuesNotEmpty2 =
     Object.keys(projectSelectedValue.selectedValue).length > 0;
 
@@ -57,8 +61,13 @@ export default function FormSelectInput() {
     e.preventDefault();
     try {
       setLoading(true);
-      await processRows();
-      showToast("success", `${toastSucessMessage}`);
+      const { toastMessage } = await processRows();
+      console.log(toastMessage, `toastMessage`);
+      showToast("success", `${toastMessage}`);
+
+      if (!projectId) {
+        onReset();
+      }
     } catch (error) {
       showToast(
         "error",
@@ -74,7 +83,6 @@ export default function FormSelectInput() {
     <Container onSubmit={taskPostRequest}>
       <FormHeader />
       <InputsDataContainer />
-
       <FormFooter>
         <Budget />
         <Button
