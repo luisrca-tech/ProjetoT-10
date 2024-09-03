@@ -5,9 +5,9 @@ import { Container, CardContentDescriptions } from "./styles";
 import GoogleImage from "/public/images/google img.svg";
 
 import Image, { type StaticImageData } from "next/image";
-import { type ProjectOptionType } from "~/server/types/Clickup.type";
+import { type OptionType } from "~/server/types/Clickup.type";
 type CardContentType = {
-  project: ProjectOptionType;
+  project: OptionType;
   dates:
     | {
         minStartDate: number | null;
