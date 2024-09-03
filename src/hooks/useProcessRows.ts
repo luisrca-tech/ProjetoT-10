@@ -1,5 +1,4 @@
 import { useAtom } from "jotai";
-import { useState } from "react";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import {
   rangesAtom,
@@ -26,7 +25,6 @@ export function useProcessRows() {
   const projectFieldSelectedValue =
     projectSelectedValue.selectedValue["projectRow-option"];
 
-  const [reqMethodState, setReqMethodState] = useState<string | undefined>();
   const mutationUpdateTask = api.clickup.updateTask.useMutation();
   const mutationPostTask = api.clickup.postTask.useMutation();
   const mutationChargeCustomField =
@@ -73,6 +71,7 @@ export function useProcessRows() {
   }
 
   async function processRows() {
+    let toastMessage;
     for (let i = 0; i < rows.length - 1; i++) {
       const row = rows[i] as string;
       const FieldSelectedValue = getOptionValueForRow(
@@ -85,7 +84,6 @@ export function useProcessRows() {
         FieldSelectedValue.hoursPerMonthValueNumber;
       const reqMethod = FieldSelectedValue.reqMethod;
 
-      // Atualizando o estado aqui
       const FieldDateSelectedValue = getOptionDateForRow({ row, ranges });
       const startDate = FieldDateSelectedValue?.startDate;
       const endDate = FieldDateSelectedValue?.endDate;
@@ -100,13 +98,14 @@ export function useProcessRows() {
             Dates: { startDate, endDate },
             taskId: taskId,
           });
-          setReqMethodState("PUT");
+          toastMessage = "Projeto atualizado";
+        } else if (reqMethod === "DELETE") {
         } else {
           const postTaskResp = await mutationPostTask.mutateAsync({
             row: row,
             Dates: { startDate, endDate },
           });
-          setReqMethodState("POST");
+          toastMessage = "Projeto criado";
           taskId = postTaskResp.taskId;
         }
 
@@ -137,10 +136,10 @@ export function useProcessRows() {
         }
       }
     }
+    return { toastMessage };
   }
 
   return {
     processRows,
-    reqMethod: reqMethodState,
   };
 }
