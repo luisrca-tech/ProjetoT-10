@@ -5,7 +5,7 @@ import { Container, SeparatorContainer } from "./styles";
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 import { useAtom } from "jotai";
 import { chargeOptionsAtom } from "~/@atom/api/CustomFields/chargeOptionsAtom";
-import { type OptionType } from "~/app/types/clickUpApi";
+import { type OptionType } from "~/server/types/Clickup.type";
 import ScrollDownOptionButton from "./ScrollDownOptionButton/index";
 import { useGetLastRowIndex } from "~/utils/functions/getLastRowIndex";
 

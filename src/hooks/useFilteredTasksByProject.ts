@@ -4,7 +4,7 @@ import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import {
   type CustomField,
-  type ProjectOptionType,
+  type OptionType,
   type Task,
 } from "~/server/types/Clickup.type";
 import { api } from "~/trpc/react";
@@ -16,7 +16,7 @@ type FetchResponseType = {
 };
 
 type FilteredTasksByProject = {
-  project: ProjectOptionType;
+  project: OptionType;
   tasks: Task[] | undefined;
   dates:
     | {
@@ -57,7 +57,7 @@ export function useFilteredTasksByProject() {
           projectCustomField?.type_config.options || [];
 
         const projectsWithTasks = projectOptionsResp?.filter(
-          (project: ProjectOptionType) =>
+          (project: OptionType) =>
             tasksData?.some((task) =>
               task.custom_fields.some(
                 (field) =>
@@ -65,6 +65,7 @@ export function useFilteredTasksByProject() {
               )
             )
         );
+        console.log(projectsWithTasks, `projectsWithTasks`);
 
         const filteredTasksByProject = projectsWithTasks?.map((project) => {
           const tasksOfProject = tasksData?.filter((task) =>

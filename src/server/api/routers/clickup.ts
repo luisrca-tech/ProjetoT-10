@@ -1,9 +1,9 @@
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
-import { type CustomField } from "~/app/types/clickUpApi";
+import { type CustomField } from "~/server/types/Clickup.type";
 import { showToast } from "~/utils/functions/showToast";
-import { type Task } from "~/app/types/clickUpApi";
+import { type Task } from "~/server/types/Clickup.type";
 const listId = "901305118368";
 const authorizationToken = process.env.CLICKUP_API_TOKEN;
 

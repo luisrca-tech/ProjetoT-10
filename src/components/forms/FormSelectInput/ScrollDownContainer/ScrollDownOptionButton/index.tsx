@@ -2,7 +2,7 @@ import { useAtom } from "jotai";
 import { Container } from "./styles";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { type OptionType } from "~/app/types/clickUpApi";
+import { type OptionType } from "~/server/types/Clickup.type";
 import Image from "next/image";
 import AddButton from "public/add.svg";
 import { poppins } from "~/app/fonts";

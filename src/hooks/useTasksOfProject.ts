@@ -6,7 +6,11 @@ import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
-import { type CustomField, type Task } from "~/app/types/clickUpApi";
+import {
+  OptionType,
+  type CustomField,
+  type Task,
+} from "~/server/types/Clickup.type";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { api } from "~/trpc/react";
 import { showToast } from "~/utils/functions/showToast";
@@ -58,6 +62,15 @@ export function useTasksOfProject() {
         };
 
         const projectOptions = customFields.project?.type_config.options;
+        const projectsWithoutTasks = projectOptions?.filter(
+          (project: OptionType) =>
+            !tasksData?.some((task) =>
+              task.custom_fields.some(
+                (field) =>
+                  Array.isArray(field.value) && field.value.includes(project.id)
+              )
+            )
+        );
 
         const foundActualProject = projectOptions?.find(
           (project) => project.id === projectId
@@ -82,7 +95,7 @@ export function useTasksOfProject() {
 
         setChargeOptions(chargeOptions);
         setFieldsIds(fieldsIds);
-        setProjectOptions(projectOptions);
+        setProjectOptions(projectsWithoutTasks);
 
         const isFetchAllCustomFields =
           Object.values(customFields).every(Boolean);

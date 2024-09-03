@@ -12,7 +12,7 @@ import ToggleSwitch from "../../widgets/ToggleSwitch";
 import { ProjectProfileHeader } from "../ProjectProfileHeader";
 import { CloseCalendarContainer } from "./CloseCalendarContainer";
 import { Container, MainContainer, FormContainer } from "./styles";
-import { type Task } from "~/app/types/clickUpApi";
+import { type Task } from "~/server/types/Clickup.type";
 import { v4 as uuidv4 } from "uuid";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
@@ -28,6 +28,7 @@ export function ProjectDetailsContent() {
   const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
     rowsAndSelectedValuesAtom
   );
+
   const [, setChecked] = useAtom(checkedAtom);
   const [rowsUpdated, setRowsUpdated] = useState(() => {
     return !projectId ? true : false;
@@ -199,6 +200,7 @@ export function ProjectDetailsContent() {
   }, [setRowsAndSelectedValues, setRanges, setChecked]);
 
   useEffect(() => {
+    console.log(rowsAndSelectedValues.selectedValues, `selectedValues`);
     if (missingFields) {
       showToast(
         "error",
@@ -207,14 +209,19 @@ export function ProjectDetailsContent() {
       );
       router.push("/painel-administrativo/projetos");
     }
-  }, [missingFields, router]);
+  }, [missingFields, router, rowsAndSelectedValues.selectedValues]);
 
   useEffect(() => {
     if (!isInitialized && isFetchAllCustomFields) {
       initializeRowsAndRanges();
       setIsInitialized(true);
     }
-  }, [isInitialized, isFetchAllCustomFields, initializeRowsAndRanges]);
+  }, [
+    isInitialized,
+    isFetchAllCustomFields,
+    initializeRowsAndRanges,
+    resetStates,
+  ]);
 
   useEffect(() => {
     if (projectId && tasksOfProject) {
@@ -250,7 +257,7 @@ export function ProjectDetailsContent() {
             {isDatePickerOpen && <CustomDateRangePicker />}
             <FormContainer isDatePickerOpen={isDatePickerOpen}>
               <ToggleSwitch />
-              <FormSelectInput />
+              <FormSelectInput onReset={resetStates} />
             </FormContainer>
           </MainContainer>
           <CloseCalendarContainer />

@@ -1,4 +1,3 @@
-//tipos das respostas que vou receber das reqs do clickup.
 export type ClickUpApiCustomField = {};
 
 interface Assignee {
@@ -9,21 +8,19 @@ interface Assignee {
   profilePicture: string | null;
 }
 
-export type CustomFieldOption = {
-  id: string;
-  name: string;
-  color: string | null;
-  orderindex?: number;
-  label?: string;
-};
-
 export type CustomField = {
   id: string;
   name: string;
   type: string;
   type_config: {
     new_drop_down: boolean;
-    options: CustomFieldOption[];
+    options: Array<{
+      id: string;
+      name: string;
+      color: string | null;
+      orderindex?: number;
+      label?: string;
+    }>;
   };
   date_created: string;
   hide_from_guests: boolean;
@@ -31,7 +28,7 @@ export type CustomField = {
   value?: string[] | number;
 };
 
-export type ProjectOptionType = {
+export type OptionType = {
   id: string;
   name: string;
   color: string | null;
@@ -45,7 +42,7 @@ export type ProjectFieldType = {
   type?: string;
   type_config?: {
     new_drop_down: boolean;
-    options: ProjectOptionType;
+    options: OptionType;
   };
   date_created?: string;
   hide_from_guests?: boolean;
@@ -113,9 +110,7 @@ interface Status {
   type: string;
 }
 
-interface Watcher {
-  // Defina a estrutura do Watcher aqui
-}
+interface Watcher {}
 
 export interface Task {
   archived: boolean;
