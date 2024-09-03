@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Container,
   InputsRow,
@@ -9,12 +9,10 @@ import {
 import Image from "next/image";
 import CalendarIcon from "public/calendaricon.svg";
 import TrashAnimation from "public/trashanimation.svg";
-
 import SelectInput from "~/components/inputs/SelectInput";
 import { useAtom } from "jotai";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
-import { rowCountAtom } from "~/@atom/ProjectStates/rowCountAtom";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { useGetLastRowIndex } from "~/app/utils/functions/getLastRowIndex";
 import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
@@ -33,27 +31,14 @@ export default function RowAndScrollDownContainer({
   row,
 }: RowAndScrollDownContainerProps) {
   const [checked] = useAtom(checkedAtom);
-  const [ranges, setRanges] = useAtom(rangesAtom);
-  const [rowCount, setRowCount] = useAtom(rowCountAtom);
-  const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
-    rowsAndSelectedValuesAtom
-  );
+  const [ranges] = useAtom(rangesAtom);
+
+  const [, setRowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const { handleInputDataMenuClick } = useInputDataMenuClick();
   const [startX, setStartX] = useState<number | null>(null);
   const [offsetXByRow, setOffsetXByRow] = useState<{ [key: string]: number }>(
     {}
   );
-  const [isNewRowAdded, setIsNewRowAdded] = useState(false);
-  const canAddRow = rowsAndSelectedValues.rows.every((index) => {
-    const firstTextValue =
-      rowsAndSelectedValues.selectedValues[`firstTextValue${index}-option`];
-    const secondTextValue =
-      rowsAndSelectedValues.selectedValues[`secondTextValue${index}-text`];
-    const thirdTextValue =
-      rowsAndSelectedValues.selectedValues[`thirdTextValue${index}-text`];
-
-    return firstTextValue && secondTextValue && thirdTextValue;
-  });
 
   const lastRowIndex = useGetLastRowIndex();
   const isLastRow = row === lastRowIndex;
@@ -76,27 +61,6 @@ export default function RowAndScrollDownContainer({
   const isRangeInThisRow =
     isLastRow ||
     (ranges?.[row]?.startDate && ranges?.[row].endDate !== undefined);
-
-  const addRow = useCallback(() => {
-    const newDateRange = {
-      startDate: undefined,
-      endDate: undefined,
-      key: `selection-row-${rowCount}`,
-      isSelected: false,
-    };
-
-    setRowsAndSelectedValues((prevState) => ({
-      ...prevState,
-      rows: [...prevState.rows, `row-${rowCount}`],
-    }));
-
-    setRanges((prevState) => ({
-      ...prevState,
-      [`row-${rowCount}`]: newDateRange,
-    }));
-
-    setRowCount((prevCount) => prevCount + 1);
-  }, [rowCount, setRanges, setRowCount, setRowsAndSelectedValues]);
 
   function formatDate(date: Date | undefined) {
     return date ? date.toLocaleDateString("pt-BR") : "";
@@ -173,13 +137,6 @@ export default function RowAndScrollDownContainer({
     }
     setStartX(null);
   }
-
-  useEffect(() => {
-    if (canAddRow && !isNewRowAdded) {
-      addRow();
-      setIsNewRowAdded(true);
-    }
-  }, [addRow, canAddRow, isNewRowAdded]);
 
   return (
     <>

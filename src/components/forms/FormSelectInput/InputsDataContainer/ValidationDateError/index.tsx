@@ -2,6 +2,7 @@ import { poppins } from "~/app/fonts";
 import { Container } from "./styles";
 import { useAtom } from "jotai";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+
 interface SelectableRangeProps {
   startDate?: Date;
   endDate?: Date;

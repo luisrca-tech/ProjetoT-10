@@ -1,5 +1,5 @@
 "use client";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { IoAdd, IoCloseSharp, IoMenu } from "react-icons/io5";
 import Modal from "../Modal";
@@ -24,6 +24,8 @@ export default function Header() {
   const [showModal, setShowModal] = useState<boolean>(false);
   const router = useRouter();
   const currentPath = usePathname();
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("projectId");
 
   const handleMenu = () => {
     setShowModal((current) => !current);
@@ -92,8 +94,10 @@ export default function Header() {
                 <IoMenu size={24} />
               </MenuButton>
             </ButtonsContainer>
-            <TitleContainer className={poppins.className}>
-              <h1>Projetos</h1>
+            <TitleContainer>
+              <h1 className={poppins.className}>
+                {!projectId ? "Projetos" : "Projeto"}
+              </h1>
             </TitleContainer>
             <ButtonsContainer>
               {!!isProjectsPage && (

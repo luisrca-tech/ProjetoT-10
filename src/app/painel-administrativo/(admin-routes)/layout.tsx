@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { styled } from "@linaria/react";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 const Container = styled.div`
   width: 100%;

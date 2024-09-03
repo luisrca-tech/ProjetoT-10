@@ -1,5 +1,6 @@
 import { styled } from "@linaria/react";
 import { theme } from "~/app/styles/theme";
+import { darken } from "polished";
 
 export const Container = styled.div`
   margin-top: 8rem;
@@ -19,4 +20,9 @@ export const ProjectContainer = styled.div`
   border-radius: 12px;
   box-shadow: 0 1px 3px 0 ${theme.COLORS.DARK};
   clip-path: inset(1);
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${darken(0.1, theme.COLORS.SECONDARY_EXTRA_LIGTH)};
+  }
 `;
