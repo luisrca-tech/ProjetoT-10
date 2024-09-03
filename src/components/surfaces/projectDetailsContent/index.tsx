@@ -200,7 +200,6 @@ export function ProjectDetailsContent() {
   }, [setRowsAndSelectedValues, setRanges, setChecked]);
 
   useEffect(() => {
-    console.log(rowsAndSelectedValues.selectedValues, `selectedValues`);
     if (missingFields) {
       showToast(
         "error",

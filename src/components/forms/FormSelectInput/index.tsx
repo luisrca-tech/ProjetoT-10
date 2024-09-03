@@ -62,7 +62,6 @@ export default function FormSelectInput({ onReset }: FormSelectInputProps) {
     try {
       setLoading(true);
       const { toastMessage } = await processRows();
-      console.log(toastMessage, `toastMessage`);
       showToast("success", `${toastMessage}`);
 
       if (!projectId) {

@@ -65,7 +65,6 @@ export function useFilteredTasksByProject() {
               )
             )
         );
-        console.log(projectsWithTasks, `projectsWithTasks`);
 
         const filteredTasksByProject = projectsWithTasks?.map((project) => {
           const tasksOfProject = tasksData?.filter((task) =>
