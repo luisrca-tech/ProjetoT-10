@@ -2,10 +2,10 @@ import { styled } from "@linaria/react";
 import { theme } from "~/app/styles/theme";
 
 export const Container = styled.div`
-  width: 100%;
-  gap: 0.5rem;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 `;
 
 export const RoleAndPerson = styled.div`
@@ -21,9 +21,27 @@ export const RoleAndPerson = styled.div`
   }
 `;
 
-export const PersonByRoleForm = styled.div`
+export const Form = styled.form`
   display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
   gap: 0.5rem;
+  max-height: 8rem;
+  padding-bottom: 0.5rem;
+
+  p {
+    font-size: 0.875rem;
+    color: red;
+    line-height: 28px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+`;
+
+export const PersonByRole = styled.div`
+  display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: ${theme.COLORS.LIGHT};
@@ -31,9 +49,17 @@ export const PersonByRoleForm = styled.div`
 
   padding: 0.4rem 0.75rem;
 
+  input,
   span {
     font-size: 1rem;
     color: ${theme.COLORS.SECONDARY_DARK};
     line-height: 24px;
+  }
+
+  input {
+    width: 50%;
+    border: none;
+    background-color: transparent;
+    outline: none;
   }
 `;

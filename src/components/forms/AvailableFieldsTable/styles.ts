@@ -4,7 +4,6 @@ import { theme } from "~/app/styles/theme";
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   width: 100%;
 `;
 
@@ -33,6 +32,13 @@ export const TableBody = styled.div`
   flex-direction: column;
   gap: 0.5rem;
   width: 100%;
+
+  height: 7rem;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 export const TableFields = styled.div`
@@ -57,6 +63,7 @@ export const TableFooterCount = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-top: 0.5rem;
   padding-left: 0.625rem;
   padding-right: 0.625rem;
 

@@ -17,8 +17,8 @@ import {
 
 // import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 // import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
-import { poppins } from "~/assets/fonts/fonts";
 import { UserButton } from "@clerk/nextjs";
+import { poppins } from "~/assets/fonts/fonts";
 
 export default function Header() {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -34,6 +34,10 @@ export default function Header() {
   const isAuthPage = () => {
     return currentPath.startsWith("/painel-administrativo/autenticacao");
   };
+
+  const isPersonsPage = currentPath.startsWith("/painel-administrativo/pessoas")
+    ? true
+    : false;
 
   const isProjectsPage = currentPath.startsWith(
     "/painel-administrativo/projetos"
@@ -95,9 +99,13 @@ export default function Header() {
               </MenuButton>
             </ButtonsContainer>
             <TitleContainer>
-              <h1 className={poppins.className}>
-                {!projectId ? "Projetos" : "Projeto"}
-              </h1>
+              {isPersonsPage ? (
+                <h1>Pessoas</h1>
+              ) : (
+                <h1 className={poppins.className}>
+                  {!projectId ? "Projetos" : "Projeto"}
+                </h1>
+              )}
             </TitleContainer>
             <ButtonsContainer>
               {!!isProjectsPage && (
