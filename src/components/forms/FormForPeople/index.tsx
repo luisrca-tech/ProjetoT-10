@@ -7,10 +7,12 @@ import { FieldsList } from "~/mocks/AvailableFieldsItems";
 import { formPersonsSchema } from "~/schemas/form-persons.schema";
 import { type formPersonsData } from "~/types/form-persons.type";
 import { showToast } from "~/utils/functions/showToast";
-import { FormFooter } from "../../FormFooter";
+import { FormFooter } from "../FormFooter";
 import { Container, Form, PersonByRole, RoleAndPerson } from "./styles";
 
 export function FormForPeople() {
+  
+
   const [isLoading, setIsLoading] = useAtom(loadingAtom);
   const {
     register,
