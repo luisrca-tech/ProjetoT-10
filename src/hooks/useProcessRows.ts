@@ -72,7 +72,55 @@ export function useProcessRows() {
 
   async function processRows() {
     let toastMessage;
+
+    const tasksIdsPromises = [];
     for (let i = 0; i < rows.length - 1; i++) {
+      const row = rows[i] as string;
+      const FieldSelectedValue = getOptionValueForRow(
+        row,
+        rowsAndSelectedValues.selectedValues
+      );
+
+      const reqMethod = FieldSelectedValue.reqMethod;
+
+      const FieldDateSelectedValue = getOptionDateForRow({ row, ranges });
+      const startDate = FieldDateSelectedValue?.startDate;
+      const endDate = FieldDateSelectedValue?.endDate;
+      if (FieldDateSelectedValue) {
+        let taskId;
+
+        if (reqMethod === "PUT") {
+          taskId = FieldSelectedValue.taskId;
+
+          tasksIdsPromises.push(
+            mutationUpdateTask.mutateAsync({
+              row: row,
+              Dates: { startDate, endDate },
+              taskId: taskId,
+            })
+          );
+          toastMessage = "Projeto atualizado";
+        } else {
+          tasksIdsPromises.push(
+            mutationPostTask.mutateAsync({
+              row: row,
+              Dates: { startDate, endDate },
+            })
+          );
+          toastMessage = "Projeto criado";
+        }
+      }
+    }
+
+    const resultTasksId = await Promise.all(tasksIdsPromises);
+
+    const projectId = (resultTasksId.find(
+      (result): result is { taskId: string; projectId: string } =>
+        "projectId" in result
+    )?.projectId ?? "") as string;
+
+    for (let i = 0; i < resultTasksId.length; i++) {
+      const taskId = resultTasksId[i]?.taskId;
       const row = rows[i] as string;
       const FieldSelectedValue = getOptionValueForRow(
         row,
@@ -82,61 +130,44 @@ export function useProcessRows() {
       const valueFieldSelectedValue = FieldSelectedValue.hourPerValueNumber;
       const hoursPMonthFieldSelectedValue =
         FieldSelectedValue.hoursPerMonthValueNumber;
-      const reqMethod = FieldSelectedValue.reqMethod;
 
-      const FieldDateSelectedValue = getOptionDateForRow({ row, ranges });
-      const startDate = FieldDateSelectedValue?.startDate;
-      const endDate = FieldDateSelectedValue?.endDate;
-
-      if (FieldDateSelectedValue) {
-        let taskId;
-
-        if (reqMethod === "PUT") {
-          taskId = FieldSelectedValue.taskId;
-          await mutationUpdateTask.mutateAsync({
-            row: row,
-            Dates: { startDate, endDate },
-            taskId: taskId,
-          });
-          toastMessage = "Projeto atualizado";
-        } else if (reqMethod === "DELETE") {
-        } else {
-          const postTaskResp = await mutationPostTask.mutateAsync({
-            row: row,
-            Dates: { startDate, endDate },
-          });
-          toastMessage = "Projeto criado";
-          taskId = postTaskResp.taskId;
-        }
-
-        if (taskId && fieldsIds) {
-          await mutationChargeCustomField.mutateAsync({
+      if (taskId && fieldsIds) {
+        const customFieldsPromises = [];
+        customFieldsPromises.push(
+          mutationChargeCustomField.mutateAsync({
             postTaskId: taskId,
             chargeFieldId: fieldsIds.chargeFieldId,
             chargeFieldSelectedValue: chargeFieldSelectedValue,
-          });
-
-          await mutationProjectCustomField.mutateAsync({
+          })
+        );
+        customFieldsPromises.push(
+          mutationProjectCustomField.mutateAsync({
             postTaskId: taskId,
             projectFieldId: fieldsIds.projectFieldId,
             projectFieldSelectedValue: projectFieldSelectedValue,
-          });
+          })
+        );
 
-          await mutationValueCustomField.mutateAsync({
+        customFieldsPromises.push(
+          mutationValueCustomField.mutateAsync({
             postTaskId: taskId,
             valueFieldId: fieldsIds.valueFieldId,
             valueFieldSelectedValue: valueFieldSelectedValue,
-          });
+          })
+        );
 
-          await mutationHourPMonthCustomField.mutateAsync({
+        customFieldsPromises.push(
+          mutationHourPMonthCustomField.mutateAsync({
             postTaskId: taskId,
             hoursPerMonthCustomFieldId: fieldsIds.hoursPerMonthCustomFieldId,
             hoursPMonthFieldSelectedValue: hoursPMonthFieldSelectedValue,
-          });
-        }
+          })
+        );
+        await Promise.all(customFieldsPromises);
       }
     }
-    return { toastMessage };
+
+    return { toastMessage, projectId };
   }
 
   return {
