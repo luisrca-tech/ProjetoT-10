@@ -9,8 +9,11 @@ import { useGetInputValueAtIndex } from "~/app/utils/functions/getInputValueAtIn
 import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
 import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
 import { useSearchParams } from "next/navigation";
+import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 
 export default function HeaderRowAndScrollDownContainer() {
+  const [projectOptions] = useAtom(projectOptionsAtom);
+  const isProjectOptions = !!projectOptions?.length;
   const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const row = "projectRow";
   const inProfileHeader = true;
@@ -40,7 +43,11 @@ export default function HeaderRowAndScrollDownContainer() {
       <SelectInput
         isInProjectHeader
         type="text"
-        placeholder="Selecione um projeto"
+        placeholder={
+          isProjectOptions
+            ? "Selecione um projeto"
+            : "Todos projetos da lista já foram criados"
+        }
         id={row}
         onChange={(value) => handleInputChange(row, value)}
         hasValue={isValueInProjectInput}
@@ -49,7 +56,9 @@ export default function HeaderRowAndScrollDownContainer() {
         readOnly={true}
       />
 
-      {useIsSelectOpen(row) && !projectId && <ScrollDownContainer row={row} />}
+      {useIsSelectOpen(row) && !projectId && isProjectOptions && (
+        <ScrollDownContainer row={row} />
+      )}
     </Container>
   );
 }
