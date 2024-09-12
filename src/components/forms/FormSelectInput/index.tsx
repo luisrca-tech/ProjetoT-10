@@ -16,6 +16,9 @@ import { FormHeader } from "./FormHeader";
 import InputsDataContainer from "./InputsDataContainer";
 import { Container } from "./styles";
 import { FormFooter } from "../FormFooter";
+import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
+import ToggleSwitch from "~/components/widgets/ToggleSwitch";
+import { useRouter } from "next/navigation";
 
 type FormSelectInputProps = {
   onReset: () => void;
@@ -29,12 +32,16 @@ export default function FormSelectInput({ onReset }: FormSelectInputProps) {
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId");
   const { processRows } = useProcessRows();
+  const [projectOptions] = useAtom(projectOptionsAtom);
+  const isProjectOptions = !!projectOptions?.length;
+  console.log(projectOptions, `projectOptions`);
+  const router = useRouter();
 
   const rangesCondition = validateRanges(ranges);
 
-  const selectedValuesNotEmpty2 =
-    Object.keys(projectSelectedValue.selectedValue).length > 0;
-
+  const selectedValuesNotEmpty2 = Object.values(
+    projectSelectedValue.selectedValue
+  ).some((value) => value !== "");
   const selectedValuesNotEmpty1 = Object.values(
     rowsAndSelectedValues.selectedValues
   ).every((value) => value !== "");
@@ -66,6 +73,7 @@ export default function FormSelectInput({ onReset }: FormSelectInputProps) {
 
       if (!projectId) {
         onReset();
+        router.push("/painel-administrativo/pessoas");
       }
     } catch (error) {
       showToast(
@@ -78,19 +86,24 @@ export default function FormSelectInput({ onReset }: FormSelectInputProps) {
     }
   }
 
-  return (
-    <Container onSubmit={taskPostRequest}>
-      <FormHeader />
-      <InputsDataContainer />
-      <FormFooter>
-        <Budget />
-        <Button
-          text="Salvar"
-          disabled={!isConditionMet}
-          loading={loading}
-          type="submit"
-        />
-      </FormFooter>
-    </Container>
-  );
+  if (projectId || (!projectId && isProjectOptions)) {
+    return (
+      <Container onSubmit={taskPostRequest}>
+        <ToggleSwitch />
+        <FormHeader />
+        <InputsDataContainer />
+        <FormFooter>
+          <Budget />
+          <Button
+            text="Salvar"
+            disabled={!isConditionMet}
+            loading={loading}
+            type="submit"
+          />
+        </FormFooter>
+      </Container>
+    );
+  }
+
+  return null;
 }
