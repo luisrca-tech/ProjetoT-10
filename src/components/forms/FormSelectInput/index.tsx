@@ -34,7 +34,6 @@ export default function FormSelectInput({ onReset }: FormSelectInputProps) {
   const { processRows } = useProcessRows();
   const [projectOptions] = useAtom(projectOptionsAtom);
   const isProjectOptions = !!projectOptions?.length;
-  console.log(projectOptions, `projectOptions`);
   const router = useRouter();
 
   const rangesCondition = validateRanges(ranges);

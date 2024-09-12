@@ -112,8 +112,6 @@ export const clickupRouter = createTRPCRouter({
     .mutation(async ({ input }) => {
       const { row, Dates, taskId } = input;
 
-      console.log(taskId, `taskId linha 117`);
-
       const query = new URLSearchParams({
         custom_task_ids: "true",
         team_id: "123",
@@ -135,9 +133,8 @@ export const clickupRouter = createTRPCRouter({
           }),
         }
       );
-      const updateTaskData = await updateTaskResp.json();
-      console.log(updateTaskData, `updateTaskData`);
-      // const projectId = updateTaskData.project.id;
+      await updateTaskResp.json();
+
       return { taskId };
     }),
 

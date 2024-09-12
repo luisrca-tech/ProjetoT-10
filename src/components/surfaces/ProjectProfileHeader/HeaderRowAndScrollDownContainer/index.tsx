@@ -7,20 +7,10 @@ import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
 import { useSearchParams } from "next/navigation";
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 import HeaderSelectInput from "./HeaderSelectInput";
-import { useEffect } from "react";
 
 export default function HeaderRowAndScrollDownContainer() {
   const [projectOptions] = useAtom(projectOptionsAtom);
   const isProjectOptions = !!projectOptions?.length;
-
-  useEffect(() => {
-    console.log(
-      projectOptions,
-      `projectOptions`,
-      isProjectOptions,
-      `isProjectOptions`
-    );
-  }, [isProjectOptions, projectOptions]);
   const row = "projectRow";
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId");
