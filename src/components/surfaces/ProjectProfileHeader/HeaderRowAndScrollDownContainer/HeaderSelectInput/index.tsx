@@ -5,39 +5,44 @@ import { Container, Input } from "./styles";
 import { useIsValueInInput } from "~/utils/functions/isValueInInput";
 import { useGetInputValueAtIndex } from "~/utils/functions/getInputValueAtIndex";
 import { useGetLastRowIndex } from "~/utils/functions/getLastRowIndex";
+import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 
 interface SelectInputProps {
-  onChange?: (value: string) => void;
+  isSelectOpen?: boolean;
   setIsSelectOpen?: (boolean: boolean) => void;
   row: string;
 }
 
-export default function SelectInput({
-  onChange,
+export default function HeaderSelectInput({
   setIsSelectOpen,
   row,
   ...rest
 }: SelectInputProps) {
   const [checked] = useAtom(checkedAtom);
-  const lastRowIndex = useGetLastRowIndex();
-  const isLastRow = row === lastRowIndex;
-  const isValueInFirstInput = useIsValueInInput(row, "firstTextValue");
-  const firstInputIdAtIndex = `firstTextValue${row}-option`;
-  const firstInputValueAtIndex = useGetInputValueAtIndex("firstTextValue", row);
+  const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
+  const [projectOptions] = useAtom(projectOptionsAtom);
+  const isProjectOptions = !!projectOptions?.length;
+  const correctPlaceHolder = isProjectOptions
+    ? "Selecione um projeto"
+    : "Todos os projetos foram criados!";
 
-  const handleChange = (
-    event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ) => {
-    if (
-      event.target instanceof HTMLSelectElement ||
-      event.target instanceof HTMLInputElement
-    ) {
-      const newValue = event.target.value;
-      if (onChange) {
-        onChange(newValue);
-      }
-    }
-  };
+  const projectHeaderInputValueAtIndex = useGetInputValueAtIndex(
+    undefined,
+    row,
+    true
+  );
+
+  function handleInputChange(row: string, value: string, optionId?: string) {
+    setProjectSelectedValue((prevState) => ({
+      ...prevState,
+      selectedValue: {
+        ...prevState.selectedValue,
+        [`${row}-text`]: value,
+        [`${row}-option`]: `${optionId}`,
+      },
+    }));
+  }
 
   const handleInputFocus = () => {
     if (setIsSelectOpen) {
@@ -57,16 +62,13 @@ export default function SelectInput({
         {...rest}
         onBlur={handleInputBlur}
         autoComplete="off"
-        hasValue={isValueInFirstInput}
-        placeholder={"Cargo"}
+        placeholder={correctPlaceHolder}
         type="text"
-        id={firstInputIdAtIndex}
-        value={firstInputValueAtIndex || ""}
-        onChange={handleChange}
+        value={projectHeaderInputValueAtIndex || ""}
+        onChange={() => handleInputChange}
         onClick={handleInputFocus}
         className={poppins.className}
         readOnly={true}
-        isLastRow={isLastRow}
       />
     </Container>
   );

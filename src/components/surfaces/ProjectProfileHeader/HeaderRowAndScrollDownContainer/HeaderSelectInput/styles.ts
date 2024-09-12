@@ -7,7 +7,6 @@ type ContainerProps = {
 };
 
 type InputProps = {
-  hasValue: Boolean;
   isLastRow?: boolean;
 };
 
