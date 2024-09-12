@@ -8,7 +8,6 @@ import { useTasksOfProject } from "~/hooks/useTasksOfProject";
 import { showToast } from "~/utils/functions/showToast";
 import FormSelectInput from "../../forms/FormSelectInput";
 import { CustomDateRangePicker } from "../../widgets/CustomDateRangePicker";
-import ToggleSwitch from "../../widgets/ToggleSwitch";
 import { ProjectProfileHeader } from "../ProjectProfileHeader";
 import { CloseCalendarContainer } from "./CloseCalendarContainer";
 import { Container, MainContainer, FormContainer } from "./styles";
@@ -17,6 +16,9 @@ import { v4 as uuidv4 } from "uuid";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { useInitializeRowsAndRanges } from "~/utils/functions/initializeRowsAndRanges";
+import { useAddRow } from "~/utils/functions/addRow";
+import { useCanAddRow } from "~/utils/functions/canAddRow";
 
 export function ProjectDetailsContent() {
   const searchParams = useSearchParams();
@@ -39,34 +41,6 @@ export function ProjectDetailsContent() {
     !projectId &&
     rowsAndSelectedValues.rows.length === 0 &&
     isFetchAllCustomFields;
-
-  const initializeRowsAndRanges = useCallback(() => {
-    if (canInitializeRowsAndRanges) {
-      const rowKey = uuidv4();
-      const newRow = `row-${rowKey}`;
-
-      setRowsAndSelectedValues((prevState) => ({
-        ...prevState,
-        rows: [...prevState.rows, newRow],
-        selectedValues: {
-          ...prevState.selectedValues,
-          [`firstTextValue${newRow}-text`]: "",
-          [`secondTextValue${newRow}-text`]: "",
-          [`thirdTextValue${newRow}-text`]: "",
-        },
-      }));
-
-      setRanges((prevState) => ({
-        ...prevState,
-        [newRow]: {
-          startDate: undefined,
-          endDate: undefined,
-          key: `selection-row-${rowKey}`,
-          isSelected: false,
-        },
-      }));
-    }
-  }, [canInitializeRowsAndRanges, setRowsAndSelectedValues, setRanges]);
 
   const updateRowsAndSelectedValues = useCallback(
     (tasksOfProject: Task[]) => {
@@ -139,53 +113,11 @@ export function ProjectDetailsContent() {
     [setRowsAndSelectedValues, setRanges]
   );
 
-  const canAddRow = useCallback(() => {
-    if (rowsUpdated) {
-      const lastIndex =
-        rowsAndSelectedValues.rows[rowsAndSelectedValues.rows.length - 1];
-      const firstTextValue =
-        rowsAndSelectedValues.selectedValues[
-          `firstTextValue${lastIndex}-option`
-        ];
-      const secondTextValue =
-        rowsAndSelectedValues.selectedValues[
-          `secondTextValue${lastIndex}-text`
-        ];
-      const thirdTextValue =
-        rowsAndSelectedValues.selectedValues[`thirdTextValue${lastIndex}-text`];
-
-      return !!firstTextValue && !!secondTextValue && !!thirdTextValue;
-    }
-  }, [
-    rowsAndSelectedValues.rows,
-    rowsAndSelectedValues.selectedValues,
-    rowsUpdated,
-  ]);
-
-  const addRow = useCallback(() => {
-    const rowKey = uuidv4();
-    const newDateRange = {
-      startDate: undefined,
-      endDate: undefined,
-      key: `selection-row-${rowKey}`,
-      isSelected: false,
-    };
-
-    setRowsAndSelectedValues((prevState) => ({
-      ...prevState,
-      rows: [...prevState.rows, `row-${rowKey}`],
-      selectedValues: {
-        ...prevState.selectedValues,
-
-        [`reqMethodrow-${rowKey}`]: "POST",
-      },
-    }));
-
-    setRanges((prevState) => ({
-      ...prevState,
-      [`row-${rowKey}`]: newDateRange,
-    }));
-  }, [setRanges, setRowsAndSelectedValues]);
+  const initializeRowsAndRanges = useInitializeRowsAndRanges({
+    canInitializeRowsAndRanges,
+  });
+  const addRow = useAddRow();
+  const canAddRow = useCanAddRow({ rowsUpdated });
 
   const resetStates = useCallback(() => {
     setRowsAndSelectedValues({
@@ -255,7 +187,6 @@ export function ProjectDetailsContent() {
           <MainContainer>
             {isDatePickerOpen && <CustomDateRangePicker />}
             <FormContainer isDatePickerOpen={isDatePickerOpen}>
-              <ToggleSwitch />
               <FormSelectInput onReset={resetStates} />
             </FormContainer>
           </MainContainer>

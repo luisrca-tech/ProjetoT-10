@@ -9,10 +9,13 @@ export const Container = styled.div`
   cursor: pointer;
   position: fixed;
   bottom: 150px;
-
-  > span {
-    font-size: 14px;
-    color: ${darken(0.5, theme.COLORS.ERROR)};
+  button {
+    border: none;
+    background-color: transparent;
+    > span {
+      font-size: 14px;
+      color: ${darken(0.5, theme.COLORS.ERROR)};
+    }
   }
 
   &:hover {

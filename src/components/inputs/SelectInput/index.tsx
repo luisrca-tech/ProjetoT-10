@@ -2,35 +2,28 @@ import { useAtom } from "jotai";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 import { poppins } from "~/assets/fonts/fonts";
 import { Container, Input } from "./styles";
+import { useIsValueInInput } from "~/utils/functions/isValueInInput";
+import { useGetInputValueAtIndex } from "~/utils/functions/getInputValueAtIndex";
+import { useGetLastRowIndex } from "~/utils/functions/getLastRowIndex";
 
 interface SelectInputProps {
-  id: string;
   onChange?: (value: string) => void;
-  placeholder: string;
-  hasValue: boolean;
-  inputValue?: string;
-  isSelectOpen?: boolean;
   setIsSelectOpen?: (boolean: boolean) => void;
-  value?: string;
-  type: string;
-  isInProjectHeader?: boolean;
-  isLastRow?: boolean;
-  readOnly?: boolean;
+  row: string;
 }
 
 export default function SelectInput({
-  id,
   onChange,
-  placeholder,
-  hasValue,
-  inputValue,
   setIsSelectOpen,
-  isLastRow,
-  readOnly,
+  row,
   ...rest
 }: SelectInputProps) {
   const [checked] = useAtom(checkedAtom);
-  const showError = !isLastRow && hasValue === false ? true : false;
+  const lastRowIndex = useGetLastRowIndex();
+  const isLastRow = row === lastRowIndex;
+  const isValueInFirstInput = useIsValueInInput(row, "firstTextValue");
+  const firstInputIdAtIndex = `firstTextValue${row}-option`;
+  const firstInputValueAtIndex = useGetInputValueAtIndex("firstTextValue", row);
 
   const handleChange = (
     event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
@@ -64,16 +57,16 @@ export default function SelectInput({
         {...rest}
         onBlur={handleInputBlur}
         autoComplete="off"
-        hasValue={hasValue}
-        placeholder={placeholder}
-        type={!rest.type ? "text" : rest.type}
-        id={id}
-        value={inputValue || ""}
+        hasValue={isValueInFirstInput}
+        placeholder={"Cargo"}
+        type="text"
+        id={firstInputIdAtIndex}
+        value={firstInputValueAtIndex || ""}
         onChange={handleChange}
         onClick={handleInputFocus}
         className={poppins.className}
-        showError={showError}
-        readOnly={readOnly}
+        readOnly={true}
+        isLastRow={isLastRow}
       />
     </Container>
   );
