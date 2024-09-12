@@ -143,7 +143,7 @@ export function useTasksOfProject() {
     const customFieldData = getCustomField.data ?? [];
     const tasksData = getTasks.data ?? [];
 
-    if (getCustomField.isFetched) {
+    if (getCustomField.isFetched && getTasks.isFetched) {
       if (Array.isArray(customFieldData)) {
         handleFetchResponse({ customFieldData, tasksData });
       } else {
