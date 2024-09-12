@@ -1,7 +1,6 @@
 "use client";
 import { Container } from "./styles";
 import { useAtom } from "jotai";
-import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import ScrollDownContainer from "../../../forms/FormSelectInput/ScrollDownContainer";
 import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
 import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";

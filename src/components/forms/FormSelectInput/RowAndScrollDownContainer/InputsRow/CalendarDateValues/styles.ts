@@ -1,6 +1,4 @@
 import { styled } from "@linaria/react";
-import { darken } from "polished";
-import { theme } from "~/app/styles/theme";
 
 export const Container = styled.button`
   display: flex;

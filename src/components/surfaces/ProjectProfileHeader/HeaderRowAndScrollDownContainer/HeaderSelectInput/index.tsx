@@ -2,9 +2,7 @@ import { useAtom } from "jotai";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 import { poppins } from "~/assets/fonts/fonts";
 import { Container, Input } from "./styles";
-import { useIsValueInInput } from "~/utils/functions/isValueInInput";
 import { useGetInputValueAtIndex } from "~/utils/functions/getInputValueAtIndex";
-import { useGetLastRowIndex } from "~/utils/functions/getLastRowIndex";
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 
