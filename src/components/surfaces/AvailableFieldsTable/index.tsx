@@ -1,6 +1,7 @@
-import { AvailableFieldsItems } from "~/mocks/AvailableFieldsItems";
+import { useTasksOfProject } from "~/hooks/useTasksOfProject";
 import {
   Container,
+  IsAvailable,
   Separate,
   TableBody,
   TableFields,
@@ -9,6 +10,10 @@ import {
 } from "./styles";
 
 export function AvailableFields() {
+  const { getCustomFields } = useTasksOfProject();
+
+  const customFields = getCustomFields();
+
   return (
     <Container>
       <TableTitle>
@@ -20,14 +25,15 @@ export function AvailableFields() {
       </TableTitle>
       <TableBody>
         <Separate />
-        {AvailableFieldsItems.map((item) => (
-          <div key={item.role}>
+        {customFields?.map((customField, index) => (
+          <div key={index}>
             <TableFields>
-              <span>{item.role}</span>
+              <span>{customField.chargeName}</span>
               <div>
-                <span>{item.hours}</span>
-                <span>{item.valueByHour}</span>
+                <span>{customField.hours}h</span>
+                <span>R${customField.valueByHour}</span>
               </div>
+              <IsAvailable />
             </TableFields>
             <Separate />
           </div>

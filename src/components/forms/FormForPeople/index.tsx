@@ -3,14 +3,18 @@ import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import Button from "~/components/widgets/Button";
-import { FieldsList } from "~/mocks/AvailableFieldsItems";
+import { useTasksOfProject } from "~/hooks/useTasksOfProject";
 import { formPersonsSchema } from "~/schemas/form-persons.schema";
 import { type formPersonsData } from "~/types/form-persons.type";
 import { showToast } from "~/utils/functions/showToast";
-import { FormFooter } from "../../FormFooter";
+import { FormFooter } from "../FormFooter";
 import { Container, Form, PersonByRole, RoleAndPerson } from "./styles";
 
 export function FormForPeople() {
+  const { getCustomFields } = useTasksOfProject();
+
+  const roles = getCustomFields();
+
   const [isLoading, setIsLoading] = useAtom(loadingAtom);
   const {
     register,
@@ -37,16 +41,16 @@ export function FormForPeople() {
         <span>Cargo</span>
       </RoleAndPerson>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        {FieldsList.map((field, index) => (
+        {roles?.map((role, index) => (
           <div key={index}>
             <PersonByRole>
               <input
                 type="text"
-                defaultValue={field.name}
+                defaultValue={role.fieldName}
                 placeholder="Vincule uma pessoa..."
                 {...register(`names.${index}`)}
               />
-              <span>{field.role}</span>
+              <span>{role.chargeName}</span>
             </PersonByRole>
             {errors.names && errors.names[index] && (
               <p>{errors.names[index]?.message}</p>

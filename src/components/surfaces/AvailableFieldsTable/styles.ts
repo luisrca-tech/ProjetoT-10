@@ -18,7 +18,7 @@ export const TableTitle = styled.div`
     font-size: 0.875rem;
     font-weight: 600;
     line-height: 28px;
-    padding-right: 1.25rem;
+    padding-right: 1rem;
   }
 `;
 
@@ -51,12 +51,26 @@ export const TableFields = styled.div`
     color: ${theme.COLORS.DARK};
     font-size: 0.875rem;
     line-height: 28px;
+    min-width: 50%;
   }
 
   div {
     display: flex;
-    gap: 2.5rem;
+    gap: 1.25rem;
+
+    span {
+      color: ${theme.COLORS.DARK};
+      font-size: 0.875rem;
+      line-height: 28px;
+    }
   }
+`;
+
+export const IsAvailable = styled.div`
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 100px;
+  background-color: #3cb31e;
 `;
 
 export const TableFooterCount = styled.div`
