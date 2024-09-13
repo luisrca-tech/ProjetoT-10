@@ -1,36 +1,46 @@
-import InputsDataContainer from "./InputsDataContainer";
-import { Container } from "./styles";
-
-import { FormHeader } from "./FormHeader";
-
 import { useAtom } from "jotai";
+import { useSearchParams } from "next/navigation";
+import { type FormEvent } from "react";
+import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
+import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import {
   rangesAtom,
   type SelectableRangePropsType,
 } from "~/@atom/ProjectStates/rangesAtom";
 import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { Budget } from "./Budget";
-
-import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
-import Button from "../../widgets/Button";
-import { FormFooter } from "./FormFooter";
-
-import { type FormEvent } from "react";
-import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { useProcessRows } from "~/hooks/useProcessRows";
 import { showToast } from "~/utils/functions/showToast";
+import Button from "../../widgets/Button";
+import { Budget } from "./Budget";
+import { FormHeader } from "./FormHeader";
+import InputsDataContainer from "./InputsDataContainer";
+import { Container } from "./styles";
+import { FormFooter } from "../FormFooter";
+import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
+import ToggleSwitch from "~/components/widgets/ToggleSwitch";
+import { useRouter } from "next/navigation";
 
-export default function FormSelectInput() {
+type FormSelectInputProps = {
+  onReset: () => void;
+};
+
+export default function FormSelectInput({ onReset }: FormSelectInputProps) {
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [loading, setLoading] = useAtom(loadingAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [ranges] = useAtom(rangesAtom);
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("projectId");
   const { processRows } = useProcessRows();
+  const [projectOptions] = useAtom(projectOptionsAtom);
+  const isProjectOptions = !!projectOptions?.length;
+  const router = useRouter();
+
   const rangesCondition = validateRanges(ranges);
 
-  const selectedValuesNotEmpty2 =
-    Object.keys(projectSelectedValue.selectedValue).length > 0;
-
+  const selectedValuesNotEmpty2 = Object.values(
+    projectSelectedValue.selectedValue
+  ).some((value) => value !== "");
   const selectedValuesNotEmpty1 = Object.values(
     rowsAndSelectedValues.selectedValues
   ).every((value) => value !== "");
@@ -57,12 +67,13 @@ export default function FormSelectInput() {
     e.preventDefault();
     try {
       setLoading(true);
-      await processRows();
-      showToast(
-        "success",
-        "Tasks criadas e vinculadas ao NOME DO PROJETO",
-        "Alterações no clickup já podem ser visualizadas"
-      );
+      const { toastMessage } = await processRows();
+      showToast("success", `${toastMessage}`);
+
+      if (!projectId) {
+        onReset();
+        router.push("/painel-administrativo/pessoas");
+      }
     } catch (error) {
       showToast(
         "error",
@@ -74,20 +85,24 @@ export default function FormSelectInput() {
     }
   }
 
-  return (
-    <Container onSubmit={taskPostRequest}>
-      <FormHeader />
-      <InputsDataContainer />
+  if (projectId || (!projectId && isProjectOptions)) {
+    return (
+      <Container onSubmit={taskPostRequest}>
+        <ToggleSwitch />
+        <FormHeader />
+        <InputsDataContainer />
+        <FormFooter>
+          <Budget />
+          <Button
+            text="Salvar"
+            disabled={!isConditionMet}
+            loading={loading}
+            type="submit"
+          />
+        </FormFooter>
+      </Container>
+    );
+  }
 
-      <FormFooter>
-        <Budget />
-        <Button
-          text="Salvar"
-          disabled={!isConditionMet}
-          loading={loading}
-          type="submit"
-        />
-      </FormFooter>
-    </Container>
-  );
+  return null;
 }

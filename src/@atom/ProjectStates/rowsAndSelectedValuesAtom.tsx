@@ -5,7 +5,7 @@ export interface RowsAndSelectedValueProps {
   selectedValues: { [key: string]: string };
 }
 const initialRowsAndSelectedValuesState = {
-  rows: ["row-0"],
+  rows: [],
   selectedValues: {},
 };
 export const rowsAndSelectedValuesAtom = atom<RowsAndSelectedValueProps>(

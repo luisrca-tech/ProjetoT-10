@@ -12,6 +12,8 @@ export interface ChargeFieldSelectedValue {
   chargeValueNumber: number;
   hoursPerMonthValueNumber: number;
   hourPerValueNumber: number;
+  reqMethod: string | undefined;
+  taskId: string | undefined;
 }
 
 export function useProcessRows() {
@@ -23,7 +25,8 @@ export function useProcessRows() {
   const projectFieldSelectedValue =
     projectSelectedValue.selectedValue["projectRow-option"];
 
-  const mutationTask = api.clickup.postTask.useMutation();
+  const mutationUpdateTask = api.clickup.updateTask.useMutation();
+  const mutationPostTask = api.clickup.postTask.useMutation();
   const mutationChargeCustomField =
     api.clickup.postChargeCustomField.useMutation();
   const mutationProjectCustomField =
@@ -40,6 +43,8 @@ export function useProcessRows() {
     const firstValue = `firstTextValue${row}-option`;
     const secondValue = `secondTextValue${row}-text`;
     const thirdValue = `thirdTextValue${row}-text`;
+    const reqMethod = selectedValues[`reqMethod${row}`];
+    const taskId = selectedValues[`taskId${row}`];
 
     const chargeValueNumber = Number(selectedValues[firstValue]);
     const hoursPerMonthValueNumber = Number(selectedValues[secondValue]);
@@ -49,6 +54,8 @@ export function useProcessRows() {
       chargeValueNumber,
       hoursPerMonthValueNumber,
       hourPerValueNumber,
+      reqMethod,
+      taskId,
     };
   }
 
@@ -64,7 +71,56 @@ export function useProcessRows() {
   }
 
   async function processRows() {
+    let toastMessage;
+
+    const tasksIdsPromises = [];
     for (let i = 0; i < rows.length - 1; i++) {
+      const row = rows[i] as string;
+      const FieldSelectedValue = getOptionValueForRow(
+        row,
+        rowsAndSelectedValues.selectedValues
+      );
+
+      const reqMethod = FieldSelectedValue.reqMethod;
+
+      const FieldDateSelectedValue = getOptionDateForRow({ row, ranges });
+      const startDate = FieldDateSelectedValue?.startDate;
+      const endDate = FieldDateSelectedValue?.endDate;
+      if (FieldDateSelectedValue) {
+        let taskId;
+
+        if (reqMethod === "PUT") {
+          taskId = FieldSelectedValue.taskId;
+
+          tasksIdsPromises.push(
+            mutationUpdateTask.mutateAsync({
+              row: row,
+              Dates: { startDate, endDate },
+              taskId: taskId,
+            })
+          );
+          toastMessage = "Projeto atualizado";
+        } else {
+          tasksIdsPromises.push(
+            mutationPostTask.mutateAsync({
+              row: row,
+              Dates: { startDate, endDate },
+            })
+          );
+          toastMessage = "Projeto criado";
+        }
+      }
+    }
+
+    const resultTasksId = await Promise.all(tasksIdsPromises);
+
+    const projectId = (resultTasksId.find(
+      (result): result is { taskId: string; projectId: string } =>
+        "projectId" in result
+    )?.projectId ?? "") as string;
+
+    for (let i = 0; i < resultTasksId.length; i++) {
+      const taskId = resultTasksId[i]?.taskId;
       const row = rows[i] as string;
       const FieldSelectedValue = getOptionValueForRow(
         row,
@@ -74,44 +130,44 @@ export function useProcessRows() {
       const valueFieldSelectedValue = FieldSelectedValue.hourPerValueNumber;
       const hoursPMonthFieldSelectedValue =
         FieldSelectedValue.hoursPerMonthValueNumber;
-      const FieldDateSelectedValue = getOptionDateForRow({ row, ranges });
-      const startDate = FieldDateSelectedValue?.startDate;
-      const endDate = FieldDateSelectedValue?.endDate;
 
-      if (FieldDateSelectedValue) {
-        const postTaskResp = await mutationTask.mutateAsync({
-          row: row,
-          Dates: { startDate, endDate },
-        });
-        const { taskId } = postTaskResp;
-
-        if (taskId && fieldsIds) {
-          await mutationChargeCustomField.mutateAsync({
+      if (taskId && fieldsIds) {
+        const customFieldsPromises = [];
+        customFieldsPromises.push(
+          mutationChargeCustomField.mutateAsync({
             postTaskId: taskId,
             chargeFieldId: fieldsIds.chargeFieldId,
             chargeFieldSelectedValue: chargeFieldSelectedValue,
-          });
-
-          await mutationProjectCustomField.mutateAsync({
+          })
+        );
+        customFieldsPromises.push(
+          mutationProjectCustomField.mutateAsync({
             postTaskId: taskId,
             projectFieldId: fieldsIds.projectFieldId,
             projectFieldSelectedValue: projectFieldSelectedValue,
-          });
+          })
+        );
 
-          await mutationValueCustomField.mutateAsync({
+        customFieldsPromises.push(
+          mutationValueCustomField.mutateAsync({
             postTaskId: taskId,
             valueFieldId: fieldsIds.valueFieldId,
             valueFieldSelectedValue: valueFieldSelectedValue,
-          });
+          })
+        );
 
-          await mutationHourPMonthCustomField.mutateAsync({
+        customFieldsPromises.push(
+          mutationHourPMonthCustomField.mutateAsync({
             postTaskId: taskId,
             hoursPerMonthCustomFieldId: fieldsIds.hoursPerMonthCustomFieldId,
             hoursPMonthFieldSelectedValue: hoursPMonthFieldSelectedValue,
-          });
-        }
+          })
+        );
+        await Promise.all(customFieldsPromises);
       }
     }
+
+    return { toastMessage, projectId };
   }
 
   return {

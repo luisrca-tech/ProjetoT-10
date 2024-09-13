@@ -1,10 +1,11 @@
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
-import { type CustomField } from "~/app/types/clickUpApi";
+import { type CustomField } from "~/server/types/Clickup.type";
 import { showToast } from "~/utils/functions/showToast";
-import { type Task } from "~/app/types/clickUpApi";
-const listId = "901303987731";
+import { type Task } from "~/server/types/Clickup.type";
+const listId = "901305118368";
+const authorizationToken = process.env.CLICKUP_API_TOKEN;
 
 export const clickupRouter = createTRPCRouter({
   getCustomFields: publicProcedure
@@ -16,7 +17,7 @@ export const clickupRouter = createTRPCRouter({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: authorizationToken ? authorizationToken : "",
           },
         }
       );
@@ -41,7 +42,7 @@ export const clickupRouter = createTRPCRouter({
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: authorizationToken ? authorizationToken : "",
           },
         }
       );
@@ -83,7 +84,7 @@ export const clickupRouter = createTRPCRouter({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: authorizationToken ? authorizationToken : "",
           },
           body: JSON.stringify({
             name: `Pessoa-${numberRow}`,
@@ -94,7 +95,7 @@ export const clickupRouter = createTRPCRouter({
       );
       const postTaskData = await postTaskResp.json();
       const taskId = postTaskData.id;
-      return { taskId, postTaskData };
+      return { taskId };
     }),
 
   updateTask: publicProcedure
@@ -105,10 +106,11 @@ export const clickupRouter = createTRPCRouter({
           startDate: z.date().optional(),
           endDate: z.date().optional(),
         }),
+        taskId: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
-      const { row, Dates } = input;
+      const { row, Dates, taskId } = input;
 
       const query = new URLSearchParams({
         custom_task_ids: "true",
@@ -116,14 +118,13 @@ export const clickupRouter = createTRPCRouter({
       }).toString();
 
       const numberRow = row?.replace("row-", "");
-
       const updateTaskResp = await fetch(
-        `https://api.clickup.com/api/v2/list/${listId}/task?${query}`,
+        `https://api.clickup.com/api/v2/task/${taskId}?${query}`,
         {
-          method: "PATCH",
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: authorizationToken ? authorizationToken : "",
           },
           body: JSON.stringify({
             name: `Pessoa-${numberRow}`,
@@ -132,9 +133,9 @@ export const clickupRouter = createTRPCRouter({
           }),
         }
       );
-      const updateTaskData = await updateTaskResp.json();
-      const taskId = updateTaskData.id;
-      return { taskId, updateTaskData };
+      await updateTaskResp.json();
+
+      return { taskId };
     }),
 
   postChargeCustomField: publicProcedure

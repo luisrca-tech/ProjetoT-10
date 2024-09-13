@@ -1,17 +1,19 @@
 "use client";
 
-import { Container, MainContainer } from "./styles";
-import { FormFooter } from "~/components/forms/FormSelectInput/FormFooter";
+import { FormForPeople } from "~/components/forms/FormForPeople";
+import { AvailableFields } from "~/components/surfaces/AvailableFieldsTable";
+import { ProjectProfileHeader } from "~/components/surfaces/ProjectProfileHeader";
+import { BodyContainer, Container, HeadersContainer } from "./styles";
 export default function Pessoas() {
   return (
     <Container>
-      <MainContainer>
-        <h1>
-          estamos na pagina FUNCIONARIO, AQUI PODERA SER EDITADO OU CRIADO UM
-          FUNCIONARIO
-        </h1>
-      </MainContainer>
-      <FormFooter />
+      <HeadersContainer>
+        <ProjectProfileHeader />
+      </HeadersContainer>
+      <BodyContainer>
+        <AvailableFields />
+        <FormForPeople />
+      </BodyContainer>
     </Container>
   );
 }

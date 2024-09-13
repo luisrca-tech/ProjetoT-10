@@ -6,6 +6,7 @@ export const Container = styled.div`
   align-items: center;
   font-family: "Roboto";
   font-size: 1rem;
+  width: 100%;
 `;
 
 export const EditProjectContainer = styled.div`

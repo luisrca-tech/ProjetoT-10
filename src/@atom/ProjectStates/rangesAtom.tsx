@@ -12,12 +12,6 @@ const initialRangesState: { [key: string]: SelectableRangePropsType } = {
     key: "selection-global-project-data",
     isSelected: false,
   },
-  "row-0": {
-    startDate: undefined,
-    endDate: undefined,
-    key: "selection-row-0",
-    isSelected: false,
-  },
 };
 
 export const rangesAtom = atom(initialRangesState);

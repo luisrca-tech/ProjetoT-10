@@ -8,7 +8,7 @@ type ContainerProps = {
 
 type InputProps = {
   hasValue: Boolean;
-  showError: boolean;
+  isLastRow?: boolean;
 };
 
 export const Container = styled.div<ContainerProps>`
@@ -43,10 +43,9 @@ export const Input = styled.input<InputProps>`
   text-overflow: ellipsis;
   white-space: nowrap;
   background-color: ${(props) =>
-    props.hasValue ? "transparent" : `${theme.COLORS.SELECT_INPUT}`};
+    props.isLastRow ? `${theme.COLORS.SELECT_INPUT}` : "transparent"};
   border-radius: 60px;
-  border: ${(props) =>
-    props.showError ? `1px solid ${theme.COLORS.ERROR}` : `none`};
+  border: none;
   outline: none;
   z-index: 1;
   font-size: 1rem;
