@@ -2,6 +2,7 @@ import { poppins } from "~/app/fonts";
 import { Container } from "./styles";
 import { useAtom } from "jotai";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 
 interface SelectableRangeProps {
   startDate?: Date;
@@ -11,6 +12,7 @@ interface SelectableRangeProps {
 export default function ValidationDateError() {
   const [ranges] = useAtom(rangesAtom);
   const areAllDatesFilled = allDatesHaveValues(ranges);
+  const [, setChecked] = useAtom(checkedAtom);
 
   function allDatesHaveValues(ranges: { [key: string]: SelectableRangeProps }) {
     const rangesPositions = Object.keys(ranges);
@@ -33,9 +35,11 @@ export default function ValidationDateError() {
     <>
       {!areAllDatesFilled && (
         <Container>
-          <span className={poppins.className}>
-            Preencha todas as datas antes de prosseguir!
-          </span>
+          <button type="button" onClick={() => setChecked(true)}>
+            <span className={poppins.className}>
+              Preencha todas as datas antes de prosseguir!
+            </span>
+          </button>
         </Container>
       )}
     </>
