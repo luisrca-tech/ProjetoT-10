@@ -41,6 +41,13 @@ export const TableBody = styled.div`
   }
 `;
 
+export const LoadingCustomFields = styled.p`
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 1rem;
+  
+`;
+
 export const TableFields = styled.div`
   display: flex;
   justify-content: space-between;
