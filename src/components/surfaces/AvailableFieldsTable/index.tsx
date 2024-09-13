@@ -2,6 +2,7 @@ import { useTasksOfProject } from "~/hooks/useTasksOfProject";
 import {
   Container,
   IsAvailable,
+  LoadingCustomFields,
   Separate,
   TableBody,
   TableFields,
@@ -23,22 +24,26 @@ export function AvailableFields() {
           <span>Valor Hora</span>
         </div>
       </TableTitle>
-      <TableBody>
-        <Separate />
-        {customFields?.map((customField, index) => (
-          <div key={index}>
-            <TableFields>
-              <span>{customField.chargeName}</span>
-              <div>
-                <span>{customField.hours}h</span>
-                <span>R${customField.valueByHour}</span>
-              </div>
-              <IsAvailable />
-            </TableFields>
-            <Separate />
-          </div>
-        ))}
-      </TableBody>
+      {customFields ? (
+        <TableBody>
+          <Separate />
+          {customFields?.map((customField, index) => (
+            <div key={index}>
+              <TableFields>
+                <span>{customField.chargeName}</span>
+                <div>
+                  <span>{customField.hours}h</span>
+                  <span>R${customField.valueByHour}</span>
+                </div>
+                <IsAvailable />
+              </TableFields>
+              <Separate />
+            </div>
+          ))}
+        </TableBody>
+      ) : (
+        <LoadingCustomFields>Carregando...</LoadingCustomFields>
+      )}
       <TableFooterCount>
         <span>Valor Total</span>
         <span>R$ 98.910,00 </span>

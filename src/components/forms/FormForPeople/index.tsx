@@ -40,7 +40,8 @@ export function FormForPeople() {
         <span>Pessoa</span>
         <span>Cargo</span>
       </RoleAndPerson>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      {roles ? (
+        <Form onSubmit={handleSubmit(onSubmit)}>
         {roles?.map((role, index) => (
           <div key={index}>
             <PersonByRole>
@@ -61,6 +62,9 @@ export function FormForPeople() {
           {!isLoading && <Button text="Salvar" type="submit" />}
         </FormFooter>
       </Form>
+      ) : (
+        <span>Carregando...</span>
+      )}
     </Container>
   );
 }

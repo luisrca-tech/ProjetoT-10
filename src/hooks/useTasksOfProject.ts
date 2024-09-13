@@ -139,7 +139,6 @@ export function useTasksOfProject() {
   );
 
   useEffect(() => {
-    setLoading(true);
     const customFieldData = getCustomField.data ?? [];
     const tasksData = getTasks.data ?? [];
 
