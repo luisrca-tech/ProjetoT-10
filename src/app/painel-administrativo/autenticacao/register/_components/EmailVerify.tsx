@@ -7,7 +7,7 @@ import Input from "~/components/inputs/Input";
 import Button from "~/components/widgets/Button";
 import { api } from "~/trpc/react";
 import { showToast } from "~/utils/functions/showToast";
-import { FormContent } from "./style";
+import { FormContainer } from "./style";
 
 export default function EmailVerify() {
   const router = useRouter();
@@ -77,12 +77,12 @@ export default function EmailVerify() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <FormContent>
+    <FormContainer>
+      <form onSubmit={handleSubmit}>
         <Input
           label="Um código de confirmação foi enviado para seu e-mail."
           type="text"
-          placeholder="Informe seu código"
+          placeholder="Código"
           value={code}
           onChange={(e) => setCode(e.target.value)}
         />
@@ -93,7 +93,7 @@ export default function EmailVerify() {
           loading={isLoadingResend}
         />
         <Button type="submit" text="Confirmar" loading={isLoading} />
-      </FormContent>
-    </form>
+      </form>
+    </FormContainer>
   );
 }

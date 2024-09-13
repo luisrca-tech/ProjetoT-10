@@ -11,7 +11,7 @@ import ErrorMessage from "~/components/widgets/ErrorMessage";
 import { backupPasswordSchema } from "~/schemas/forgot-password.schema";
 import { type backupPassword } from "~/types/forgot-password.type";
 import { showToast } from "~/utils/functions/showToast";
-import { FormContent } from "./styles";
+import { FormContainer } from "../../register/_components/style";
 
 export default function ResetPassword() {
   const {
@@ -81,38 +81,30 @@ export default function ResetPassword() {
   };
 
   return (
-    <form onSubmit={handleSubmit(handleBackupPassword)}>
-      <FormContent>
-        <Input
-          label="Um código de confirmação foi enviado para seu e-mail."
-          type="text"
-          value={code}
-          placeholder="Informe seu código"
-          onChange={(e) => setCode(e.target.value)}
-        />
-        <Input
-          label="Informe sua nova senha"
-          placeholder="********"
-          type="password"
-          {...register("password")}
-        />
+    <FormContainer>
+      <form onSubmit={handleSubmit(handleBackupPassword)}>
+        <Input placeholder="Senha" type="password" {...register("password")} />
         <ErrorMessage>
           {errors.password?.message && errors.password?.message}
         </ErrorMessage>
-        <div>
-          <Button
-            onClick={resendCode}
-            type="button"
-            text="Reenviar código"
-            loading={isLoadingResend}
-          />
-          <Button
-            type="submit"
-            text="Confirmar nova senha"
-            loading={isSubmitting}
-          />
-        </div>
-      </FormContent>
-    </form>
+        <Input
+          type="text"
+          value={code}
+          placeholder="Código"
+          onChange={(e) => setCode(e.target.value)}
+        />
+        <Button
+          onClick={resendCode}
+          type="button"
+          text="Reenviar código"
+          loading={isLoadingResend}
+        />
+        <Button
+          type="submit"
+          text="Confirmar nova senha"
+          loading={isSubmitting}
+        />
+      </form>
+    </FormContainer>
   );
 }

@@ -1,19 +1,15 @@
 import { styled } from "@linaria/react";
 
-export const FormContent = styled.div`
+export const FormContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  width: 328px;
 
-  div {
+  form {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    width: 100%;
+    gap: 1rem;
   }
 `;
-
-export const ResendInputContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  
-`

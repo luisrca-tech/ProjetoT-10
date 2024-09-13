@@ -36,7 +36,7 @@ export default function Register() {
         <Input
           id="email"
           type="email"
-          placeholder="Insira seu e-mail..."
+          placeholder="Email@example.com"
           autoComplete="useremail"
           {...register("email")}
         />
@@ -47,7 +47,7 @@ export default function Register() {
           isPassword={true}
           id="password"
           type="password"
-          placeholder="Cadastre sua senha..."
+          placeholder="Senha"
           autoComplete="current-password"
           {...register("password")}
         />
@@ -58,7 +58,7 @@ export default function Register() {
           isPassword={true}
           id="confirmPassword"
           type="password"
-          placeholder="Confirme sua senha..."
+          placeholder="Confirme sua senha"
           autoComplete="current-password"
           {...register("confirmPassword")}
         />
