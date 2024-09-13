@@ -6,12 +6,12 @@ import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
+import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import {
-  type OptionType,
   type CustomField,
+  type OptionType,
   type Task,
 } from "~/server/types/Clickup.type";
-import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { api } from "~/trpc/react";
 import { showToast } from "~/utils/functions/showToast";
 
@@ -166,9 +166,43 @@ export function useTasksOfProject() {
     setLoading,
   ]);
 
+  function getCustomFields() {
+    return tasksOfProject?.map((task) => {
+      const chargeField = task.custom_fields.find(
+        (field) => field.name === "PixelCraft_cargos"
+      );
+      const hoursField = task.custom_fields.find(
+        (field) => field.name === "PixelCraft_Horas_Mes"
+      );
+      const valueField = task.custom_fields.find(
+        (field) => field.name === "PixelCraft_Valor"
+      );
+
+      const chargeOptions = chargeField?.type_config?.options;
+      const chargeValue = chargeField?.value;
+      let chargeName = "";
+
+      if (chargeOptions && typeof chargeValue === "number") {
+        chargeName = chargeOptions[chargeValue]?.name ?? "";
+      }
+
+      const hasNumber = /\d/;
+      const fieldName = hasNumber.test(task.name) ? "" : task.name;
+
+      return {
+        chargeName,
+        fieldName,
+        hours: hoursField?.value || 0,
+        valueByHour: valueField?.value || 0,
+      };
+    });
+  }
+
   return {
     isFetchAllCustomFields,
     tasksOfProject,
     missingFields,
+    fieldsIdsAtom,
+    getCustomFields,
   };
 }

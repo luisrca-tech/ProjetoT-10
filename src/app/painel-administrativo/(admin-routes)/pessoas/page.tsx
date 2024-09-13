@@ -1,7 +1,7 @@
 "use client";
 
-import { AvailableFields } from "~/components/surfaces/AvailableFieldsTable";
 import { FormForPeople } from "~/components/forms/FormForPeople";
+import { AvailableFields } from "~/components/surfaces/AvailableFieldsTable";
 import Header from "~/components/surfaces/header";
 import { ProjectProfileHeader } from "~/components/surfaces/ProjectProfileHeader";
 import { BodyContainer, Container, HeadersContainer } from "./styles";
