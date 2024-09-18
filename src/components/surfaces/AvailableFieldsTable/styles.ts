@@ -8,9 +8,8 @@ export const Container = styled.div`
 `;
 
 export const TableTitle = styled.div`
-  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content:  space-around;
   align-items: center;
 
   span {
@@ -33,11 +32,12 @@ export const TableBody = styled.div`
   gap: 0.5rem;
   width: 100%;
 
-  height: 7rem;
+  max-height: 6.8rem;
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
-    width: 0;
+    width: 0.2rem;
+    background-color: ${theme.COLORS.PRIMARY};
   }
 `;
 
@@ -45,35 +45,35 @@ export const LoadingCustomFields = styled.p`
   padding-top: 1rem;
   padding-bottom: 1rem;
   font-size: 1rem;
-  
 `;
 
 export const TableFields = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
   align-items: center;
   padding: 0.5rem;
 
-  span {
+  strong {
+    max-width: 40%;
     color: ${theme.COLORS.DARK};
     font-size: 0.875rem;
     line-height: 28px;
-    min-width: 50%;
+    font-weight: 400;
   }
 
-  div {
-    display: flex;
-    gap: 1.25rem;
-
-    span {
-      color: ${theme.COLORS.DARK};
-      font-size: 0.875rem;
-      line-height: 28px;
-    }
+  span {
+    min-width: 25%;
+    color: ${theme.COLORS.DARK};
+    font-size: 0.875rem;
+    line-height: 28px;
   }
 `;
 
 export const IsAvailable = styled.div`
+  position: absolute;
+  right: 1rem;
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 100px;
