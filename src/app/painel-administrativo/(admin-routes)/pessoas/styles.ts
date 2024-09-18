@@ -13,7 +13,7 @@ export const Container = styled.div`
 `;
 
 export const HeadersContainer = styled.div`
-  margin-top: 10.594rem;
+  margin-top: 9rem;
   width: 100%;
   height: 100%;
   display: flex;

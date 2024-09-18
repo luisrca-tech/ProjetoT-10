@@ -26,7 +26,7 @@ export const Form = styled.form`
   flex-direction: column;
   overflow-y: scroll;
   gap: 0.5rem;
-  max-height: 8rem;
+  max-height: 9rem;
   padding-bottom: 0.5rem;
 
   p {
