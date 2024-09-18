@@ -1,9 +1,8 @@
-import { createTRPCRouter, publicProcedure } from "../trpc";
 import { z } from "zod";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
-import { type CustomField } from "~/server/types/Clickup.type";
+import { type CustomField, type Task } from "~/server/types/Clickup.type";
 import { showToast } from "~/utils/functions/showToast";
-import { type Task } from "~/server/types/Clickup.type";
+import { createTRPCRouter, publicProcedure } from "../trpc";
 const listId = "901305118368";
 const authorizationToken = process.env.CLICKUP_API_TOKEN;
 
@@ -136,6 +135,57 @@ export const clickupRouter = createTRPCRouter({
       await updateTaskResp.json();
 
       return { taskId };
+    }),
+
+  updateTaskName: publicProcedure
+    .input(
+      z.object({
+        taskIds: z.array(z.string()).optional(),
+        names: z.array(z.string()).optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { taskIds, names } = input;
+
+      if (!taskIds || taskIds.length === 0) {
+        throw new Error("No task IDs provided");
+      }
+
+      if (!names || names.length === 0) {
+        throw new Error("No names provided");
+      }
+
+      if (taskIds.length !== names.length) {
+        throw new Error(
+          "The number of task IDs must match the number of names"
+        );
+      }
+
+      const updatePromises = taskIds.map(async (taskId, index) => {
+        const updateTaskNameResp = await fetch(
+          `https://api.clickup.com/api/v2/task/${taskId}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: authorizationToken ? authorizationToken : "",
+            },
+            body: JSON.stringify({
+              name: names[index],
+            }),
+          }
+        );
+
+        if (!updateTaskNameResp.ok) {
+          throw new Error(`Failed to update task name for task ID: ${taskId}`);
+        }
+
+        return updateTaskNameResp.json();
+      });
+
+      await Promise.all(updatePromises);
+
+      return { taskIds };
     }),
 
   postChargeCustomField: publicProcedure

@@ -19,10 +19,8 @@ export function AvailableFields() {
     <Container>
       <TableTitle>
         <span>Cargo</span>
-        <div>
-          <span>Qtd. Horas</span>
-          <span>Valor Hora</span>
-        </div>
+        <span>Qtd. Horas</span>
+        <span>Valor Hora</span>
       </TableTitle>
       {customFields ? (
         <TableBody>
@@ -30,11 +28,9 @@ export function AvailableFields() {
           {customFields?.map((customField, index) => (
             <div key={index}>
               <TableFields>
-                <span>{customField.chargeName}</span>
-                <div>
-                  <span>{customField.hours}h</span>
-                  <span>R${customField.valueByHour}</span>
-                </div>
+                <strong>{customField.chargeName}</strong>
+                <span>{customField.hours}h</span>
+                <span>R${customField.valueByHour}</span>
                 <IsAvailable />
               </TableFields>
               <Separate />
