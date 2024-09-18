@@ -167,6 +167,7 @@ export function useTasksOfProject() {
 
   function getCustomFields() {
     return tasksOfProject?.map((task) => {
+      const taskId = task.id;
       const chargeField = task.custom_fields.find(
         (field) => field.name === "PixelCraft_cargos"
       );
@@ -189,6 +190,7 @@ export function useTasksOfProject() {
       const fieldName = hasNumber.test(task.name) ? "" : task.name;
 
       return {
+        taskId,
         chargeName,
         fieldName,
         hours: hoursField?.value || 0,
