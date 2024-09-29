@@ -34,7 +34,6 @@ export const Container = styled.div<ContainerProps>`
 
 export const Input = styled.input<InputProps>`
   display: inline-block;
-  padding-left: 0.75rem;
   height: 100%;
   max-width: 100%;
   width: 100%;
@@ -43,7 +42,7 @@ export const Input = styled.input<InputProps>`
   white-space: nowrap;
   background-color: ${(props) =>
     props.isLastRow ? `${theme.COLORS.SELECT_INPUT}` : "transparent"};
-  border-radius: 60px;
+
   border: none;
   outline: none;
   z-index: 1;

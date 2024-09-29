@@ -2,14 +2,7 @@ import { styled } from "@linaria/react";
 
 interface FormContainerProps {
   isDatePickerOpen: boolean;
-  isProjectOptionsOpen?: boolean;
 }
-
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-`;
 
 export const MainContainer = styled.div`
   margin-top: 13.594rem;
@@ -23,8 +16,7 @@ export const MainContainer = styled.div`
   justify-content: center;
 `;
 
-export const FormContainer = styled.div<FormContainerProps>`
-  padding-top: ${(props) => (props.isProjectOptionsOpen ? "120px" : "0")};
+export const TableContainer = styled.div<FormContainerProps>`
   filter: ${(props) => (props.isDatePickerOpen ? `blur(2px)` : `none`)};
   width: 100%;
   pointer-events: ${(props) => (props.isDatePickerOpen ? `none` : `auto`)};
@@ -34,11 +26,30 @@ export const FormContainer = styled.div<FormContainerProps>`
   height: calc(100vh - 390px);
 `;
 
+export const Container = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+`;
+
 export const InputsContent = styled.div`
   display: flex;
   gap: 0.2rem;
   align-items: center;
+  flex-direction: column;
   font-family: "Roboto";
   font-size: 1rem;
   width: 100%;
+`;
+
+export const LoadingCustomFields = styled.p`
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 1rem;
 `;
