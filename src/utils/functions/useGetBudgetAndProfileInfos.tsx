@@ -1,9 +1,7 @@
-import { type TasksCustomFieldsType } from "~/server/types/Clickup.type";
+import { type TasksInfosType } from "~/server/types/Clickup.type";
 import { useGetMinAndMaxDates } from "./useGetMinAndMaxDates";
 
-export function useGetBudgetAndProfileInfos(
-  tasksCustomFields: TasksCustomFieldsType
-) {
+export function useGetBudgetAndProfileInfos(tasksCustomFields: TasksInfosType) {
   const newRanges: Record<string, any> = {};
 
   tasksCustomFields?.forEach((task) => {

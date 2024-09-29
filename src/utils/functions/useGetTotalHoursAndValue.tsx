@@ -1,9 +1,7 @@
 import { useMemo } from "react";
-import { type TasksCustomFieldsType } from "~/server/types/Clickup.type";
+import { type TasksInfosType } from "~/server/types/Clickup.type";
 
-export const useGetTotalHoursAndValue = (
-  tasksCustomFields: TasksCustomFieldsType
-) => {
+export const useGetTotalHoursAndValue = (tasksCustomFields: TasksInfosType) => {
   return useMemo(() => {
     if (!tasksCustomFields) {
       return { totalHours: 0, totalValue: 0 };
