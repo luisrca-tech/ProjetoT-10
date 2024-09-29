@@ -12,6 +12,18 @@ export const Container = styled.div`
   position: fixed;
   z-index: 3;
   border-bottom-left-radius: 10px;
+  height: 5rem;
+  padding-left: 1.25rem;
+  gap: 1rem;
+
+  input {
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: ${theme.COLORS.SECONDARY_DARK};
+  }
 `;
 
 export const ContentContainer = styled.div`
@@ -19,7 +31,7 @@ export const ContentContainer = styled.div`
   height: 5rem;
   background: ${theme.COLORS.SECONDARY_EXTRA_LIGTH};
   display: flex;
-  padding: 0 1.25rem;
+
   align-items: center;
   gap: 1rem;
 
@@ -31,4 +43,13 @@ export const ContentContainer = styled.div`
     font-weight: 600;
     color: ${theme.COLORS.SECONDARY_DARK};
   }
+`;
+
+export const InputsContent = styled.div`
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  font-family: "Roboto";
+  font-size: 1rem;
+  width: 100%;
 `;

@@ -11,42 +11,44 @@ import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelected
 import { useProcessRows } from "~/hooks/useProcessRows";
 import { showToast } from "~/utils/functions/showToast";
 import Button from "../../widgets/Button";
-import { Budget } from "./Budget";
-import { FormHeader } from "./FormHeader";
+import { Budget } from "../../widgets/Budget";
+import { FormHeader } from "~/components/surfaces/FormHeader";
 import InputsDataContainer from "./InputsDataContainer";
 import { Container } from "./styles";
-import { FormFooter } from "../FormFooter";
-import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
+import { FormFooter } from "../../surfaces/FormFooter";
 import ToggleSwitch from "~/components/widgets/ToggleSwitch";
 import { useRouter } from "next/navigation";
+import { useTotalDaysCalc } from "~/utils/functions/useTotalDaysCalc";
+import { useTotalHoursSum } from "~/utils/functions/useTotalHoursSum";
 
 type FormSelectInputProps = {
   onReset: () => void;
 };
 
 export default function FormSelectInput({ onReset }: FormSelectInputProps) {
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("projectId");
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [loading, setLoading] = useAtom(loadingAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [ranges] = useAtom(rangesAtom);
-  const searchParams = useSearchParams();
-  const projectId = searchParams.get("projectId");
-  const { processRows } = useProcessRows();
-  const [projectOptions] = useAtom(projectOptionsAtom);
-  const isProjectOptions = !!projectOptions?.length;
-  const router = useRouter();
-
   const rangesCondition = validateRanges(ranges);
+  const router = useRouter();
+  const { processRows } = useProcessRows();
+  const totalDays = useTotalDaysCalc();
+  const { totalHours, totalValue } = useTotalHoursSum();
+  const budgetInfo = { totalDays, totalHours, totalValue };
 
   const selectedValuesNotEmpty2 = Object.values(
     projectSelectedValue.selectedValue
   ).some((value) => value !== "");
+
   const selectedValuesNotEmpty1 = Object.values(
     rowsAndSelectedValues.selectedValues
   ).every((value) => value !== "");
 
-  const isConditionMet =
-    rangesCondition && selectedValuesNotEmpty1 && selectedValuesNotEmpty2;
+  const canSubmit =
+    !rangesCondition && !selectedValuesNotEmpty1 && !selectedValuesNotEmpty2;
 
   function validateRanges(ranges: {
     [key: string]: SelectableRangePropsType;
@@ -85,24 +87,20 @@ export default function FormSelectInput({ onReset }: FormSelectInputProps) {
     }
   }
 
-  if (projectId || (!projectId && isProjectOptions)) {
-    return (
-      <Container onSubmit={taskPostRequest}>
-        <ToggleSwitch />
-        <FormHeader />
-        <InputsDataContainer />
-        <FormFooter>
-          <Budget />
-          <Button
-            text="Salvar"
-            disabled={!isConditionMet}
-            loading={loading}
-            type="submit"
-          />
-        </FormFooter>
-      </Container>
-    );
-  }
-
-  return null;
+  return (
+    <Container onSubmit={taskPostRequest}>
+      <ToggleSwitch />
+      <FormHeader />
+      <InputsDataContainer />
+      <FormFooter>
+        <Budget budgetInfo={budgetInfo} />
+        <Button
+          text="Salvar"
+          disabled={canSubmit}
+          loading={loading}
+          type="submit"
+        />
+      </FormFooter>
+    </Container>
+  );
 }

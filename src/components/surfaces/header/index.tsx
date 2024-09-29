@@ -15,8 +15,6 @@ import {
   TitleContainer,
 } from "./styles";
 
-// import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
-// import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { UserButton } from "@clerk/nextjs";
 import { poppins } from "~/assets/fonts/fonts";
 

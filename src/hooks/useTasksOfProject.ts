@@ -45,7 +45,7 @@ export function useTasksOfProject() {
 
   const handleFetchResponse = useCallback(
     ({ customFieldData, tasksData }: FetchResponseType) => {
-      if (customFieldData != undefined && tasksData != undefined) {
+      if (!!customFieldData && !!tasksData) {
         const customFields = {
           project: customFieldData.find(
             (field: CustomField) => field.name === "PixelCraft_projeto"
@@ -165,7 +165,7 @@ export function useTasksOfProject() {
     setLoading,
   ]);
 
-  function getCustomFields() {
+  function getTasksInfos() {
     return tasksOfProject?.map((task) => {
       const taskId = task.id;
       const chargeField = task.custom_fields.find(
@@ -177,6 +177,13 @@ export function useTasksOfProject() {
       const valueField = task.custom_fields.find(
         (field) => field.name === "PixelCraft_Valor"
       );
+
+      const taskStartDate = task.start_date
+        ? new Date(parseInt(task.start_date))
+        : new Date();
+      const taskDueDate = task.due_date
+        ? new Date(parseInt(task.due_date))
+        : new Date();
 
       const chargeOptions = chargeField?.type_config?.options;
       const chargeValue = chargeField?.value;
@@ -195,6 +202,11 @@ export function useTasksOfProject() {
         fieldName,
         hours: hoursField?.value || 0,
         valueByHour: valueField?.value || 0,
+
+        taskStartDate,
+        taskDueDate,
+        chargeOptions,
+        chargeValue,
       };
     });
   }
@@ -204,6 +216,6 @@ export function useTasksOfProject() {
     tasksOfProject,
     missingFields,
     fieldsIdsAtom,
-    getCustomFields,
+    getTasksInfos,
   };
 }

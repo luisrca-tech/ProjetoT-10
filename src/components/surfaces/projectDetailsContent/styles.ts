@@ -33,3 +33,12 @@ export const FormContainer = styled.div<FormContainerProps>`
   gap: 1rem;
   height: calc(100vh - 390px);
 `;
+
+export const InputsContent = styled.div`
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  font-family: "Roboto";
+  font-size: 1rem;
+  width: 100%;
+`;

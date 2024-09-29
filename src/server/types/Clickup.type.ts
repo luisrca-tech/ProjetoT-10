@@ -28,6 +28,22 @@ export type CustomField = {
   value?: string[] | number;
 };
 
+export type TasksInfosType =
+  | {
+      taskId: string;
+      chargeName: string;
+      fieldName: string;
+      hours: number | string[];
+      valueByHour: number | string[];
+      taskStartDate: Date;
+      taskDueDate: Date;
+    }[]
+  | undefined;
+
+export type ProjectDates = {
+  maxEndDateObj: Date | undefined;
+  minStartDateObj: Date | undefined;
+};
 export type OptionType = {
   id: string;
   name: string;
