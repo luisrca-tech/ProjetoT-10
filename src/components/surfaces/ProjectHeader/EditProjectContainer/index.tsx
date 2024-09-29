@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Container } from "./styles";
-import HeaderRowAndScrollDownContainer from "../HeaderRowAndScrollDownContainer";
+import HeaderRowAndScrollDownContainer from "./HeaderRowAndScrollDownContainer";
 export function EditProjectContainer() {
   return (
     <Container>

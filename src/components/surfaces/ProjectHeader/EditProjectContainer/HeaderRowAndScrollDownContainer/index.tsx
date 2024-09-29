@@ -1,7 +1,7 @@
 "use client";
 import { Container } from "./styles";
 import { useAtom } from "jotai";
-import ScrollDownContainer from "../../../forms/FormSelectInput/ScrollDownContainer";
+import ScrollDownContainer from "~/components/forms/FormSelectInput/ScrollDownContainer";
 import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
 import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
 import { useSearchParams } from "next/navigation";
