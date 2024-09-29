@@ -8,12 +8,12 @@ import { formPersonsSchema } from "~/schemas/form-persons.schema";
 import { api } from "~/trpc/react";
 import { type formPersonsData } from "~/types/form-persons.type";
 import { showToast } from "~/utils/functions/showToast";
-import { FormFooter } from "../FormFooter";
+import { FormFooter } from "../../surfaces/FormFooter";
 import { Container, Form, PersonByRole, RoleAndPerson } from "./styles";
 
 export function FormForPeople() {
-  const { getCustomFields } = useTasksOfProject();
-  const roles = getCustomFields();
+  const { getTasksInfos } = useTasksOfProject();
+  const roles = getTasksInfos();
   const updateTaskName = api.clickup.updateTaskName.useMutation();
   const [isLoading, setIsLoading] = useAtom(loadingAtom);
   const {

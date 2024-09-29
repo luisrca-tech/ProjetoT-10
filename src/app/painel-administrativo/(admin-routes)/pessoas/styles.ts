@@ -35,3 +35,13 @@ export const BodyContainer = styled.div`
   justify-content: center;
   padding-bottom: 2rem;
 `;
+
+export const InputsContent = styled.div`
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  flex-direction: column;
+  font-family: "Roboto";
+  font-size: 1rem;
+  width: 100%;
+`;
