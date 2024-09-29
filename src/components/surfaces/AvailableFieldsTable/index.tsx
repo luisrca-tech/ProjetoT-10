@@ -11,9 +11,15 @@ import {
 } from "./styles";
 
 export function AvailableFields() {
-  const { getCustomFields } = useTasksOfProject();
+  const { getTasksInfos } = useTasksOfProject();
 
-  const customFields = getCustomFields();
+  const tasksInfos = getTasksInfos();
+  const filteredFields =
+    tasksInfos?.map(({ chargeName, hours, valueByHour }) => ({
+      chargeName,
+      hours,
+      valueByHour,
+    })) || [];
 
   return (
     <Container>
@@ -22,10 +28,10 @@ export function AvailableFields() {
         <span>Qtd. Horas</span>
         <span>Valor Hora</span>
       </TableTitle>
-      {customFields ? (
+      {filteredFields ? (
         <TableBody>
           <Separate />
-          {customFields?.map((customField, index) => (
+          {filteredFields?.map((customField, index) => (
             <div key={index}>
               <TableFields>
                 <strong>{customField.chargeName}</strong>
