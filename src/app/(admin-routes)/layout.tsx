@@ -14,7 +14,7 @@ type AuthHeaderProps = {
 
 export default function PrivateLayout({ children }: AuthHeaderProps) {
   auth().protect({
-    unauthenticatedUrl: "/painel-administrativo/autenticacao/login",
+    unauthenticatedUrl: "/autenticacao/login",
     unauthorizedUrl: "/",
   });
 

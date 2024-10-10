@@ -26,7 +26,7 @@ export function MirrorTableContainer({
   const router = useRouter();
 
   function HandleRedirectToPages(page: string) {
-    router.push(`/painel-administrativo/${page}?projectId=${projectId}`);
+    router.push(`/${page}?projectId=${projectId}`);
   }
   return (
     <Container>

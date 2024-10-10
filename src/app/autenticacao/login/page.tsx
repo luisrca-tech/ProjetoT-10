@@ -74,14 +74,11 @@ export default function Login() {
       <OtherOptionsContainer>
         <ButtonsTextContainer>
           <ButtonText className={roboto.className}>
-            <Link href={"/painel-administrativo/autenticacao/register"}>
-              {" "}
-              Não tenho conta
-            </Link>
+            <Link href={"/autenticacao/register"}> Não tenho conta</Link>
           </ButtonText>
 
           <ButtonText className={roboto.className}>
-            <Link href={"/painel-administrativo/autenticacao/forgot-password"}>
+            <Link href={"/autenticacao/forgot-password"}>
               Esqueci minha senha
             </Link>
           </ButtonText>

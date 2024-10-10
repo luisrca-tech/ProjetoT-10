@@ -30,7 +30,7 @@ const Main = styled.main`
 export default function AuthLayout({ children }: AuthHeaderProps) {
   const { userId } = auth();
 
-  if (userId) redirect("/painel-administrativo/projetos");
+  if (userId) redirect("/projetos");
   return (
     <Container>
       <Toaster richColors />

@@ -14,7 +14,7 @@ export function ProjectsCards() {
     useFilteredTasksByProject();
 
   function HandleClickProjectCard(projectId: string) {
-    router.push(`/painel-administrativo/espelho?projectId=${projectId}`);
+    router.push(`/espelho?projectId=${projectId}`);
   }
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export function ProjectsCards() {
       showToast(
         "error",
         "Não existe Projeto_PixelCraft na lista",
-        "Compare seu painel administrativo com a lista ClickUp!"
+        "Confira sua configuração"
       );
     }
   }, [isNocustomFieldProject]);
