@@ -73,19 +73,26 @@ export default function Header() {
             <OptionsContainer>
               <ButtonContainer>
                 <button
-                  onClick={() => router.push("/painel-administrativo/projetos")}
+                  onClick={() => router.push("/projetos")}
                   className={poppins.className}
                 >
                   Projetos
                 </button>
               </ButtonContainer>
+
               <ButtonContainer>
-                <button className={poppins.className}>Pessoas</button>
+                <button
+                  onClick={() => router.push("/configuracao")}
+                  className={poppins.className}
+                >
+                  Configuração
+                </button>
               </ButtonContainer>
-              <ButtonContainer>
+
+              <ButtonContainer disabled>
                 <button className={poppins.className}>Mobilizados</button>
               </ButtonContainer>
-              <ButtonContainer>
+              <ButtonContainer disabled>
                 <button className={poppins.className}>Férias</button>
               </ButtonContainer>
             </OptionsContainer>
