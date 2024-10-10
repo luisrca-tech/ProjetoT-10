@@ -9,6 +9,10 @@ type ContainerType = {
   isAutentication: boolean;
 };
 
+type ButtonContainerType = {
+  disabled?: boolean;
+};
+
 export const Container = styled.header<ContainerType>`
   width: 100%;
   display: flex;
@@ -105,7 +109,7 @@ export const AddProjectButton = styled.button`
   justify-content: center;
 `;
 
-export const ButtonContainer = styled.div`
+export const ButtonContainer = styled.div<ButtonContainerType>`
   width: 100%;
   padding: 1.5rem 0;
   display: flex;
@@ -117,5 +121,7 @@ export const ButtonContainer = styled.div`
     font-size: 1rem;
     font-weight: 600;
     border: none;
+    opacity: ${(props) => (props.disabled ? "0.5" : "1")};
+    pointer-events: ${(props) => (props.disabled ? "none" : "auto")};
   }
 `;
