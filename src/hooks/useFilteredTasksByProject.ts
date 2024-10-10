@@ -1,3 +1,4 @@
+import { useSession } from "@clerk/nextjs";
 import { useAtom } from "jotai";
 import { useCallback, useEffect, useState } from "react";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
@@ -27,6 +28,9 @@ type FilteredTasksByProject = {
 };
 
 export function useFilteredTasksByProject() {
+  const { session } = useSession()
+  const userId = session?.user.id;
+
   const [filteredTasksByProject, setFilteredTasksByProject] =
     useState<FilteredTasksByProject[]>();
   const [, setLoading] = useAtom(loadingAtom);
@@ -35,10 +39,12 @@ export function useFilteredTasksByProject() {
 
   const getTasks = api.clickup.getTasks.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.task,
+    userId: userId ?? '',
   });
 
   const getCustomField = api.clickup.getCustomFields.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.field,
+    userId: userId ?? '',
   });
 
   const handleFetchResponse = useCallback(

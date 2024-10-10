@@ -1,22 +1,43 @@
 import { z } from "zod";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
+import { db } from "~/server/db";
 import { type CustomField, type Task } from "~/server/types/Clickup.type";
 import { showToast } from "~/utils/functions/showToast";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-const listId = "901305118368";
-const authorizationToken = process.env.CLICKUP_API_TOKEN;
+
+async function getClickupKeys(userId: string) {
+  const user = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      AuthorizationPkKey: true,
+      listId: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return {
+    AuthorizationPkKey: user.AuthorizationPkKey,
+    listId: user.listId,
+  };
+}
 
 export const clickupRouter = createTRPCRouter({
   getCustomFields: publicProcedure
-    .input(z.object({ endPoint: EndPointClickUpApiEnum }))
+    .input(z.object({ endPoint: EndPointClickUpApiEnum, userId: z.string() }))
     .query<CustomField[]>(async ({ input }) => {
+      const { AuthorizationPkKey, listId } = await getClickupKeys(input.userId);
       const response = await fetch(
         `https://api.clickup.com/api/v2/list/${listId}/${input.endPoint}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: authorizationToken ? authorizationToken : "",
+            Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
           },
         }
       );
@@ -33,15 +54,16 @@ export const clickupRouter = createTRPCRouter({
     }),
 
   getTasks: publicProcedure
-    .input(z.object({ endPoint: EndPointClickUpApiEnum }))
+    .input(z.object({ endPoint: EndPointClickUpApiEnum, userId: z.string() }))
     .query<Task[]>(async ({ input }) => {
+      const { AuthorizationPkKey, listId } = await getClickupKeys(input.userId);
       const response = await fetch(
         `https://api.clickup.com/api/v2/list/${listId}/${input.endPoint}`,
         {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: authorizationToken ? authorizationToken : "",
+            Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
           },
         }
       );
@@ -60,6 +82,7 @@ export const clickupRouter = createTRPCRouter({
   postTask: publicProcedure
     .input(
       z.object({
+        userId: z.string(),
         row: z.string().optional(),
         Dates: z.object({
           startDate: z.date().optional(),
@@ -68,6 +91,7 @@ export const clickupRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
+      const { AuthorizationPkKey, listId } = await getClickupKeys(input.userId);
       const { row, Dates } = input;
 
       const query = new URLSearchParams({
@@ -83,7 +107,7 @@ export const clickupRouter = createTRPCRouter({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: authorizationToken ? authorizationToken : "",
+            Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
           },
           body: JSON.stringify({
             name: `Pessoa-${numberRow}`,
@@ -100,6 +124,7 @@ export const clickupRouter = createTRPCRouter({
   updateTask: publicProcedure
     .input(
       z.object({
+        userId: z.string(),
         row: z.string().optional(),
         Dates: z.object({
           startDate: z.date().optional(),
@@ -109,6 +134,7 @@ export const clickupRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input }) => {
+      const { AuthorizationPkKey } = await getClickupKeys(input.userId);
       const { row, Dates, taskId } = input;
 
       const query = new URLSearchParams({
@@ -123,7 +149,7 @@ export const clickupRouter = createTRPCRouter({
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: authorizationToken ? authorizationToken : "",
+            Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
           },
           body: JSON.stringify({
             name: `Pessoa-${numberRow}`,
@@ -140,11 +166,13 @@ export const clickupRouter = createTRPCRouter({
   updateTaskName: publicProcedure
     .input(
       z.object({
+        userId: z.string(),
         taskIds: z.array(z.string()).optional(),
         names: z.array(z.string()).optional(),
       })
     )
     .mutation(async ({ input }) => {
+      const { AuthorizationPkKey } = await getClickupKeys(input.userId);
       const { taskIds, names } = input;
 
       if (!taskIds || taskIds.length === 0) {
@@ -168,7 +196,7 @@ export const clickupRouter = createTRPCRouter({
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              Authorization: authorizationToken ? authorizationToken : "",
+              Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
             },
             body: JSON.stringify({
               name: names[index],
