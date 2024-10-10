@@ -1,4 +1,4 @@
-import withLinaria from 'next-with-linaria'
+import withLinaria from "next-with-linaria";
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -6,6 +6,15 @@ const config = {
   compiler: {
     styledComponents: true,
   },
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/projetos",
+        permanent: true,
+      },
+    ];
+  },
 };
 
-export default withLinaria(config)
+export default withLinaria(config);
