@@ -73,13 +73,20 @@ export default function Header() {
                   Projetos
                 </button>
               </ButtonContainer>
+
               <ButtonContainer>
-                <button className={poppins.className}>Pessoas</button>
+                <button
+                  onClick={() => router.push("/configuracao")}
+                  className={poppins.className}
+                >
+                  Configuração
+                </button>
               </ButtonContainer>
-              <ButtonContainer>
+
+              <ButtonContainer disabled>
                 <button className={poppins.className}>Mobilizados</button>
               </ButtonContainer>
-              <ButtonContainer>
+              <ButtonContainer disabled>
                 <button className={poppins.className}>Férias</button>
               </ButtonContainer>
             </OptionsContainer>
