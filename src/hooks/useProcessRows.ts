@@ -7,6 +7,7 @@ import {
 import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { api } from "~/trpc/react";
+import { useSession } from "@clerk/nextjs";
 
 export interface ChargeFieldSelectedValue {
   chargeValueNumber: number;
@@ -17,6 +18,8 @@ export interface ChargeFieldSelectedValue {
 }
 
 export function useProcessRows() {
+  const { session } = useSession()
+  const userId = session?.user.id;
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [ranges] = useAtom(rangesAtom);
   const rows = rowsAndSelectedValues.rows;
@@ -94,6 +97,7 @@ export function useProcessRows() {
 
           tasksIdsPromises.push(
             mutationUpdateTask.mutateAsync({
+              userId: userId ?? '',
               row: row,
               Dates: { startDate, endDate },
               taskId: taskId,
@@ -103,6 +107,7 @@ export function useProcessRows() {
         } else {
           tasksIdsPromises.push(
             mutationPostTask.mutateAsync({
+              userId: userId ?? "",
               row: row,
               Dates: { startDate, endDate },
             })

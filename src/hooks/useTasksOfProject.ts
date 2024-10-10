@@ -1,3 +1,4 @@
+import { useSession } from "@clerk/nextjs";
 import { useAtom } from "jotai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
@@ -21,6 +22,9 @@ type FetchResponseType = {
 };
 
 export function useTasksOfProject() {
+  const { session } = useSession();
+  const userId = session?.user.id;
+
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId");
   const [isFetchAllCustomFields, setIsFetchAllCustomFields] =
@@ -37,10 +41,12 @@ export function useTasksOfProject() {
 
   const getTasks = api.clickup.getTasks.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.task,
+    userId: userId ?? "",
   });
 
   const getCustomField = api.clickup.getCustomFields.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.field,
+    userId: userId ?? "",
   });
 
   const handleFetchResponse = useCallback(

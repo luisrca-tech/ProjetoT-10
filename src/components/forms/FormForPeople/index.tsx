@@ -10,8 +10,11 @@ import { type formPersonsData } from "~/types/form-persons.type";
 import { showToast } from "~/utils/functions/showToast";
 import { FormFooter } from "../../surfaces/FormFooter";
 import { Container, Form, PersonByRole, RoleAndPerson } from "./styles";
+import { useSession } from "@clerk/nextjs";
 
 export function FormForPeople() {
+  const { session } = useSession()
+  const userId = session?.user.id;
   const { getTasksInfos } = useTasksOfProject();
   const roles = getTasksInfos();
   const updateTaskName = api.clickup.updateTaskName.useMutation();
@@ -28,6 +31,7 @@ export function FormForPeople() {
     setIsLoading(true);
     try {
       await updateTaskName.mutateAsync({
+        userId: userId ?? "",
         taskIds: roles?.map((role) => role.taskId),
         names: names,
       });
