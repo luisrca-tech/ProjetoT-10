@@ -13,6 +13,8 @@ model User {
   updatedAt      DateTime  @updatedAt
   name           String?
   email          String?   @unique
+  AuthorizationPkKey  String?  @unique
+  listId         String?  @unique
 
 
   @@map("users")
