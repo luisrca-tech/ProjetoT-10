@@ -22,7 +22,7 @@ export function ProjectsCards() {
       showToast(
         "error",
         "Não existe Projeto_PixelCraft na lista",
-        "Compare seu painel administrativo com a lista ClickUp!"
+        "Confira sua configuração"
       );
     }
   }, [isNocustomFieldProject]);
