@@ -1,6 +1,5 @@
 "use client";
 
-import { useSignIn } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { roboto } from "~/assets/fonts/fonts";
@@ -15,18 +14,11 @@ import { configurationSchema } from "~/schemas/configuration-schema";
 export default function Configuration() {
   const {
     register,
-    handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
   } = useForm<configurationType>({
     resolver: zodResolver(configurationSchema),
     mode: "onChange",
   });
-
-  // async function handleCreateKeys({ listId, pk }: loginType) {
-
-  //   // reset();
-  // }
   const submitIsDisabled = !!errors.listId?.message || !!errors.pk?.message;
   return (
     <Container>
