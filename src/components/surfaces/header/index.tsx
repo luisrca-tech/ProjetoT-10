@@ -30,18 +30,12 @@ export default function Header() {
   };
 
   const isAuthPage = () => {
-    return currentPath.startsWith("/painel-administrativo/autenticacao");
+    return currentPath.startsWith("/autenticacao");
   };
 
-  const isPersonsPage = currentPath.startsWith("/painel-administrativo/pessoas")
-    ? true
-    : false;
+  const isPersonsPage = currentPath.startsWith("/pessoas") ? true : false;
 
-  const isProjectsPage = currentPath.startsWith(
-    "/painel-administrativo/projetos"
-  )
-    ? true
-    : false;
+  const isProjectsPage = currentPath.startsWith("/projetos") ? true : false;
 
   const noRenderIconsAndSidebar = () => {
     if (isAuthPage()) {
@@ -73,7 +67,7 @@ export default function Header() {
             <OptionsContainer>
               <ButtonContainer>
                 <button
-                  onClick={() => router.push("/painel-administrativo/projetos")}
+                  onClick={() => router.push("/projetos")}
                   className={poppins.className}
                 >
                   Projetos
@@ -107,9 +101,7 @@ export default function Header() {
             </TitleContainer>
             <ButtonsContainer>
               {!!isProjectsPage && (
-                <AddProjectButton
-                  onClick={() => router.push("/painel-administrativo/projeto")}
-                >
+                <AddProjectButton onClick={() => router.push("/projeto")}>
                   <IoAdd size={24} />
                 </AddProjectButton>
               )}

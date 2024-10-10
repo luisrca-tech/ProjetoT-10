@@ -14,7 +14,7 @@ export function ProjectsCards() {
     useFilteredTasksByProject();
 
   function HandleClickProjectCard(projectId: string) {
-    router.push(`/painel-administrativo/espelho?projectId=${projectId}`);
+    router.push(`/espelho?projectId=${projectId}`);
   }
 
   useEffect(() => {
