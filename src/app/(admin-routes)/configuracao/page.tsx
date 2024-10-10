@@ -42,7 +42,7 @@ export default function Configuration() {
         <Button
           className={roboto.className}
           loading={isSubmitting}
-          text="Entrar"
+          text="Salvar"
           type="submit"
           disabled={submitIsDisabled}
         />
