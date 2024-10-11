@@ -74,7 +74,7 @@ export default function FormSelectInput({ onReset }: FormSelectInputProps) {
 
       if (!projectId) {
         onReset();
-        router.push("/painel-administrativo/pessoas");
+        router.push("/pessoas");
       }
     } catch (error) {
       showToast(

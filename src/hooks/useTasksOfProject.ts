@@ -158,7 +158,7 @@ export function useTasksOfProject() {
           "Confira seus listId e AuthorizationToken"
         );
 
-        router.push("/painel-administrativo/projetos");
+        router.push("/projetos");
       }
     }
   }, [

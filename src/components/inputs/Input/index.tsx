@@ -3,6 +3,7 @@
 import { forwardRef, useState, type ComponentProps } from "react";
 import { FaUnlockAlt, FaLock } from "react-icons/fa";
 import { Container } from "./styles";
+import { poppins } from "~/app/fonts";
 
 type Props = ComponentProps<"input"> & {
   isPassword?: boolean;
@@ -18,6 +19,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
       <Container type={type}>
         <div>
           <input
+            className={poppins.className}
             ref={ref}
             {...rest}
             type={passwordIsVisible ? "text" : type}

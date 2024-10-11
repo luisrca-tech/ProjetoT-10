@@ -19,7 +19,7 @@ export function useAuth() {
     signIn?.authenticateWithRedirect({
       strategy: "oauth_google",
       redirectUrl: "/sso-callback",
-      redirectUrlComplete: "/painel-administrativo/projetos",
+      redirectUrlComplete: "/projetos",
     });
 
   async function Login({ email, password }: loginType) {
@@ -35,7 +35,7 @@ export function useAuth() {
         }
 
         await setActive({ session: result.createdSessionId });
-        router.push("/painel-administrativo/projetos");
+        router.push("/projetos");
       }
     } catch (error) {
       if (isClerkAPIResponseError(error)) {

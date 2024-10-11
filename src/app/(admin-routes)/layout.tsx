@@ -5,7 +5,7 @@ import Header from "~/components/surfaces/header";
 
 const Container = styled.div`
   width: 100%;
-  height: 100%;
+  height: 100vh;
 `;
 
 type AuthHeaderProps = {
@@ -14,7 +14,7 @@ type AuthHeaderProps = {
 
 export default function PrivateLayout({ children }: AuthHeaderProps) {
   auth().protect({
-    unauthenticatedUrl: "/painel-administrativo/autenticacao/login",
+    unauthenticatedUrl: "/autenticacao/login",
     unauthorizedUrl: "/",
   });
 

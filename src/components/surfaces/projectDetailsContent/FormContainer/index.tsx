@@ -136,7 +136,7 @@ export function FormContainer() {
         "Erro ao carregar projeto",
         `${missingFields} não existem na lista.`
       );
-      router.push("/painel-administrativo/projetos");
+      router.push("/projetos");
     }
   }, [missingFields, router, rowsAndSelectedValues.selectedValues]);
 

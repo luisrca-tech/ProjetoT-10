@@ -87,7 +87,7 @@ export const Container = styled.div<InputProps>`
       height: 2.5rem;
       width: 100%;
       background-color: transparent;
-
+      font-size: 1rem;
       border: 0;
       outline: 0;
       color: ${() => theme.COLORS.DARK};
