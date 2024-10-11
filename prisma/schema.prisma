@@ -13,9 +13,17 @@ model User {
   updatedAt      DateTime  @updatedAt
   name           String?
   email          String?   @unique
-  AuthorizationPkKey  String?  @unique
-  listId         String?  @unique
-
+  configurationKeys ConfigurationKeys[]
 
   @@map("users")
+}
+
+model ConfigurationKeys {
+  id                String  @id @default(cuid())
+  AuthorizationPkKey String? @unique
+  listId            String? 
+  userId            String? @unique
+  user              User?   @relation(fields: [userId], references: [id])
+
+  @@map("configuration_keys")
 }
