@@ -1,10 +1,14 @@
+"use client"
+
 import { useAtom } from "jotai";
-import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
-import { poppins } from "~/assets/fonts/fonts";
-import { Container, Input } from "./styles";
-import { useGetInputValueAtIndex } from "~/utils/functions/getInputValueAtIndex";
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
+import { poppins } from "~/assets/fonts/fonts";
+import { Skeleton } from "~/components/widgets/Skeleton";
+import { useTasksOfProject } from "~/hooks/useTasksOfProject";
+import { useGetInputValueAtIndex } from "~/utils/functions/getInputValueAtIndex";
+import { Container, Input } from "./styles";
 
 interface SelectInputProps {
   isSelectOpen?: boolean;
@@ -17,6 +21,9 @@ export default function HeaderSelectInput({
   row,
   ...rest
 }: SelectInputProps) {
+  const { getTasksInfos } = useTasksOfProject();
+
+  const projectAttributes = getTasksInfos();
   const [checked] = useAtom(checkedAtom);
   const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [projectOptions] = useAtom(projectOptionsAtom);
@@ -56,18 +63,26 @@ export default function HeaderSelectInput({
 
   return (
     <Container checked={checked} isInProjectHeader>
-      <Input
-        {...rest}
-        onBlur={handleInputBlur}
-        autoComplete="off"
-        placeholder={correctPlaceHolder}
-        type="text"
-        value={projectHeaderInputValueAtIndex || ""}
-        onChange={() => handleInputChange}
-        onClick={handleInputFocus}
-        className={poppins.className}
-        readOnly={true}
-      />
+      {!!projectAttributes ? (
+        <Input
+          {...rest}
+          onBlur={handleInputBlur}
+          autoComplete="off"
+          placeholder={correctPlaceHolder}
+          type="text"
+          value={projectHeaderInputValueAtIndex || ""}
+          onChange={() => handleInputChange}
+          onClick={handleInputFocus}
+          className={poppins.className}
+          readOnly={true}
+        />
+      ) : (
+        <Skeleton
+          style={{ alignSelf: "flex-start", marginTop: "0.875rem" }}
+          width="90%"
+          height="1.2rem"
+        />
+      )}
     </Container>
   );
 }

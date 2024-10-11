@@ -1,3 +1,5 @@
+"use client"
+
 import Button from "~/components/widgets/Button";
 import { FormHeader } from "../../FormHeader";
 import { FormFooter } from "../../FormFooter";
@@ -7,6 +9,8 @@ import { TableData } from "./MirrorTablePresenter";
 import { Budget } from "~/components/widgets/Budget";
 import { type TasksInfosType } from "~/server/types/Clickup.type";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SkeletonContainer } from "~/components/forms/FormSelectInput/InputsDataContainer/styles";
+import { Skeleton } from "~/components/widgets/Skeleton";
 
 type BudgetInfo = {
   totalDays: number;
@@ -32,7 +36,21 @@ export function MirrorTableContainer({
     <Container>
       <ToggleSwitch />
       <FormHeader />
-      <TableData tasksCustomFields={tasksCustomFields} />
+      {!!tasksCustomFields ? (
+        <TableData tasksCustomFields={tasksCustomFields} />
+      ) : (
+        <div>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <SkeletonContainer key={index}>
+              <Skeleton
+                style={{ borderRadius: "60px" }}
+                width="95%"
+                height="1.25rem"
+              />
+            </SkeletonContainer>
+          ))}
+        </div>
+      )}
       <FormFooter>
         <Budget budgetInfo={budgetInfo} />
         <Button

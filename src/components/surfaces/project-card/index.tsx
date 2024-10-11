@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { Skeleton } from "~/components/widgets/Skeleton";
 import { useFilteredTasksByProject } from "~/hooks/useFilteredTasksByProject";
 import { showToast } from "~/utils/functions/showToast";
 import { CardContent } from "./CardContent";
@@ -29,16 +30,37 @@ export function ProjectsCards() {
 
   return (
     <Container>
-      {filteredTasksByProject?.map(({ project, dates }) => (
-        <ProjectContainer
-          key={project.id}
-          onClick={() => HandleClickProjectCard(project.id)}
-        >
-          <CardContent project={project} dates={dates} />
+      {!!filteredTasksByProject ? (
+        <>
+          {filteredTasksByProject?.map(({ project, dates }) => (
+            <ProjectContainer
+              key={project.id}
+              onClick={() => HandleClickProjectCard(project.id)}
+            >
+              <CardContent project={project} dates={dates} />
 
-          <ProgressBar />
-        </ProjectContainer>
-      ))}
+              <ProgressBar />
+            </ProjectContainer>
+          ))}
+        </>
+      ) : (
+        <>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <ProjectContainer key={index}>
+              <Skeleton
+                style={{ marginTop: "1rem", marginLeft: "1rem" }}
+                width="90%"
+                height="1.25rem"
+              />
+              <Skeleton
+                style={{ marginLeft: "1rem" }}
+                width="90%"
+                height="1.25rem"
+              />
+            </ProjectContainer>
+          ))}
+        </>
+      )}
     </Container>
   );
 }

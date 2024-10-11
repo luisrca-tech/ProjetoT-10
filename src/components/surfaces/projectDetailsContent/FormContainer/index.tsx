@@ -3,20 +3,19 @@
 import { useAtom } from "jotai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { isDatePickerOpenAtom } from "~/@atom/ProjectStates/isDatePickerOpenAtom";
-import { useTasksOfProject } from "~/hooks/useTasksOfProject";
-import { showToast } from "~/utils/functions/showToast";
-import FormSelectInput from "~/components/forms/FormSelectInput";
-import { Container } from "./styles";
-import { type Task } from "~/server/types/Clickup.type";
 import { v4 as uuidv4 } from "uuid";
-import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
-import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
-import { useInitializeRowsAndRanges } from "~/utils/functions/initializeRowsAndRanges";
+import { isDatePickerOpenAtom } from "~/@atom/ProjectStates/isDatePickerOpenAtom";
+import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
+import { rowsAndSelectedValuesAtom } from "~/@atom/ProjectStates/rowsAndSelectedValuesAtom";
+import FormSelectInput from "~/components/forms/FormSelectInput";
+import { useTasksOfProject } from "~/hooks/useTasksOfProject";
+import { type Task } from "~/server/types/Clickup.type";
 import { useAddRow } from "~/utils/functions/addRow";
 import { useCanAddRow } from "~/utils/functions/canAddRow";
-import { LoadingCustomFields } from "../../AvailableFieldsTable/styles";
+import { useInitializeRowsAndRanges } from "~/utils/functions/initializeRowsAndRanges";
+import { showToast } from "~/utils/functions/showToast";
+import { Container } from "./styles";
 export function FormContainer() {
   const searchParams = useSearchParams();
 
@@ -180,11 +179,7 @@ export function FormContainer() {
 
   return (
     <Container isDatePickerOpen={isDatePickerOpen}>
-      {!!tasksOfProject ? (
-        <FormSelectInput onReset={resetStates} />
-      ) : (
-        <LoadingCustomFields>Carregando...</LoadingCustomFields>
-      )}
+      <FormSelectInput onReset={resetStates} />
     </Container>
   );
 }

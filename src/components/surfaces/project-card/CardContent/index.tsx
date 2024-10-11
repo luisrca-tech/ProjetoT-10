@@ -1,7 +1,7 @@
 "use client";
 
 import { poppins } from "~/app/fonts";
-import { Container, CardContentDescriptions } from "./styles";
+import { CardContentDescriptions, Container } from "./styles";
 import GoogleImage from "/public/images/google img.svg";
 
 import Image, { type StaticImageData } from "next/image";

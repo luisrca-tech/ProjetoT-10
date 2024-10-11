@@ -1,8 +1,10 @@
+"use client"
+
+import { Skeleton } from "~/components/widgets/Skeleton";
 import { useTasksOfProject } from "~/hooks/useTasksOfProject";
 import {
   Container,
   IsAvailable,
-  LoadingCustomFields,
   Separate,
   TableBody,
   TableFields,
@@ -12,10 +14,10 @@ import {
 
 export function AvailableFields() {
   const { getTasksInfos } = useTasksOfProject();
+  const taskAttributes = getTasksInfos();
 
-  const tasksInfos = getTasksInfos();
   const filteredFields =
-    tasksInfos?.map(({ chargeName, hours, valueByHour }) => ({
+    taskAttributes?.map(({ chargeName, hours, valueByHour }) => ({
       chargeName,
       hours,
       valueByHour,
@@ -28,7 +30,7 @@ export function AvailableFields() {
         <span>Qtd. Horas</span>
         <span>Valor Hora</span>
       </TableTitle>
-      {filteredFields ? (
+      {taskAttributes ? (
         <TableBody>
           <Separate />
           {filteredFields?.map((customField, index) => (
@@ -44,7 +46,15 @@ export function AvailableFields() {
           ))}
         </TableBody>
       ) : (
-        <LoadingCustomFields>Carregando...</LoadingCustomFields>
+        <TableBody>
+          <Separate />
+          {Array.from({ length: 10 }).map((_, index) => (
+            <TableFields key={index}>
+              <Skeleton width="100%" height="1rem" />
+            </TableFields>
+          ))}
+          <Separate />
+        </TableBody>
       )}
       <TableFooterCount>
         <span>Valor Total</span>

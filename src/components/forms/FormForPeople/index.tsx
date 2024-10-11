@@ -1,8 +1,12 @@
+"use client";
+
+import { useSession } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import Button from "~/components/widgets/Button";
+import { Skeleton } from "~/components/widgets/Skeleton";
 import { useTasksOfProject } from "~/hooks/useTasksOfProject";
 import { formPersonsSchema } from "~/schemas/form-persons.schema";
 import { api } from "~/trpc/react";
@@ -10,10 +14,9 @@ import { type formPersonsData } from "~/types/form-persons.type";
 import { showToast } from "~/utils/functions/showToast";
 import { FormFooter } from "../../surfaces/FormFooter";
 import { Container, Form, PersonByRole, RoleAndPerson } from "./styles";
-import { useSession } from "@clerk/nextjs";
 
 export function FormForPeople() {
-  const { session } = useSession()
+  const { session } = useSession();
   const userId = session?.user.id;
   const { getTasksInfos } = useTasksOfProject();
   const roles = getTasksInfos();
@@ -58,7 +61,7 @@ export function FormForPeople() {
                 <input
                   type="text"
                   defaultValue={role.fieldName}
-                  placeholder="Vincule uma pessoa..."
+                  placeholder="Vincule uma pessoa"
                   {...register(`names.${index}`)}
                 />
                 <span>{role.chargeName}</span>
@@ -73,7 +76,16 @@ export function FormForPeople() {
           </FormFooter>
         </Form>
       ) : (
-        <span>Carregando...</span>
+        <Form>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <PersonByRole key={index}>
+              <Skeleton key={index} width="100%" height="1rem" />
+            </PersonByRole>
+          ))}
+          <FormFooter>
+            {!isLoading && <Button text="Salvar" type="submit" />}
+          </FormFooter>
+        </Form>
       )}
     </Container>
   );
