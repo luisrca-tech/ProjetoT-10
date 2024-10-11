@@ -7,13 +7,19 @@ import Input from "~/components/inputs/Input";
 import Button from "~/components/widgets/Button";
 import ErrorMessage from "~/components/widgets/ErrorMessage";
 
-import { Container, Form } from "./styles";
-import { type configurationType } from "~/types/configuration.type";
+import { useSession } from "@clerk/nextjs";
 import { configurationSchema } from "~/schemas/configuration-schema";
-import { showToast } from "~/utils/functions/showToast";
 import { api } from "~/trpc/react";
+import { type configurationType } from "~/types/configuration.type";
+import { showToast } from "~/utils/functions/showToast";
+import { Container, Form } from "./styles";
+import { useRouter } from "next/navigation";
 
 export default function Configuration() {
+  const { session } = useSession();
+  const userId = session?.user.id ?? "";
+  const router = useRouter()
+
   const {
     register,
     handleSubmit,
@@ -24,21 +30,42 @@ export default function Configuration() {
   });
 
   const postClickUpKeys = api.clickup.postClickUpKeys.useMutation();
+  const updateClickUpKeys = api.clickup.updateClickUpKeys.useMutation();
+  const getClickUpKeys = api.clickup.getClickupKeys.useQuery({ userId });
+
   const submitIsDisabled = !!errors.listId?.message || !!errors.pk?.message;
 
   const onSubmit = async ({ pk, listId }: configurationType) => {
     try {
-      await postClickUpKeys.mutateAsync({
-        pk,
-        listId,
-      });
-      if (postClickUpKeys.isSuccess) {
-        showToast("success", "configuração salva com sucesso!");
+      const existingKeys = await getClickUpKeys.refetch();
+
+      if (Array.isArray(existingKeys.data) && existingKeys.data.length > 0) {
+        await updateClickUpKeys.mutateAsync({
+          pk,
+          listId,
+          userId: userId,
+        });
+        if (updateClickUpKeys.isSuccess) {
+          showToast("success", "Configuração atualizada com sucesso!");
+          router.push("/projetos");
+        }
+      } else {
+        await postClickUpKeys.mutateAsync({
+          pk,
+          listId,
+          userId,
+        });
+        if (postClickUpKeys.isSuccess) {
+          showToast("success", "Configuração salva com sucesso!");
+          router.push("/projetos");
+        }
       }
     } catch (error) {
       showToast("error", "Erro ao configurar");
+    }  finally {
     }
   };
+
   return (
     <Container>
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -46,6 +73,7 @@ export default function Configuration() {
           id="listId"
           type="text"
           placeholder="List Id"
+          defaultValue={getClickUpKeys.data?.listId ?? ""}
           {...register("listId")}
         />
         <ErrorMessage>
@@ -55,6 +83,7 @@ export default function Configuration() {
           id="pk"
           type="text"
           placeholder="Autorization Key"
+          defaultValue={getClickUpKeys.data?.AuthorizationPkKey ?? ""}
           {...register("pk")}
         />
         <ErrorMessage>{errors.pk?.message && errors.pk?.message}</ErrorMessage>

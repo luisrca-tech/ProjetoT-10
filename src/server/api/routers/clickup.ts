@@ -1,10 +1,13 @@
 import { z } from "zod";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { db } from "~/server/db";
-import { type CustomField, type Task } from "~/server/types/Clickup.type";
+import {
+  type CustomField,
+  type Task,
+} from "~/server/types/Clickup.type";
 import { showToast } from "~/utils/functions/showToast";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { configurationSchema } from "~/schemas/configuration-schema";
+import { configurationSchemaTrpc } from "~/server/schemas/configurationKeys.schema";
 
 async function getClickupKeys(userId: string) {
   const user = await db.user.findUnique({
@@ -12,22 +15,32 @@ async function getClickupKeys(userId: string) {
       id: userId,
     },
     select: {
-      AuthorizationPkKey: true,
-      listId: true,
+      configurationKeys: {
+        select: {
+          AuthorizationPkKey: true,
+          listId: true,
+        },
+      },
     },
   });
 
-  if (!user) {
-    throw new Error("User not found");
+  if (!user || !user.configurationKeys) {
+    throw new Error("User or configuration keys not found");
   }
 
   return {
-    AuthorizationPkKey: user.AuthorizationPkKey,
-    listId: user.listId,
+    AuthorizationPkKey: user.configurationKeys[0]?.AuthorizationPkKey,
+    listId: user.configurationKeys[0]?.listId,
   };
 }
 
 export const clickupRouter = createTRPCRouter({
+  getClickupKeys: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input }) => {
+      return await getClickupKeys(input.userId);
+    }),
+    
   getCustomFields: publicProcedure
     .input(z.object({ endPoint: EndPointClickUpApiEnum, userId: z.string() }))
     .query<CustomField[]>(async ({ input }) => {
@@ -326,15 +339,33 @@ export const clickupRouter = createTRPCRouter({
       return postHourPMonthCustomFieldData;
     }),
   postClickUpKeys: publicProcedure
-    .input(configurationSchema)
+    .input(configurationSchemaTrpc)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.configurationKeys.create({
+        data: {
+          AuthorizationPkKey: input.pk,
+          listId: input.listId,
 
-    .mutation(async ({ input }) => {
-      const { pk, listId } = input;
+          user: {
+            connect: {
+              id: input.userId,
+            },
+          },
+        },
+      });
     }),
 
   updateClickUpKeys: publicProcedure
-    .input(configurationSchema)
-    .mutation(async ({ input }) => {
-      const { pk, listId } = input;
+    .input(configurationSchemaTrpc)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.configurationKeys.update({
+        where: {
+          userId: input.userId,
+        },
+        data: {
+          AuthorizationPkKey: input.pk,
+          listId: input.listId,
+        },
+      });
     }),
 });
