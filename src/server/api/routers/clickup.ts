@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import { type CustomField, type Task } from "~/server/types/Clickup.type";
 import { showToast } from "~/utils/functions/showToast";
 import { createTRPCRouter, publicProcedure } from "../trpc";
+import { configurationSchema } from "~/schemas/configuration-schema";
 
 async function getClickupKeys(userId: string) {
   const user = await db.user.findUnique({
@@ -323,5 +324,17 @@ export const clickupRouter = createTRPCRouter({
       const postHourPMonthCustomFieldData =
         await postHourPMonthCustomFieldResp.json();
       return postHourPMonthCustomFieldData;
+    }),
+  postClickUpKeys: publicProcedure
+    .input(configurationSchema)
+
+    .mutation(async ({ input }) => {
+      const { pk, listId } = input;
+    }),
+
+  updateClickUpKeys: publicProcedure
+    .input(configurationSchema)
+    .mutation(async ({ input }) => {
+      const { pk, listId } = input;
     }),
 });
