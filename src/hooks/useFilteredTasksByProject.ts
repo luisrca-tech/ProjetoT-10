@@ -118,7 +118,6 @@ export function useFilteredTasksByProject() {
   );
 
   useEffect(() => {
-    setLoading(true);
     const customFieldData = getCustomField.data ?? [];
     const tasksData = getTasks.data ?? [];
     if (getCustomField.isFetched) {
@@ -131,7 +130,6 @@ export function useFilteredTasksByProject() {
           "Confira seus listId e AuthorizationToken"
         );
       }
-      setLoading(false);
     }
   }, [
     getCustomField.data,
