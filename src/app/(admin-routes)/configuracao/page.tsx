@@ -10,19 +10,38 @@ import ErrorMessage from "~/components/widgets/ErrorMessage";
 import { Container, Form } from "./styles";
 import { type configurationType } from "~/types/configuration.type";
 import { configurationSchema } from "~/schemas/configuration-schema";
+import { showToast } from "~/utils/functions/showToast";
+import { api } from "~/trpc/react";
 
 export default function Configuration() {
   const {
     register,
+    handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<configurationType>({
     resolver: zodResolver(configurationSchema),
     mode: "onChange",
   });
+
+  const postClickUpKeys = api.clickup.postClickUpKeys.useMutation();
   const submitIsDisabled = !!errors.listId?.message || !!errors.pk?.message;
+
+  const onSubmit = async ({ pk, listId }: configurationType) => {
+    try {
+      await postClickUpKeys.mutateAsync({
+        pk,
+        listId,
+      });
+      if (postClickUpKeys.isSuccess) {
+        showToast("success", "configuração salva com sucesso!");
+      }
+    } catch (error) {
+      showToast("error", "Erro ao configurar");
+    }
+  };
   return (
     <Container>
-      <Form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Input
           id="listId"
           type="text"
