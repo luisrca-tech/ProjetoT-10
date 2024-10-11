@@ -23,6 +23,8 @@ export const Container = styled.div<ContainerProps>`
   align-items: center;
   position: relative;
 
+ 
+
   img {
     display: ${(props) => (props.isInProjectHeader ? "none" : "flex")};
     position: absolute;
