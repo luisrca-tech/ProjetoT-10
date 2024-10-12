@@ -8,17 +8,17 @@ import Button from "~/components/widgets/Button";
 import ErrorMessage from "~/components/widgets/ErrorMessage";
 
 import { useSession } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { configurationSchema } from "~/schemas/configuration-schema";
 import { api } from "~/trpc/react";
 import { type configurationType } from "~/types/configuration.type";
 import { showToast } from "~/utils/functions/showToast";
 import { Container, Form } from "./styles";
-import { useRouter } from "next/navigation";
 
 export default function Configuration() {
   const { session } = useSession();
   const userId = session?.user.id ?? "";
-  const router = useRouter()
+  const router = useRouter();
 
   const {
     register,
@@ -39,7 +39,7 @@ export default function Configuration() {
     try {
       const existingKeys = await getClickUpKeys.refetch();
 
-      if (Array.isArray(existingKeys.data) && existingKeys.data.length > 0) {
+      if (Array.isArray(existingKeys.data)) {
         await updateClickUpKeys.mutateAsync({
           pk,
           listId,
@@ -47,8 +47,8 @@ export default function Configuration() {
         });
         if (updateClickUpKeys.isSuccess) {
           showToast("success", "Configuração atualizada com sucesso!");
-          router.push("/projetos");
         }
+        router.push("/projetos");
       } else {
         await postClickUpKeys.mutateAsync({
           pk,
@@ -57,13 +57,12 @@ export default function Configuration() {
         });
         if (postClickUpKeys.isSuccess) {
           showToast("success", "Configuração salva com sucesso!");
-          router.push("/projetos");
         }
+        router.push("/projetos");
       }
     } catch (error) {
       showToast("error", "Erro ao configurar");
-    }  finally {
-    }
+    } 
   };
 
   return (

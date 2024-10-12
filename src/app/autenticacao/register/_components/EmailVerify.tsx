@@ -46,7 +46,7 @@ export default function EmailVerify() {
           email: email,
         });
         await setActive({ session: completeSignUp.createdSessionId });
-        router.push("/projetos");
+        router.push("/configuracao");
       }
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
