@@ -28,23 +28,21 @@ type FilteredTasksByProject = {
 };
 
 export function useFilteredTasksByProject() {
-  const { session } = useSession()
+  const { session } = useSession();
   const userId = session?.user.id;
 
   const [filteredTasksByProject, setFilteredTasksByProject] =
     useState<FilteredTasksByProject[]>();
   const [, setLoading] = useAtom(loadingAtom);
-  const [isNocustomFieldProject, setIsNocustomFieldProject] =
-    useState<boolean>(false);
 
   const getTasks = api.clickup.getTasks.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.task,
-    userId: userId ?? '',
+    userId: userId ?? "",
   });
 
   const getCustomField = api.clickup.getCustomFields.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.field,
-    userId: userId ?? '',
+    userId: userId ?? "",
   });
 
   const handleFetchResponse = useCallback(
@@ -55,7 +53,6 @@ export function useFilteredTasksByProject() {
         );
 
         if (!projectCustomField) {
-          setIsNocustomFieldProject(true);
           return { filteredTasksByProject: [] };
         }
 
@@ -141,6 +138,5 @@ export function useFilteredTasksByProject() {
 
   return {
     filteredTasksByProject,
-    isNocustomFieldProject,
   };
 }

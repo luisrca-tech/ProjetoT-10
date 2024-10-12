@@ -2,7 +2,6 @@
 
 import { useSignIn, useSignUp } from "@clerk/nextjs";
 import { isClerkAPIResponseError } from "@clerk/nextjs/errors";
-import router from "next/router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { type loginType } from "~/types/login.type";
@@ -19,7 +18,7 @@ export function useAuth() {
     signIn?.authenticateWithRedirect({
       strategy: "oauth_google",
       redirectUrl: "/sso-callback",
-      redirectUrlComplete: "/projetos",
+      redirectUrlComplete: "/configuracao",
     });
 
   async function Login({ email, password }: loginType) {
@@ -35,7 +34,6 @@ export function useAuth() {
         }
 
         await setActive({ session: result.createdSessionId });
-        router.push("/projetos");
       }
     } catch (error) {
       if (isClerkAPIResponseError(error)) {
