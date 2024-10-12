@@ -30,6 +30,7 @@ type FilteredTasksByProject = {
 export function useFilteredTasksByProject() {
   const { session } = useSession();
   const userId = session?.user.id;
+  const [missingFields, setMissingFields] = useState<boolean>(false);
 
   const [filteredTasksByProject, setFilteredTasksByProject] =
     useState<FilteredTasksByProject[]>();
@@ -53,6 +54,7 @@ export function useFilteredTasksByProject() {
         );
 
         if (!projectCustomField) {
+          setMissingFields(true);
           return { filteredTasksByProject: [] };
         }
 
@@ -117,6 +119,7 @@ export function useFilteredTasksByProject() {
   useEffect(() => {
     const customFieldData = getCustomField.data ?? [];
     const tasksData = getTasks.data ?? [];
+
     if (getCustomField.isFetched) {
       if (Array.isArray(customFieldData)) {
         handleFetchResponse({ customFieldData, tasksData });
@@ -138,5 +141,6 @@ export function useFilteredTasksByProject() {
 
   return {
     filteredTasksByProject,
+    missingFields,
   };
 }

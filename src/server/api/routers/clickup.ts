@@ -40,7 +40,7 @@ export const clickupRouter = createTRPCRouter({
     .query(async ({ input }) => {
       return await getClickupKeys(input.userId);
     }),
-    
+
   getCustomFields: publicProcedure
     .input(z.object({ endPoint: EndPointClickUpApiEnum, userId: z.string() }))
     .query<CustomField[]>(async ({ input }) => {
@@ -338,21 +338,55 @@ export const clickupRouter = createTRPCRouter({
         await postHourPMonthCustomFieldResp.json();
       return postHourPMonthCustomFieldData;
     }),
+    
   postClickUpKeys: publicProcedure
     .input(configurationSchemaTrpc)
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.configurationKeys.create({
-        data: {
-          AuthorizationPkKey: input.pk,
-          listId: input.listId,
-
-          user: {
-            connect: {
-              id: input.userId,
-            },
+      const data: {
+        listId: string;
+        AuthorizationPkKey?: string;
+        user: {
+          connect: {
+            id: string;
+          };
+        };
+      } = {
+        listId: input.listId,
+        user: {
+          connect: {
+            id: input.userId,
           },
         },
-      });
+      };
+
+      if (input.pk) {
+        data.AuthorizationPkKey = input.pk;
+      }
+
+      try {
+        const existingEntry = await ctx.db.configurationKeys.findUnique({
+          where: {
+            userId: input.userId,
+          },
+        });
+
+        if (existingEntry) {
+          return await ctx.db.configurationKeys.update({
+            where: {
+              userId: input.userId,
+            },
+            data,
+          });
+        } else {
+          return await ctx.db.configurationKeys.create({
+            data,
+          });
+        }
+      } catch (error) {
+        throw new Error(
+          "Error creating or updating configuration key: " + (error as Error).message
+        );
+      }
     }),
 
   updateClickUpKeys: publicProcedure
