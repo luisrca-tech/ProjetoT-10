@@ -1,10 +1,7 @@
 import { z } from "zod";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { db } from "~/server/db";
-import {
-  type CustomField,
-  type Task,
-} from "~/server/types/Clickup.type";
+import { type CustomField, type Task } from "~/server/types/Clickup.type";
 import { showToast } from "~/utils/functions/showToast";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { configurationSchemaTrpc } from "~/server/schemas/configurationKeys.schema";
@@ -236,17 +233,21 @@ export const clickupRouter = createTRPCRouter({
         postTaskId: z.string(),
         chargeFieldId: z.string().optional(),
         chargeFieldSelectedValue: z.number().optional(),
+        userId: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      const { postTaskId, chargeFieldId, chargeFieldSelectedValue } = input;
+      const { postTaskId, chargeFieldId, chargeFieldSelectedValue, userId } =
+        input;
+      const { AuthorizationPkKey } = await getClickupKeys(userId);
+
       const postChargeCustomFieldResp = await fetch(
         `https://api.clickup.com/api/v2/task/${postTaskId}/field/${chargeFieldId}?`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
           },
           body: JSON.stringify({ value: chargeFieldSelectedValue }),
         }
@@ -259,14 +260,16 @@ export const clickupRouter = createTRPCRouter({
     .input(
       z.object({
         postTaskId: z.string(),
-
+        userId: z.string(),
         projectFieldId: z.string().optional(),
 
         projectFieldSelectedValue: z.string().optional(),
       })
     )
     .mutation(async ({ input }) => {
-      const { postTaskId, projectFieldId, projectFieldSelectedValue } = input;
+      const { postTaskId, projectFieldId, projectFieldSelectedValue, userId } =
+        input;
+      const { AuthorizationPkKey } = await getClickupKeys(userId);
 
       const postProjectCustomFieldResp = await fetch(
         `https://api.clickup.com/api/v2/task/${postTaskId}/field/${projectFieldId}?`,
@@ -274,7 +277,7 @@ export const clickupRouter = createTRPCRouter({
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
           },
           body: JSON.stringify({ value: [projectFieldSelectedValue] }),
         }
@@ -290,17 +293,20 @@ export const clickupRouter = createTRPCRouter({
         postTaskId: z.string(),
         valueFieldId: z.string().optional(),
         valueFieldSelectedValue: z.number().optional(),
+        userId: z.string(),
       })
     )
     .mutation(async ({ input }) => {
-      const { postTaskId, valueFieldId, valueFieldSelectedValue } = input;
+      const { postTaskId, valueFieldId, valueFieldSelectedValue, userId } =
+        input;
+      const { AuthorizationPkKey } = await getClickupKeys(userId);
       const postValueCustomFieldResp = await fetch(
         `https://api.clickup.com/api/v2/task/${postTaskId}/field/${valueFieldId}?`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
           },
           body: JSON.stringify({ value: valueFieldSelectedValue }),
         }
@@ -315,6 +321,7 @@ export const clickupRouter = createTRPCRouter({
         postTaskId: z.string(),
         hoursPerMonthCustomFieldId: z.string().optional(),
         hoursPMonthFieldSelectedValue: z.number().optional(),
+        userId: z.string(),
       })
     )
     .mutation(async ({ input }) => {
@@ -322,14 +329,16 @@ export const clickupRouter = createTRPCRouter({
         postTaskId,
         hoursPerMonthCustomFieldId,
         hoursPMonthFieldSelectedValue,
+        userId,
       } = input;
+      const { AuthorizationPkKey } = await getClickupKeys(userId);
       const postHourPMonthCustomFieldResp = await fetch(
         `https://api.clickup.com/api/v2/task/${postTaskId}/field/${hoursPerMonthCustomFieldId}?`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: "pk_81997206_S36OVHASAWZPBXJNMUNGQO4F1XJHEI8P",
+            Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
           },
           body: JSON.stringify({ value: hoursPMonthFieldSelectedValue }),
         }
@@ -338,7 +347,7 @@ export const clickupRouter = createTRPCRouter({
         await postHourPMonthCustomFieldResp.json();
       return postHourPMonthCustomFieldData;
     }),
-    
+
   postClickUpKeys: publicProcedure
     .input(configurationSchemaTrpc)
     .mutation(async ({ ctx, input }) => {
@@ -384,7 +393,8 @@ export const clickupRouter = createTRPCRouter({
         }
       } catch (error) {
         throw new Error(
-          "Error creating or updating configuration key: " + (error as Error).message
+          "Error creating or updating configuration key: " +
+            (error as Error).message
         );
       }
     }),
