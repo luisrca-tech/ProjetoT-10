@@ -25,11 +25,11 @@ export function ProjectDetailsContent() {
       <ProjectHeader.Root inProjectPage projectDates={profileHeaderInfo}>
         <ProjectHeader.BoxImage />
         <InputsContent>
-          {!checked ? (
-            <ProjectHeader.EditProject />
-          ) : (
-            <ProjectHeader.DateContainer projectDates={profileHeaderInfo} />
-          )}
+          <ProjectHeader.EditProject checked={checked} />
+          <ProjectHeader.DateContainer
+            projectDates={profileHeaderInfo}
+            checked={checked}
+          />
         </InputsContent>
       </ProjectHeader.Root>
       <MainContainer>

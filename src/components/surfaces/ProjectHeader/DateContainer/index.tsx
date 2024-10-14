@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { poppins } from "~/app/fonts";
 import { Container, DatesContainer } from "./styles";
@@ -7,11 +7,15 @@ import { Skeleton } from "~/components/widgets/Skeleton";
 import { useTasksOfProject } from "~/hooks/useTasksOfProject";
 type DateContainer = {
   projectDates: ProjectDates;
+  checked?: boolean;
 };
-export default function DateContainer({ projectDates }: DateContainer) {
-    const { getTasksInfos } = useTasksOfProject();
+export default function DateContainer({
+  projectDates,
+  checked,
+}: DateContainer) {
+  const { getTasksInfos } = useTasksOfProject();
 
-    const tasksInfos = getTasksInfos();
+  const tasksInfos = getTasksInfos();
 
   function formatDate(date: Date | undefined) {
     return date ? date.toLocaleDateString("pt-BR") : "";
@@ -19,7 +23,7 @@ export default function DateContainer({ projectDates }: DateContainer) {
   const globalProjectStartDate = formatDate(projectDates.minStartDateObj);
   const globalProjectEndDate = formatDate(projectDates.maxEndDateObj);
   return (
-    <Container>
+    <Container checked={checked}>
       <strong className={poppins.className}>Duração:</strong>
       {tasksInfos ? (
         <DatesContainer>
