@@ -69,13 +69,10 @@ export default function FormSelectInput({ onReset }: FormSelectInputProps) {
     e.preventDefault();
     try {
       setLoading(true);
-      const { toastMessage } = await processRows();
+      const { toastMessage, projectFieldSelectedValue } = await processRows();
       showToast("success", `${toastMessage}`);
-
-      if (!projectId) {
-        onReset();
-        router.push("/pessoas");
-      }
+      onReset();
+      window.location.href = `/espelho?projectId=${projectFieldSelectedValue}`;
     } catch (error) {
       showToast(
         "error",

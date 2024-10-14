@@ -14,8 +14,11 @@ import { type formPersonsData } from "~/types/form-persons.type";
 import { showToast } from "~/utils/functions/showToast";
 import { FormFooter } from "../../surfaces/FormFooter";
 import { Container, Form, PersonByRole, RoleAndPerson } from "./styles";
+import { useSearchParams } from "next/navigation";
 
 export function FormForPeople() {
+  const searchParams = useSearchParams();
+  const projectId = searchParams.get("projectId");
   const { session } = useSession();
   const userId = session?.user.id;
   const { getTasksInfos } = useTasksOfProject();
@@ -40,6 +43,7 @@ export function FormForPeople() {
       });
 
       showToast("success", "Pessoas alocadas com sucesso!");
+      window.location.href = `/espelho?projectId=${projectId}`;
     } catch (error) {
       showToast("error", "Failed to update task name");
     } finally {
