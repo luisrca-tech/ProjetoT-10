@@ -118,7 +118,6 @@ export function useProcessRows() {
     }
 
     const resultTasksId = await Promise.all(tasksIdsPromises);
-    console.log(resultTasksId, `resultTasksId`);
     const projectFieldId = fieldsIds.projectFieldId;
     for (let i = 0; i < resultTasksId.length; i++) {
       const taskId = resultTasksId[i]?.taskId;
