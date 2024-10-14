@@ -1,9 +1,13 @@
 import { Suspense } from "react";
 import { Container } from "./styles";
 import HeaderRowAndScrollDownContainer from "./HeaderRowAndScrollDownContainer";
-export function EditProjectContainer() {
+
+type EditProjectContainer = {
+  checked?: boolean;
+};
+export function EditProjectContainer({ checked }: EditProjectContainer) {
   return (
-    <Container>
+    <Container checked={checked}>
       <Suspense>
         <HeaderRowAndScrollDownContainer />
       </Suspense>
