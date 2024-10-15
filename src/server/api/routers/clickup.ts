@@ -1,13 +1,10 @@
 import { z } from "zod";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { db } from "~/server/db";
-import {
-  type CustomField,
-  type Task,
-} from "~/server/types/Clickup.type";
+import { configurationSchemaTrpc } from "~/server/schemas/configurationKeys.schema";
+import { type CustomField, type Task } from "~/server/types/Clickup.type";
 import { showToast } from "~/utils/functions/showToast";
 import { createTRPCRouter, publicProcedure } from "../trpc";
-import { configurationSchemaTrpc } from "~/server/schemas/configurationKeys.schema";
 
 async function getClickupKeys(userId: string) {
   const user = await db.user.findUnique({
@@ -338,20 +335,13 @@ export const clickupRouter = createTRPCRouter({
         await postHourPMonthCustomFieldResp.json();
       return postHourPMonthCustomFieldData;
     }),
-    
-  postClickUpKeys: publicProcedure
+
+  upsertKeys: publicProcedure
     .input(configurationSchemaTrpc)
     .mutation(async ({ ctx, input }) => {
-      const data: {
-        listId: string;
-        AuthorizationPkKey?: string;
-        user: {
-          connect: {
-            id: string;
-          };
-        };
-      } = {
+      const data = {
         listId: input.listId,
+        AuthorizationPkKey: input.pk,
         user: {
           connect: {
             id: input.userId,
@@ -359,47 +349,19 @@ export const clickupRouter = createTRPCRouter({
         },
       };
 
-      if (input.pk) {
-        data.AuthorizationPkKey = input.pk;
-      }
-
       try {
-        const existingEntry = await ctx.db.configurationKeys.findUnique({
+        await ctx.db.configurationKeys.upsert({
           where: {
             userId: input.userId,
           },
+          create: data,
+          update: data,
         });
-
-        if (existingEntry) {
-          return await ctx.db.configurationKeys.update({
-            where: {
-              userId: input.userId,
-            },
-            data,
-          });
-        } else {
-          return await ctx.db.configurationKeys.create({
-            data,
-          });
-        }
       } catch (error) {
         throw new Error(
-          "Error creating or updating configuration key: " + (error as Error).message
+          "Error creating or updating configuration key: " +
+            (error as Error).message
         );
       }
-    }),
-
-  updateClickUpKeys: publicProcedure
-    .input(configurationSchemaTrpc)
-    .mutation(async ({ ctx, input }) => {
-      return ctx.db.configurationKeys.update({
-        where: {
-          userId: input.userId,
-        },
-        data: {
-          AuthorizationPkKey: input.pk,
-          listId: input.listId,
-        },
-      });
     }),
 });

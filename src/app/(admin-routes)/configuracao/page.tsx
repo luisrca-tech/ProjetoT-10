@@ -29,40 +29,24 @@ export default function Configuration() {
     mode: "onChange",
   });
 
-  const postClickUpKeys = api.clickup.postClickUpKeys.useMutation();
-  const updateClickUpKeys = api.clickup.updateClickUpKeys.useMutation();
+  const upsertClickUpKeys = api.clickup.upsertKeys.useMutation();
   const getClickUpKeys = api.clickup.getClickupKeys.useQuery({ userId });
-
   const submitIsDisabled = !!errors.listId?.message || !!errors.pk?.message;
 
   const onSubmit = async ({ pk, listId }: configurationType) => {
     try {
-      const existingKeys = await getClickUpKeys.refetch();
-
-      if (Array.isArray(existingKeys.data)) {
-        await updateClickUpKeys.mutateAsync({
-          pk,
-          listId,
-          userId: userId,
-        });
-        if (updateClickUpKeys.isSuccess) {
-          showToast("success", "Configuração atualizada com sucesso!");
-        }
-        router.push("/projetos");
-      } else {
-        await postClickUpKeys.mutateAsync({
-          pk,
-          listId,
-          userId,
-        });
-        if (postClickUpKeys.isSuccess) {
-          showToast("success", "Configuração salva com sucesso!");
-        }
-        router.push("/projetos");
+      await upsertClickUpKeys.mutateAsync({
+        pk,
+        listId,
+        userId: userId,
+      });
+      if (upsertClickUpKeys.isSuccess) {
+        showToast("success", "Configuração salva com sucesso!");
       }
+      router.push("/projetos");
     } catch (error) {
-      showToast("error", "Erro ao configurar");
-    } 
+      showToast("error", "Erro ao salvar a configuração.");
+    }
   };
 
   return (
