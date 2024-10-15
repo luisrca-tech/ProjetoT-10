@@ -1,7 +1,6 @@
-"use client"
+"use client";
 
 import { Skeleton } from "~/components/widgets/Skeleton";
-import { useTasksOfProject } from "~/hooks/useTasksOfProject";
 import {
   Container,
   IsAvailable,
@@ -11,18 +10,14 @@ import {
   TableFooterCount,
   TableTitle,
 } from "./styles";
+import { useAvailableFields } from "~/utils/functions/useAvailableFields";
 
 export function AvailableFields() {
-  const { getTasksInfos } = useTasksOfProject();
-  const taskAttributes = getTasksInfos();
-
-  const filteredFields =
-    taskAttributes?.map(({ chargeName, hours, valueByHour }) => ({
-      chargeName,
-      hours,
-      valueByHour,
-    })) || [];
-
+  const { totalValue, filteredFields, taskAttributes } = useAvailableFields();
+  const formattedTotalValue = totalValue.toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
   return (
     <Container>
       <TableTitle>
@@ -58,7 +53,7 @@ export function AvailableFields() {
       )}
       <TableFooterCount>
         <span>Valor Total</span>
-        <span>R$ 98.910,00 </span>
+        <span>$ {formattedTotalValue} </span>
       </TableFooterCount>
     </Container>
   );
