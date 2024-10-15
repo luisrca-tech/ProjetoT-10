@@ -5,15 +5,12 @@ export function useTotalHoursSum() {
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const totalHoursSum = rowsAndSelectedValues.rows.reduce(
     (acc, row) => {
-      const hours = parseInt(
+      const hours = parseFloat(
         rowsAndSelectedValues.selectedValues[`secondTextValue${row}-text`] ||
-          "0",
-        10
+          "0"
       );
-      const value = parseInt(
-        rowsAndSelectedValues.selectedValues[`thirdTextValue${row}-text`] ||
-          "0",
-        10
+      const value = parseFloat(
+        rowsAndSelectedValues.selectedValues[`thirdTextValue${row}-text`] || "0"
       );
       acc.hours += hours;
       acc.value += hours * value;
