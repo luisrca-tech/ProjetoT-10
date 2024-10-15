@@ -8,14 +8,15 @@ import "./DateRangePicker.css";
 import { useAtom } from "jotai";
 import { rangesAtom } from "~/@atom/ProjectStates/rangesAtom";
 import { stringRowAtom } from "~/@atom/ProjectStates/stringRowAtom";
+import { endOfDay, startOfDay } from "date-fns";
 
 export function CustomDateRangePicker({}) {
   const [ranges, setRanges] = useAtom(rangesAtom);
   const [stringRow] = useAtom(stringRowAtom);
 
   const currentRange = ranges[stringRow] || {
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: startOfDay(new Date()),
+    endDate: endOfDay(new Date()),
     key: `selection-${stringRow}`,
   };
 
