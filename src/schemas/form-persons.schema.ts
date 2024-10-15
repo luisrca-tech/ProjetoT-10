@@ -5,8 +5,8 @@ export const formPersonsSchema = z.object({
     z
       .string()
       .regex(
-        /^[a-zA-Z\s]*$/,
-        "Nomes não podem conter números ou caracteres especiais."
+        /^[a-zA-Zà-úÀ-ÚçÇñÑ\s'`~^¨]*$/,
+        "Nomes não podem conter números ou caracteres especiais inválidos."
       )
   ),
 });
