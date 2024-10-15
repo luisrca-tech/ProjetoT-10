@@ -174,6 +174,32 @@ export const clickupRouter = createTRPCRouter({
       return { taskId };
     }),
 
+  deleteTask: publicProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+        taskId: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { AuthorizationPkKey } = await getClickupKeys(input.userId);
+      const { taskId } = input;
+
+      if (!taskId) {
+        throw new Error("TaskId é obrigatório nesta requisição.");
+      }
+
+      await fetch(`https://api.clickup.com/api/v2/task/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: AuthorizationPkKey ? AuthorizationPkKey : "",
+        },
+      });
+
+      return { taskId, message: "Task deletada com sucesso." };
+    }),
+
   updateTaskName: publicProcedure
     .input(
       z.object({
