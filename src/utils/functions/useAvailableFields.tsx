@@ -27,5 +27,10 @@ export function useAvailableFields() {
     { hours: 0, value: 0 }
   );
 
-  return { totalValue: totalHoursSum.value, filteredFields, taskAttributes };
+  const formattedTotalValue = totalHoursSum.value.toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+
+  return { totalValue: formattedTotalValue, filteredFields, taskAttributes };
 }
