@@ -9,7 +9,7 @@ export const Container = styled.div`
 
 export const TableTitle = styled.div`
   display: flex;
-  justify-content:  space-around;
+  justify-content: space-around;
   align-items: center;
 
   span {
@@ -92,5 +92,6 @@ export const TableFooterCount = styled.div`
     color: ${theme.COLORS.DARK};
     font-size: 0.875rem;
     line-height: 28px;
+    font-weight: 600;
   }
 `;
