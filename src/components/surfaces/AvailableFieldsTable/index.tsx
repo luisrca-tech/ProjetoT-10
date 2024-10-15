@@ -14,10 +14,7 @@ import { useAvailableFields } from "~/utils/functions/useAvailableFields";
 
 export function AvailableFields() {
   const { totalValue, filteredFields, taskAttributes } = useAvailableFields();
-  const formattedTotalValue = totalValue.toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+
   return (
     <Container>
       <TableTitle>
@@ -53,7 +50,7 @@ export function AvailableFields() {
       )}
       <TableFooterCount>
         <span>Valor Total</span>
-        <span>$ {formattedTotalValue} </span>
+        <span>$ {totalValue} </span>
       </TableFooterCount>
     </Container>
   );
