@@ -32,5 +32,10 @@ export function useAvailableFields() {
     maximumFractionDigits: 2,
   });
 
-  return { totalValue: formattedTotalValue, filteredFields, taskAttributes };
+  return {
+    totalValue: formattedTotalValue,
+    filteredFields,
+    taskAttributes,
+    totalHours: totalHoursSum.hours,
+  };
 }

@@ -18,6 +18,9 @@ export function useTotalHoursSum() {
     },
     { hours: 0, value: 0 }
   );
-
-  return { totalHours: totalHoursSum.hours, totalValue: totalHoursSum.value };
+  const formattedTotalValue = totalHoursSum.value.toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+  return { totalHours: totalHoursSum.hours, totalValue: formattedTotalValue };
 }
