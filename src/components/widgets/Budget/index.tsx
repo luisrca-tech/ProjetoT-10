@@ -7,7 +7,7 @@ type BudgetProps = {
   budgetInfo?: {
     totalHours: number;
     totalDays: number;
-    totalValue: number;
+    totalValue: string | number;
   };
 };
 export function Budget({ budgetInfo }: BudgetProps) {
@@ -31,7 +31,7 @@ export function Budget({ budgetInfo }: BudgetProps) {
             <span>{`${budgetInfo?.totalHours}h`}</span>
           </BudgetContent>
           <BudgetContent>
-            <span>{`R$${budgetInfo?.totalValue},00`}</span>
+            <span>{`R$${budgetInfo?.totalValue}`}</span>
           </BudgetContent>
         </>
       )}
