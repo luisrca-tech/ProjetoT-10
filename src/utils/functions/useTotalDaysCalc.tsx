@@ -8,7 +8,9 @@ export function useTotalDaysCalc() {
 
   const totalDays =
     startDate && endDate
-      ? (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+      ? Math.ceil(
+          (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)
+        )
       : 0;
 
   return totalDays;

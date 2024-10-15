@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Button from "~/components/widgets/Button";
 import { FormHeader } from "../../FormHeader";
@@ -15,7 +15,7 @@ import { Skeleton } from "~/components/widgets/Skeleton";
 type BudgetInfo = {
   totalDays: number;
   totalHours: number;
-  totalValue: number;
+  totalValue: string | number;
 };
 type MirrorTableProps = {
   budgetInfo: BudgetInfo;

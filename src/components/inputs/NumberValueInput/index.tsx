@@ -14,12 +14,14 @@ interface NumberValueInputProps {
   isLastRow?: boolean;
   row?: string;
   textValueType?: string;
+  placeHolder?: string;
 }
 
 export default function NumberValueInput({
   onChange,
   row,
   textValueType,
+  placeHolder,
 }: NumberValueInputProps) {
   const [checked] = useAtom(checkedAtom);
   const inputValue = useGetInputValueAtIndex(textValueType, row);
@@ -55,7 +57,7 @@ export default function NumberValueInput({
         render={({ field }) => (
           <Input
             {...field}
-            placeholder="Horas"
+            placeholder={placeHolder}
             type="text"
             id={textValueType}
             onChange={(e) => {

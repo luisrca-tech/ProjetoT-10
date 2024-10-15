@@ -79,6 +79,7 @@ export function InputsRow({ row }: InputRowProps) {
             isLastRow={isLastRow}
             row={row}
             textValueType="secondTextValue"
+            placeHolder="Horas"
           />
           <NumberValueInput
             onChange={(value) =>
@@ -87,6 +88,7 @@ export function InputsRow({ row }: InputRowProps) {
             isLastRow={isLastRow}
             row={row}
             textValueType="thirdTextValue"
+            placeHolder="Valor"
           />
         </>
       ) : (

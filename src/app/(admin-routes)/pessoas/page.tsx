@@ -9,16 +9,8 @@ import {
   HeadersContainer,
   InputsContent,
 } from "./styles";
-import { useGetBudgetAndProfileInfos } from "~/utils/functions/useGetBudgetAndProfileInfos";
-import { useTasksOfProject } from "~/hooks/useTasksOfProject";
+
 export default function Pessoas() {
-  const { getTasksInfos } = useTasksOfProject();
-
-  const tasksInfos = getTasksInfos();
-  const { maxEndDateObj, minStartDateObj } =
-    useGetBudgetAndProfileInfos(tasksInfos);
-
-  const profileHeaderInfo = { maxEndDateObj, minStartDateObj };
   return (
     <Container>
       <HeadersContainer>
@@ -26,7 +18,6 @@ export default function Pessoas() {
           <ProjectHeader.BoxImage />
           <InputsContent>
             <ProjectHeader.EditProject />
-            <ProjectHeader.DateContainer projectDates={profileHeaderInfo} />
           </InputsContent>
         </ProjectHeader.Root>
       </HeadersContainer>

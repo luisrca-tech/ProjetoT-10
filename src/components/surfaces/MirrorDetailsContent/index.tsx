@@ -13,14 +13,17 @@ import {
   MainContainer,
   TableContainer,
 } from "./styles";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { useAvailableFields } from "~/utils/functions/useAvailableFields";
 
 export function MirrorDetailsContent() {
   const [isDatePickerOpen] = useAtom(isDatePickerOpenAtom);
   const { getTasksInfos } = useTasksOfProject();
   const tasksCustomFields = getTasksInfos();
-  const { totalDays, totalHours, totalValue, maxEndDateObj, minStartDateObj } =
+  const { totalDays, maxEndDateObj, minStartDateObj } =
     useGetBudgetAndProfileInfos(tasksCustomFields);
-
+  const { totalValue, totalHours } = useAvailableFields();
+  const [checked] = useAtom(checkedAtom);
   const budgetInfo = { totalDays, totalHours, totalValue };
   const profileHeaderInfo = { maxEndDateObj, minStartDateObj };
   return (
@@ -28,8 +31,11 @@ export function MirrorDetailsContent() {
       <ProjectHeader.Root>
         <ProjectHeader.BoxImage />
         <InputsContent>
-          <ProjectHeader.EditProject />
-          <ProjectHeader.DateContainer projectDates={profileHeaderInfo} />
+          <ProjectHeader.EditProject checked={checked} />
+          <ProjectHeader.DateContainer
+            projectDates={profileHeaderInfo}
+            checked={checked}
+          />
         </InputsContent>
       </ProjectHeader.Root>
       <MainContainer>
