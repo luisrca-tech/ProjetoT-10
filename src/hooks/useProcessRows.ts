@@ -18,7 +18,7 @@ export interface ChargeFieldSelectedValue {
 }
 
 export function useProcessRows() {
-  const { session } = useSession()
+  const { session } = useSession();
   const userId = session?.user.id;
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [ranges] = useAtom(rangesAtom);
@@ -97,7 +97,7 @@ export function useProcessRows() {
 
           tasksIdsPromises.push(
             mutationUpdateTask.mutateAsync({
-              userId: userId ?? '',
+              userId: userId ?? "",
               row: row,
               Dates: { startDate, endDate },
               taskId: taskId,
@@ -118,12 +118,7 @@ export function useProcessRows() {
     }
 
     const resultTasksId = await Promise.all(tasksIdsPromises);
-
-    const projectId = (resultTasksId.find(
-      (result): result is { taskId: string; projectId: string } =>
-        "projectId" in result
-    )?.projectId ?? "") as string;
-
+    const projectFieldId = fieldsIds.projectFieldId;
     for (let i = 0; i < resultTasksId.length; i++) {
       const taskId = resultTasksId[i]?.taskId;
       const row = rows[i] as string;
@@ -138,18 +133,21 @@ export function useProcessRows() {
 
       if (taskId && fieldsIds) {
         const customFieldsPromises = [];
+
         customFieldsPromises.push(
           mutationChargeCustomField.mutateAsync({
             postTaskId: taskId,
             chargeFieldId: fieldsIds.chargeFieldId,
             chargeFieldSelectedValue: chargeFieldSelectedValue,
+            userId: userId ?? "",
           })
         );
         customFieldsPromises.push(
           mutationProjectCustomField.mutateAsync({
             postTaskId: taskId,
-            projectFieldId: fieldsIds.projectFieldId,
+            projectFieldId: projectFieldId,
             projectFieldSelectedValue: projectFieldSelectedValue,
+            userId: userId ?? "",
           })
         );
 
@@ -158,6 +156,7 @@ export function useProcessRows() {
             postTaskId: taskId,
             valueFieldId: fieldsIds.valueFieldId,
             valueFieldSelectedValue: valueFieldSelectedValue,
+            userId: userId ?? "",
           })
         );
 
@@ -166,13 +165,14 @@ export function useProcessRows() {
             postTaskId: taskId,
             hoursPerMonthCustomFieldId: fieldsIds.hoursPerMonthCustomFieldId,
             hoursPMonthFieldSelectedValue: hoursPMonthFieldSelectedValue,
+            userId: userId ?? "",
           })
         );
         await Promise.all(customFieldsPromises);
       }
     }
 
-    return { toastMessage, projectId };
+    return { toastMessage, projectFieldSelectedValue };
   }
 
   return {

@@ -1,7 +1,10 @@
 import { styled } from "@linaria/react";
+type ContainerProps = {
+  checked?: boolean;
+};
 
-export const Container = styled.div`
-  display: flex;
+export const Container = styled.div<ContainerProps>`
+  display: ${(props) => (props.checked ? `none` : `flex`)};
   width: 100%;
   position: relative;
 

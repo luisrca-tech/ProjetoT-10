@@ -1,5 +1,4 @@
 import { useAtom } from "jotai";
-import { useSearchParams } from "next/navigation";
 import { type FormEvent } from "react";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
@@ -17,7 +16,6 @@ import InputsDataContainer from "./InputsDataContainer";
 import { Container } from "./styles";
 import { FormFooter } from "../../surfaces/FormFooter";
 import ToggleSwitch from "~/components/widgets/ToggleSwitch";
-import { useRouter } from "next/navigation";
 import { useTotalDaysCalc } from "~/utils/functions/useTotalDaysCalc";
 import { useTotalHoursSum } from "~/utils/functions/useTotalHoursSum";
 
@@ -26,14 +24,11 @@ type FormSelectInputProps = {
 };
 
 export default function FormSelectInput({ onReset }: FormSelectInputProps) {
-  const searchParams = useSearchParams();
-  const projectId = searchParams.get("projectId");
   const [rowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
   const [loading, setLoading] = useAtom(loadingAtom);
   const [projectSelectedValue] = useAtom(projectSelectedValuePropAtom);
   const [ranges] = useAtom(rangesAtom);
   const rangesCondition = validateRanges(ranges);
-  const router = useRouter();
   const { processRows } = useProcessRows();
   const totalDays = useTotalDaysCalc();
   const { totalHours, totalValue } = useTotalHoursSum();
@@ -69,13 +64,10 @@ export default function FormSelectInput({ onReset }: FormSelectInputProps) {
     e.preventDefault();
     try {
       setLoading(true);
-      const { toastMessage } = await processRows();
+      const { toastMessage, projectFieldSelectedValue } = await processRows();
       showToast("success", `${toastMessage}`);
-
-      if (!projectId) {
-        onReset();
-        router.push("/pessoas");
-      }
+      onReset();
+      window.location.href = `/espelho?projectId=${projectFieldSelectedValue}`;
     } catch (error) {
       showToast(
         "error",

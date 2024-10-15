@@ -6,6 +6,8 @@ import { useGetLastRowIndex } from "~/app/utils/functions/getLastRowIndex";
 import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
 import ScrollDownContainer from "~/components/forms/FormSelectInput/ScrollDownContainer";
 import { InputsRow } from "./InputsRow";
+import { api } from "~/trpc/react";
+import { useSession } from "@clerk/nextjs";
 
 interface RowAndScrollDownContainerProps {
   row: string;
@@ -14,7 +16,13 @@ interface RowAndScrollDownContainerProps {
 export default function RowAndScrollDownContainer({
   row,
 }: RowAndScrollDownContainerProps) {
-  const [, setRowsAndSelectedValues] = useAtom(rowsAndSelectedValuesAtom);
+  const mutationDeleteTask = api.clickup.deleteTask.useMutation();
+  const { session } = useSession();
+  const userId = session?.user.id;
+  const [rowsAndSelectedValues, setRowsAndSelectedValues] = useAtom(
+    rowsAndSelectedValuesAtom
+  );
+
   const [startX, setStartX] = useState<number | null>(null);
   const [offsetXByRow, setOffsetXByRow] = useState<{ [key: string]: number }>(
     {}
@@ -23,7 +31,8 @@ export default function RowAndScrollDownContainer({
   const lastRowIndex = useGetLastRowIndex();
   const isLastRow = row === lastRowIndex;
 
-  function removeRow(rowIndex: string) {
+  async function removeRow(rowIndex: string) {
+    const taskId = rowsAndSelectedValues.selectedValues[`taskId${rowIndex}`];
     setRowsAndSelectedValues((prevState) => {
       const removedRows = prevState.rows.filter((row) => row !== rowIndex);
       const updatedSelectedValues = { ...prevState.selectedValues };
@@ -42,6 +51,11 @@ export default function RowAndScrollDownContainer({
         rows: removedRows,
         selectedValues: updatedSelectedValues,
       };
+    });
+
+    await mutationDeleteTask.mutateAsync({
+      taskId: taskId,
+      userId: userId ?? "",
     });
   }
 

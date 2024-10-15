@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { useAtom } from "jotai";
 import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
