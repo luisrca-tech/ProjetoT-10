@@ -1,10 +1,8 @@
-import { useTasksOfProject } from "~/hooks/useTasksOfProject";
+import { type TasksInfosType } from "~/server/types/Clickup.type";
 
-export function useAvailableFields() {
-  const { getTasksInfos } = useTasksOfProject();
-  const taskAttributes = getTasksInfos();
+export function useAvailableFields(tasksCustomFields: TasksInfosType) {
   const filteredFields =
-    taskAttributes?.map(({ chargeName, hours, valueByHour }) => ({
+    tasksCustomFields?.map(({ chargeName, hours, valueByHour }) => ({
       chargeName,
       hours,
       valueByHour,
@@ -35,7 +33,6 @@ export function useAvailableFields() {
   return {
     totalValue: formattedTotalValue,
     filteredFields,
-    taskAttributes,
     totalHours: totalHoursSum.hours,
   };
 }

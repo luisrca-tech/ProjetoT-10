@@ -11,9 +11,13 @@ import {
   TableTitle,
 } from "./styles";
 import { useAvailableFields } from "~/utils/functions/useAvailableFields";
+import { useTasksOfProject } from "~/hooks/useTasksOfProject";
 
 export function AvailableFields() {
-  const { totalValue, filteredFields, taskAttributes } = useAvailableFields();
+  const { getTasksInfos } = useTasksOfProject();
+  const tasksCustomFields = getTasksInfos();
+
+  const { totalValue, filteredFields } = useAvailableFields(tasksCustomFields);
 
   return (
     <Container>
@@ -22,7 +26,7 @@ export function AvailableFields() {
         <span>Qtd. Horas</span>
         <span>Valor Hora</span>
       </TableTitle>
-      {taskAttributes ? (
+      {tasksCustomFields ? (
         <TableBody>
           <Separate />
           {filteredFields?.map((customField, index) => (
