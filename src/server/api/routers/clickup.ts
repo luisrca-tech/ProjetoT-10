@@ -80,15 +80,10 @@ export const clickupRouter = createTRPCRouter({
       const { AuthorizationPkKey, listId } = await getClickupKeys(input.userId);
       const { row, Dates } = input;
 
-      const query = new URLSearchParams({
-        custom_task_ids: "true",
-        team_id: "123",
-      }).toString();
-
       const numberRow = row?.replace("row-", "");
 
       const postTaskResp = await fetch(
-        `https://api.clickup.com/api/v2/list/${listId}/task?${query}`,
+        `https://api.clickup.com/api/v2/list/${listId}/task`,
         {
           method: "POST",
           headers: {
@@ -123,14 +118,9 @@ export const clickupRouter = createTRPCRouter({
       const { AuthorizationPkKey } = await getClickupKeys(input.userId);
       const { row, Dates, taskId } = input;
 
-      const query = new URLSearchParams({
-        custom_task_ids: "true",
-        team_id: "123",
-      }).toString();
-
       const numberRow = row?.replace("row-", "");
       const updateTaskResp = await fetch(
-        `https://api.clickup.com/api/v2/task/${taskId}?${query}`,
+        `https://api.clickup.com/api/v2/task/${taskId}`,
         {
           method: "PUT",
           headers: {
