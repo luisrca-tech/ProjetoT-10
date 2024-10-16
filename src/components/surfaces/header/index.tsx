@@ -108,7 +108,9 @@ export default function Header() {
             </TitleContainer>
             <ButtonsContainer>
               {!!isProjectsPage && (
-                <AddProjectButton onClick={() => router.push("/projeto")}>
+                <AddProjectButton
+                  onClick={() => (window.location.href = "/projeto")}
+                >
                   <IoAdd size={24} />
                 </AddProjectButton>
               )}
