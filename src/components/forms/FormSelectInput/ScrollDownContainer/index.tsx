@@ -2,7 +2,7 @@
 
 import { poppins } from "~/app/fonts";
 import { Container, SeparatorContainer } from "./styles";
-import { projectWihoutTasksAtom } from "~/@atom/ProjectStates/projectWithoutTasksAtom";
+import { projectsWihoutTasksAtom } from "~/@atom/ProjectStates/projectsWithoutTasksAtom";
 import { useAtom } from "jotai";
 import { chargeOptionsAtom } from "~/@atom/api/CustomFields/chargeOptionsAtom";
 import { type OptionType } from "~/server/types/Clickup.type";
@@ -14,7 +14,7 @@ type ScrollDownContainer = {
 };
 
 export default function ScrollDownContainer({ row }: ScrollDownContainer) {
-  const [projectWihoutTasks] = useAtom(projectWihoutTasksAtom);
+  const [projectWihoutTasks] = useAtom(projectsWihoutTasksAtom);
   const [chargeOptions] = useAtom(chargeOptionsAtom);
 
   const currentRow = row ? row : "projectRow";
