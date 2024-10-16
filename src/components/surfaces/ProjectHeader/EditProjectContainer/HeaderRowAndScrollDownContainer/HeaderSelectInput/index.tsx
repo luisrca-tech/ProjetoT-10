@@ -1,7 +1,7 @@
 "use client";
 
 import { useAtom } from "jotai";
-import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
+import { projectsWihoutTasksAtom } from "~/@atom/ProjectStates/projectsWithoutTasksAtom";
 import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { poppins } from "~/assets/fonts/fonts";
@@ -26,8 +26,8 @@ export default function HeaderSelectInput({
   const projectAttributes = getTasksInfos();
   const [checked] = useAtom(checkedAtom);
   const [, setProjectSelectedValue] = useAtom(projectSelectedValuePropAtom);
-  const [projectOptions] = useAtom(projectOptionsAtom);
-  const isProjectOptions = !!projectOptions?.length;
+  const [projectWihoutTasks] = useAtom(projectsWihoutTasksAtom);
+  const isProjectOptions = !!projectWihoutTasks?.length;
   const correctPlaceHolder = isProjectOptions
     ? "Selecione um projeto"
     : "Todos os projetos foram criados!";

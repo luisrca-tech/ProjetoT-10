@@ -5,12 +5,12 @@ import ScrollDownContainer from "~/components/forms/FormSelectInput/ScrollDownCo
 import { useToggleSelectOpen } from "~/app/utils/functions/toggleSelectedOpen";
 import { useIsSelectOpen } from "~/app/utils/functions/isSelectOpen";
 import { useSearchParams } from "next/navigation";
-import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
+import { projectsWihoutTasksAtom } from "~/@atom/ProjectStates/projectsWithoutTasksAtom";
 import HeaderSelectInput from "./HeaderSelectInput";
 
 export default function HeaderRowAndScrollDownContainer() {
-  const [projectOptions] = useAtom(projectOptionsAtom);
-  const isProjectOptions = !!projectOptions?.length;
+  const [projectWihoutTasks] = useAtom(projectsWihoutTasksAtom);
+  const isProjectOptions = !!projectWihoutTasks?.length;
   const row = "projectRow";
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId");
