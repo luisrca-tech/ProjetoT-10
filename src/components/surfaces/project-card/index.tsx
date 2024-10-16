@@ -16,8 +16,7 @@ export function ProjectsCards() {
   const userId = session?.user.id;
   const router = useRouter();
 
-  const { filteredTasksByProject, isLoading } =
-    useFilteredTasksByProject();
+  const { filteredTasksByProject, isLoading } = useFilteredTasksByProject();
 
   const getClickupKeys = api.clickup.getClickupKeys.useQuery({
     userId: userId ?? "",
@@ -58,7 +57,7 @@ export function ProjectsCards() {
             >
               <CardContent project={project} dates={dates} />
 
-              <ProgressBar />
+              <ProgressBar project={project} />
             </ProjectContainer>
           ))}
         </>
