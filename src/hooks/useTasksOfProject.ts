@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { chargeOptionsAtom } from "~/@atom/api/CustomFields/chargeOptionsAtom";
 import { fieldsIdsAtom } from "~/@atom/api/CustomFields/fieldsIds";
-import { projectOptionsAtom } from "~/@atom/api/CustomFields/projectOptionsAtom";
+import { projectsWihoutTasksAtom } from "~/@atom/ProjectStates/projectsWithoutTasksAtom";
 import { loadingAtom } from "~/@atom/LoadingState/loadingAtom";
 import { projectSelectedValuePropAtom } from "~/@atom/ProjectStates/projectSelectedValue";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
@@ -15,23 +15,26 @@ import {
 } from "~/server/types/Clickup.type";
 import { api } from "~/trpc/react";
 import { showToast } from "~/utils/functions/showToast";
-
+import { projectOptionsAtom } from "~/@atom/ProjectStates/projectOptions";
 type FetchResponseType = {
   customFieldData: CustomField[];
   tasksData: Task[];
 };
 
-export function useTasksOfProject() {
+export function useTasksOfProject(projectId?: string) {
+  const searchParams = useSearchParams();
+  const projectIdParams = searchParams.get("projectId");
+  let correctProjectId = projectId ? projectId : projectIdParams;
   const { session } = useSession();
   const userId = session?.user.id;
+  const [, setProjectOptions] = useAtom(projectOptionsAtom);
 
-  const searchParams = useSearchParams();
-  const projectId = searchParams.get("projectId");
   const [isFetchAllCustomFields, setIsFetchAllCustomFields] =
     useState<boolean>(false);
   const [missingFields, setMissingFields] = useState<string>("");
   const [tasksOfProject, setTasksOfProject] = useState<Task[] | undefined>();
-  const [, setProjectOptions] = useAtom(projectOptionsAtom);
+  const [, setProjectWihoutTasks] = useAtom(projectsWihoutTasksAtom);
+
   const [, setFieldsIds] = useAtom(fieldsIdsAtom);
   const [, setChargeOptions] = useAtom(chargeOptionsAtom);
   const [, setLoading] = useAtom(loadingAtom);
@@ -68,6 +71,7 @@ export function useTasksOfProject() {
         };
 
         const projectOptions = customFields.project?.type_config.options;
+        setProjectOptions(projectOptions);
         const projectsWithoutTasks = projectOptions?.filter(
           (project: OptionType) =>
             !tasksData?.some((task) =>
@@ -79,7 +83,7 @@ export function useTasksOfProject() {
         );
 
         const foundActualProject = projectOptions?.find(
-          (project) => project.id === projectId
+          (project) => project.id === correctProjectId
         );
 
         setProjectSelectedValue((prevState) => ({
@@ -101,7 +105,7 @@ export function useTasksOfProject() {
 
         setChargeOptions(chargeOptions);
         setFieldsIds(fieldsIds);
-        setProjectOptions(projectsWithoutTasks);
+        setProjectWihoutTasks(projectsWithoutTasks);
 
         const isFetchAllCustomFields =
           Object.values(customFields).every(Boolean);
@@ -124,8 +128,8 @@ export function useTasksOfProject() {
 
         const tasksOfProject = tasksData.filter((task) =>
           task.custom_fields.some((field) => {
-            if (Array.isArray(field.value) && projectId) {
-              return field.value.includes(projectId);
+            if (Array.isArray(field.value) && correctProjectId) {
+              return field.value.includes(correctProjectId);
             }
             return false;
           })
@@ -135,12 +139,13 @@ export function useTasksOfProject() {
       }
     },
     [
-      projectId,
+      correctProjectId,
       setChargeOptions,
       setFieldsIds,
       setLoading,
       setProjectOptions,
       setProjectSelectedValue,
+      setProjectWihoutTasks,
     ]
   );
 
@@ -158,7 +163,7 @@ export function useTasksOfProject() {
           "Confira seus listId e AuthorizationToken"
         );
 
-        router.push("/projetos");
+        router.push("/configuracao");
       }
     }
   }, [
