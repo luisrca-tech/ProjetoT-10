@@ -1,6 +1,8 @@
 import { useSession } from "@clerk/nextjs";
+import { useAtom } from "jotai";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
+import { projectOptionsAtom } from "~/@atom/ProjectStates/projectOptions";
 import { EndPointClickUpApiEnum } from "~/clickUpApi/EndPointClickUpApiEnum";
 import { type CustomField, type OptionType } from "~/server/types/Clickup.type";
 import { api } from "~/trpc/react";
@@ -10,6 +12,7 @@ export function useFilteredTasksByProject() {
   const router = useRouter();
   const { session } = useSession();
   const userId = session?.user.id;
+  const [, setProjectOptions] = useAtom(projectOptionsAtom);
 
   const getTasks = api.clickup.getTasks.useQuery({
     endPoint: EndPointClickUpApiEnum.enum.task,
@@ -38,7 +41,7 @@ export function useFilteredTasksByProject() {
     }
 
     const projectOptionsResp = projectCustomField.type_config.options || [];
-
+    setProjectOptions(projectOptionsResp);
     const projectsWithTasks = projectOptionsResp.filter((project: OptionType) =>
       tasksData.some((task) =>
         task.custom_fields.some(
@@ -83,7 +86,12 @@ export function useFilteredTasksByProject() {
 
       return { project, tasks: tasksOfProject, dates };
     });
-  }, [getCustomField.data, getCustomField.isFetched, getTasks.data]);
+  }, [
+    getCustomField.data,
+    getCustomField.isFetched,
+    getTasks.data,
+    setProjectOptions,
+  ]);
 
   useEffect(() => {
     if (getCustomField.error) {
