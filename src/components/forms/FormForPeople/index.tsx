@@ -15,6 +15,7 @@ import { showToast } from "~/utils/functions/showToast";
 import { FormFooter } from "../../surfaces/FormFooter";
 import { Container, Form, PersonByRole, RoleAndPerson } from "./styles";
 import { useSearchParams } from "next/navigation";
+import { allocatedPeopleAtom } from "~/@atom/ProjectStates/allocatedPeopleAtom";
 
 export function FormForPeople() {
   const searchParams = useSearchParams();
@@ -25,6 +26,7 @@ export function FormForPeople() {
   const roles = getTasksInfos();
   const updateTaskName = api.clickup.updateTaskName.useMutation();
   const [isLoading, setIsLoading] = useAtom(loadingAtom);
+  const [, setPeopleState] = useAtom(allocatedPeopleAtom);
   const {
     register,
     handleSubmit,
@@ -51,6 +53,14 @@ export function FormForPeople() {
     }
   };
 
+  const onInputChange = (index: number, value: string) => {
+    setPeopleState((prev) => {
+      const updated = [...prev];
+      updated[index] = value;
+      return updated;
+    });
+  };
+
   return (
     <Container>
       <RoleAndPerson>
@@ -67,6 +77,7 @@ export function FormForPeople() {
                   defaultValue={role.fieldName}
                   placeholder="Vincule uma pessoa"
                   {...register(`names.${index}`)}
+                  onChange={(e) => onInputChange(index, e.target.value)}
                 />
                 <span>{role.chargeName}</span>
               </PersonByRole>
