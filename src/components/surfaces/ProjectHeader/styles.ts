@@ -2,13 +2,15 @@ import { theme } from "~/app/styles/theme";
 import { styled } from "@linaria/react";
 
 export const Container = styled.div`
-  width: 100%;
+  width: 100vw;
   height: 5rem;
   background: ${theme.COLORS.SECONDARY_EXTRA_LIGTH};
   display: flex;
   justify-content: center;
   align-items: center;
   top: 6rem;
+  left: 0;
+  right: 0;
   position: fixed;
   z-index: 3;
   border-bottom-left-radius: 10px;

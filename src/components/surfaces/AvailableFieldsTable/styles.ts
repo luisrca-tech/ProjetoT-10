@@ -5,6 +5,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-height: 13rem;
 `;
 
 export const TableTitle = styled.div`
@@ -14,10 +15,16 @@ export const TableTitle = styled.div`
 
   span {
     color: ${theme.COLORS.DARK};
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 600;
     line-height: 28px;
-    padding-right: 1rem;
+    width: 33%;
+  }
+  > span:nth-of-type(2) {
+    text-align: center;
+  }
+  > span:nth-of-type(3) {
+    text-align: center;
   }
 `;
 
@@ -32,12 +39,19 @@ export const TableBody = styled.div`
   gap: 0.5rem;
   width: 100%;
 
-  max-height: 6.8rem;
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
-    width: 0.2rem;
+    width: 0.4rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
     background-color: ${theme.COLORS.PRIMARY};
+    border-radius: 20px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: ${theme.COLORS.DARK};
   }
 `;
 
@@ -53,27 +67,27 @@ export const TableFields = styled.div`
   justify-content: space-between;
   gap: 1rem;
   align-items: center;
-  padding: 0.5rem;
 
   strong {
-    max-width: 40%;
+    width: 33%;
     color: ${theme.COLORS.DARK};
-    font-size: 0.875rem;
+    font-size: 1rem;
     line-height: 28px;
     font-weight: 400;
   }
 
   span {
-    min-width: 25%;
+    width: 33%;
+    text-align: center;
     color: ${theme.COLORS.DARK};
-    font-size: 0.875rem;
+    font-size: 1rem;
     line-height: 28px;
   }
 `;
 
 export const IsAvailable = styled.div`
   position: absolute;
-  right: 1rem;
+  right: 0;
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 100px;
@@ -85,12 +99,10 @@ export const TableFooterCount = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-top: 0.5rem;
-  padding-left: 0.625rem;
-  padding-right: 0.625rem;
 
   span {
     color: ${theme.COLORS.DARK};
-    font-size: 0.875rem;
+    font-size: 1rem;
     line-height: 28px;
     font-weight: 600;
   }

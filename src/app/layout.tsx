@@ -31,7 +31,7 @@ const globalStyle = css`
   body {
     width: 100%;
     overflow-x: hidden;
-    min-height: 100vh;
+    overflow-y: hidden;
     max-height: none;
     margin: 0;
     padding: 0;
