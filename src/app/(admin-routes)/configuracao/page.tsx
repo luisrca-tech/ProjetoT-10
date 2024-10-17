@@ -14,6 +14,7 @@ import { api } from "~/trpc/react";
 import { type configurationType } from "~/types/configuration.type";
 import { showToast } from "~/utils/functions/showToast";
 import { Container, Form } from "./styles";
+import { Skeleton } from "~/components/widgets/Skeleton";
 
 export default function Configuration() {
   const { session } = useSession();
@@ -52,30 +53,39 @@ export default function Configuration() {
   return (
     <Container>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          id="listId"
-          type="text"
-          placeholder="List Id"
-          defaultValue={getClickUpKeys.data?.listId ?? ""}
-          {...register("listId")}
-        />
+        {getClickUpKeys.isPending ? (
+          <Skeleton width="328px" height="40px" />
+        ) : (
+          <Input
+            id="listId"
+            type="text"
+            placeholder="List Id"
+            defaultValue={getClickUpKeys.data?.listId ?? ""}
+            {...register("listId")}
+          />
+        )}
+
         <ErrorMessage>
           {errors.listId?.message && errors.listId?.message}
         </ErrorMessage>
-        <Input
-          id="pk"
-          type="text"
-          placeholder="Autorization Key"
-          defaultValue={getClickUpKeys.data?.AuthorizationPkKey ?? ""}
-          {...register("pk")}
-        />
+        {getClickUpKeys.isPending ? (
+          <Skeleton width="328px" height="40px" />
+        ) : (
+          <Input
+            id="pk"
+            type="text"
+            placeholder="Autorization Key"
+            defaultValue={getClickUpKeys.data?.AuthorizationPkKey ?? ""}
+            {...register("pk")}
+          />
+        )}
         <ErrorMessage>{errors.pk?.message && errors.pk?.message}</ErrorMessage>
         <Button
           className={roboto.className}
           loading={isSubmitting}
           text="Salvar"
           type="submit"
-          disabled={submitIsDisabled}
+          disabled={submitIsDisabled || getClickUpKeys.isPending}
         />
       </Form>
     </Container>
