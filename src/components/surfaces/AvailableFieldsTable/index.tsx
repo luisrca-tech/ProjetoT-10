@@ -12,11 +12,13 @@ import {
 } from "./styles";
 import { useAvailableFields } from "~/utils/functions/useAvailableFields";
 import { useTasksOfProject } from "~/hooks/useTasksOfProject";
+import { allocatedPeopleAtom } from "~/@atom/ProjectStates/allocatedPeopleAtom";
+import { useAtom } from "jotai";
 
 export function AvailableFields() {
   const { getTasksInfos } = useTasksOfProject();
   const tasksCustomFields = getTasksInfos();
-
+  const [peopleState] = useAtom(allocatedPeopleAtom);
   const { totalValue, filteredFields } = useAvailableFields(tasksCustomFields);
 
   return (
@@ -35,7 +37,11 @@ export function AvailableFields() {
                 <strong>{customField.chargeName}</strong>
                 <span>{customField.hours}h</span>
                 <span>R${customField.valueByHour}</span>
-                <IsAvailable />
+                <IsAvailable
+                  style={{
+                    backgroundColor: peopleState[index] ? "#3cb31e" : "#ff0000",
+                  }}
+                />
               </TableFields>
               <Separate />
             </div>
