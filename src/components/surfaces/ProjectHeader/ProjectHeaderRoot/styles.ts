@@ -12,8 +12,9 @@ export const Container = styled.div`
   position: fixed;
   z-index: 3;
   border-bottom-left-radius: 10px;
+  left: 0;
   height: 5rem;
-  padding-left: 1.25rem;
+
   gap: 1rem;
 
   input {

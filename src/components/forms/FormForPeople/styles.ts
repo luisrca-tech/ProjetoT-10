@@ -6,6 +6,7 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
+  height: calc(100vh - 34rem);
 `;
 
 export const RoleAndPerson = styled.div`
@@ -14,7 +15,7 @@ export const RoleAndPerson = styled.div`
   justify-content: space-between;
 
   span {
-    font-size: 0.875rem;
+    font-size: 1rem;
     color: ${theme.COLORS.DARK};
     font-weight: 600;
     line-height: 28px;
@@ -26,7 +27,6 @@ export const Form = styled.form`
   flex-direction: column;
   overflow-y: scroll;
   gap: 0.5rem;
-  max-height: 9rem;
   padding-bottom: 0.5rem;
 
   p {
