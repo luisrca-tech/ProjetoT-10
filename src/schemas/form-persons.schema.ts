@@ -4,9 +4,6 @@ export const formPersonsSchema = z.object({
   names: z.array(
     z
       .string()
-      .regex(
-        /^[a-zA-Zà-úÀ-ÚçÇñÑ\s'`~^¨]*$/,
-        "Nomes não podem conter números ou caracteres especiais inválidos."
-      )
+      .regex(/^[a-zA-Zà-úÀ-ÚçÇñÑ\s'`~^¨]*$/, "Nomes não podem conter números .")
   ),
 });
