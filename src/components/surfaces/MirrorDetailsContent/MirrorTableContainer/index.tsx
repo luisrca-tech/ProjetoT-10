@@ -11,6 +11,9 @@ import { type TasksInfosType } from "~/server/types/Clickup.type";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SkeletonContainer } from "~/components/forms/FormSelectInput/InputsDataContainer/styles";
 import { Skeleton } from "~/components/widgets/Skeleton";
+import { checkedAtom } from "~/@atom/ProjectStates/checkedAtom";
+import { useAtom } from "jotai";
+import { MonthlyForecastTable } from "~/components/widgets/MonthlyForecastTable";
 
 type BudgetInfo = {
   totalDays: number;
@@ -25,6 +28,7 @@ export function MirrorTableContainer({
   budgetInfo,
   tasksCustomFields,
 }: MirrorTableProps) {
+  const [checked] = useAtom(checkedAtom);
   const searchParams = useSearchParams();
   const projectId = searchParams.get("projectId");
   const router = useRouter();
@@ -53,16 +57,22 @@ export function MirrorTableContainer({
       )}
       <FormFooter>
         <Budget budgetInfo={budgetInfo} />
-        <Button
-          text="Alterar projeto"
-          type="button"
-          onClick={() => HandleRedirectToPages("projeto")}
-        />
-        <Button
-          text="Definir pessoas"
-          type="button"
-          onClick={() => HandleRedirectToPages("pessoas")}
-        />
+        {checked ? (
+          <MonthlyForecastTable />
+        ) : (
+          <>
+            <Button
+              text="Alterar projeto"
+              type="button"
+              onClick={() => HandleRedirectToPages("projeto")}
+            />
+            <Button
+              text="Definir pessoas"
+              type="button"
+              onClick={() => HandleRedirectToPages("pessoas")}
+            />
+          </>
+        )}
       </FormFooter>
     </Container>
   );
