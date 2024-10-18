@@ -23,7 +23,12 @@ export const TableContainer = styled.div<FormContainerProps>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  height: calc(90vh - 390px);
+  height: calc(100vh - 390px);
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 export const Container = styled.form`
@@ -31,11 +36,6 @@ export const Container = styled.form`
   flex-direction: column;
   gap: 1rem;
   width: 100%;
-  overflow-y: scroll;
-
-  &::-webkit-scrollbar {
-    width: 0;
-  }
 `;
 
 export const InputsContent = styled.div`
