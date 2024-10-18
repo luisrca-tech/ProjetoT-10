@@ -23,8 +23,7 @@ export const TableContainer = styled.div<FormContainerProps>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  height: calc(100vh - 390px);
-  height: calc(-webkit-fill-available - 390px);
+  height: calc(90vh - 390px);
 `;
 
 export const Container = styled.form`
