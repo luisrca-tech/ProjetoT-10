@@ -5,7 +5,7 @@ interface FormContainerProps {
 }
 
 export const MainContainer = styled.div`
-  margin-top: 13.594rem;
+  margin-top: 12.5rem;
   padding: 0 5%;
   width: 100%;
   height: 100%;
@@ -23,11 +23,15 @@ export const TableContainer = styled.div<FormContainerProps>`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  height: calc(100vh - 390px);
+  height: calc(100vh - 430px);
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
     width: 0;
+  }
+
+  @media (min-width: 1024px) {
+    height: calc(100vh - 400px);
   }
 `;
 
